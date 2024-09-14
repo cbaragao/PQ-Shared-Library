@@ -21,7 +21,7 @@ Special thanks to:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/PowerQueryFunctionLibrary.git
+    git clone https://github.com/cbaragao/PQ-Shared-Library.git
     ```
 2. Navigate to the `shared master` directory and import the sharedmaster.pq file into Power BI:
 
