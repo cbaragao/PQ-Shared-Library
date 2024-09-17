@@ -1922,6 +1922,44 @@ in
   Value.ReplaceType(RemoveUnwantedCharacters, fnType) 
       ],
       [
+        Name = "ColumnToList", 
+        Category = "Tbl", 
+        Function = 
+          let
+  Source = Function.From(
+    type function (t as table, column_name as text) as list, 
+    (params) =>
+      let
+        // Convert the specified column to a list
+        ColumnToList = Table.ToList(
+                          Table.TransformColumnTypes(
+                            Table.SelectColumns(
+                              params{0}, 
+                              {params{1}}
+                            ),
+                            {params{1}, 
+                            type text}
+                          )
+                        )
+      in
+        ColumnToList
+  ), 
+  fnType = type function (t as table, column_name as text) as list
+    meta [
+      Documentation.Name = "ColumnToList", 
+      Documentation.LongDescription = "This function converts a specified column from a given table into a list. It takes a table and a column name as input and returns the column as a list.",
+      Documentation.Examples = {
+        [
+          Description = "Convert the 'A' column of a table to a list.",
+          Code        = "=ColumnToList(#table({""A"", ""B""}, {{1, 2}, {3, 4}}), ""A"")", 
+          Result      = "{1, 3}"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(Source, fnType) 
+      ],
+      [
         Name = "RemoveNullColumns", 
         Category = "Tbl", 
         Function = 
@@ -1964,6 +2002,81 @@ in
 in
   Value.ReplaceType(RemoveNullColumns, fnType)
  
+      ],
+      [
+        Name = "ReplaceInColumnNames", 
+        Category = "Tbl", 
+        Function = 
+          let
+  Source = Function.From(
+    type function (t as table, string as text, replacement as text) as table, 
+    (params) =>
+      let
+        // Get the profile of the table to extract column names
+        Source = Table.Buffer(Table.Profile(params{0}))[Column],
+        // Replace underscores with spaces in column names
+        Replacements = List.ReplaceValue(Source, params{1}, params{2}, Replacer.ReplaceText),
+        // Zip the original and replacement column names together
+        Zip = List.Zip({Source, Replacements}),
+        // Rename columns in the table using the zipped list
+        ReplaceInColumnNames = Table.RenameColumns(params{0}, Zip)
+      in
+        ReplaceInColumnNames
+  ), 
+  fnType = type function (t as table, string as text, replacement as text) as table
+    meta [
+      Documentation.Name = "ReplaceInColumnNames", 
+      Documentation.LongDescription = "This function replaces underscores with spaces in the column names of a given table. It takes a table, a string to find, and a replacement string as input and returns the table with updated column names.",
+      Documentation.Examples = {
+        [
+          Description = "Replace underscores with spaces in column names of a table.",
+          Code        = "=ReplaceInColumnNames(#table({""A_B"", ""C_D""}, {{1, 2}, {3, 4}}), ""_"", "" "")", 
+          Result      = "#table({""A B"", ""C D""}, {{1, 2}, {3, 4}})"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(Source, fnType) 
+      ],
+      [
+        Name = "RoundColumns", 
+        Category = "Tbl", 
+        Function = 
+          let
+  RoundColumns = Function.From(
+    type function (t as table, decimal_places as number, optional exclusions as list) as table, 
+    (params) =>
+      let
+        // Select columns that are of type Number
+        Columns = Table.SelectRows(Table.Schema(params{0}), each _[TypeName] = "Number.Type")[Name],
+        // Exclude any columns that do not need to be rounded
+        Exclude = try List.RemoveItems(Columns, params{2}) otherwise {},
+        // Create a list of transformation functions for rounding numbers
+        Zip = List.Zip({Exclude, List.Repeat({(num) as number => Number.RoundAwayFromZero(num, params{1})}, List.Count(Exclude))}),
+        // Apply the rounding transformation to the columns
+        Txform = Table.TransformColumns(params{0}, Zip)
+      in
+        Txform
+  ), 
+  fnType = type function (t as table, decimal_places as number, optional exclusions as list) as table
+    meta [
+      Documentation.Name = "RoundColumns", 
+      Documentation.LongDescription = "This function rounds the values in all numeric columns of a given table to a specified number of decimal places. It takes a table, the number of decimal places, and an optional list of columns to exclude as input and returns the table with rounded values.",
+      Documentation.Examples = {
+        [
+          Description = "Round the values in numeric columns of a table to 2 decimal places.",
+          Code        = "=RoundColumns(Table.TransformColumnTypes(#table({""A"", ""B""}, {{1.234, 2.345}, {3.456, 4.567}}),{{""A"", type number}, {""B"", type number}}), 2)", 
+          Result      = "#table({""A"", ""B""}, {{1.23, 2.35}, {3.46, 4.57}})"
+        ],
+        [
+          Description = "Round the values in numeric columns of a table to 2 decimal places, excluding the 'B' column.",
+          Code        = "=RoundColumns(Table.TransformColumnTypes(#table({""A"", ""B""}, {{1.234, 2.345}, {3.456, 4.567}}),{{""A"", type number}, {""B"", type number}}), 2, {""B""})", 
+          Result      = "#table({""A"", ""B""}, {{1.23, 2.345}, {3.46, 4.567}})"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(RoundColumns, fnType) 
       ],
       [
         Name = "GetFunctionMetadata", 
