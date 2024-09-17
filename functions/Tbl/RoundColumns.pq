@@ -6,7 +6,7 @@ let
         // Select columns that are of type Number
         Columns = Table.SelectRows(Table.Schema(params{0}), each _[TypeName] = "Number.Type")[Name],
         // Exclude any columns that do not need to be rounded
-        Exclude = try List.RemoveItems(Columns, params{2}) otherwise {},
+        Exclude = try List.RemoveItems(Columns, params{2}) otherwise Columns,
         // Create a list of transformation functions for rounding numbers
         Zip = List.Zip({Exclude, List.Repeat({(num) as number => Number.RoundAwayFromZero(num, params{1})}, List.Count(Exclude))}),
         // Apply the rounding transformation to the columns
