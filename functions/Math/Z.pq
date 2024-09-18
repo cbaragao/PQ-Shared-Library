@@ -807,15 +807,15 @@ let
       ),
 
       // check the test type, if it is not z, subtract from 1
-      v = if params{0} <> "z" then Number.Round(1 - params{1}, 3) else params{1},
+      v = if params{0} <> "z" then Number.RoundAwayFromZero(1 - params{1}, 3) else params{1},
       get_values =
         // lookup values based on test - default to z lookup
         if params{0} = "r" then
-          Table.ToRecords(Table.LastN(Table.SelectRows(standard, each Number.Round([area_right], 3) = v), 1))
+          Table.ToRecords(Table.LastN(Table.SelectRows(standard, each Number.RoundAwayFromZero([area_right], 3) = v), 1))
         else if params{0} = "l" then
-          Table.ToRecords(Table.FirstN(Table.SelectRows(standard, each Number.Round([area_left], 3) = v), 1))
+          Table.ToRecords(Table.FirstN(Table.SelectRows(standard, each Number.RoundAwayFromZero([area_left], 3) = v), 1))
         else if params{0} = "t" then
-          Table.SelectRows(standard, each Number.Round([area_left], 3) = Number.Round(v / 2, 3) or Number.Round([area_right], 3) = Number.Round(v / 2, 3))
+          Table.SelectRows(standard, each Number.RoundAwayFromZero([area_left], 3) = Number.RoundAwayFromZero(v / 2, 3) or Number.RoundAwayFromZero([area_right], 3) = Number.RoundAwayFromZero(v / 2, 3))
         else
           Table.SelectRows(standard, each [z] = v)
     in

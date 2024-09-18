@@ -12,7 +12,7 @@ let
     q3 = count * 0.75,
     fnRunCheck = (check as number)=>
         let 
-            get_q = if check = Number.IntegerDivide(check,1) then List.Average({l{Number.Round(check,0)-1}, l{Number.Round(check,0)}}) else l{Number.Round(check,0)}
+            get_q = if check = Number.IntegerDivide(check,1) then List.Average({l{Number.RoundAwayFromZero(check,0)-1}, l{Number.RoundAwayFromZero(check,0)}}) else l{Number.RoundAwayFromZero(check,0)}
         in   
             get_q,
     q1_val = fnRunCheck(q1),

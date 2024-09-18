@@ -21,7 +21,7 @@ let
         c = 2 * Number.Asin(Number.Sqrt(a)),
 
         // Calculate the distance and round to 4 decimal places
-        result = Number.Round(r * c, 4)
+        result = Number.RoundAwayFromZero(r * c, 4)
       in
         result
   ), 

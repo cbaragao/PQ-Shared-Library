@@ -24,7 +24,7 @@ let
                 List.Transform(
                   List.Random(params{0}, params{1}), 
                   // Convert to integers
-                  each Number.Round(_ * places, 0)
+                  each Number.RoundAwayFromZero(_ * places, 0)
                 )
               ), 
               Order.Ascending

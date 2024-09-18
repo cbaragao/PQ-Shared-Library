@@ -332,9 +332,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )
@@ -374,9 +374,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )
@@ -416,9 +416,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )

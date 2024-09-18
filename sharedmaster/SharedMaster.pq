@@ -129,7 +129,7 @@ in
         c = 2 * Number.Asin(Number.Sqrt(a)),
 
         // Calculate the distance and round to 4 decimal places
-        result = Number.Round(r * c, 4)
+        result = Number.RoundAwayFromZero(r * c, 4)
       in
         result
   ), 
@@ -469,7 +469,7 @@ Value.ReplaceType(ErlangC, fnType)
                 List.Transform(
                   List.Random(params{0}, params{1}), 
                   // Convert to integers
-                  each Number.Round(_ * places, 0)
+                  each Number.RoundAwayFromZero(_ * places, 0)
                 )
               ), 
               Order.Ascending
@@ -907,7 +907,7 @@ let
     q3 = count * 0.75,
     fnRunCheck = (check as number)=>
         let 
-            get_q = if check = Number.IntegerDivide(check,1) then List.Average({l{Number.Round(check,0)-1}, l{Number.Round(check,0)}}) else l{Number.Round(check,0)}
+            get_q = if check = Number.IntegerDivide(check,1) then List.Average({l{Number.RoundAwayFromZero(check,0)-1}, l{Number.RoundAwayFromZero(check,0)}}) else l{Number.RoundAwayFromZero(check,0)}
         in   
             get_q,
     q1_val = fnRunCheck(q1),
@@ -1745,15 +1745,15 @@ in
       ),
 
       // check the test type, if it is not z, subtract from 1
-      v = if params{0} <> "z" then Number.Round(1 - params{1}, 3) else params{1},
+      v = if params{0} <> "z" then Number.RoundAwayFromZero(1 - params{1}, 3) else params{1},
       get_values =
         // lookup values based on test - default to z lookup
         if params{0} = "r" then
-          Table.ToRecords(Table.LastN(Table.SelectRows(standard, each Number.Round([area_right], 3) = v), 1))
+          Table.ToRecords(Table.LastN(Table.SelectRows(standard, each Number.RoundAwayFromZero([area_right], 3) = v), 1))
         else if params{0} = "l" then
-          Table.ToRecords(Table.FirstN(Table.SelectRows(standard, each Number.Round([area_left], 3) = v), 1))
+          Table.ToRecords(Table.FirstN(Table.SelectRows(standard, each Number.RoundAwayFromZero([area_left], 3) = v), 1))
         else if params{0} = "t" then
-          Table.SelectRows(standard, each Number.Round([area_left], 3) = Number.Round(v / 2, 3) or Number.Round([area_right], 3) = Number.Round(v / 2, 3))
+          Table.SelectRows(standard, each Number.RoundAwayFromZero([area_left], 3) = Number.RoundAwayFromZero(v / 2, 3) or Number.RoundAwayFromZero([area_right], 3) = Number.RoundAwayFromZero(v / 2, 3))
         else
           Table.SelectRows(standard, each [z] = v)
     in
@@ -2664,9 +2664,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )
@@ -2706,9 +2706,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )
@@ -2748,9 +2748,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.Round(Number.Abs(r), 0)), 
-                  Text.From(Number.Round(Number.Abs(g), 0)), 
-                  Text.From(Number.Round(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
                 }, 
                 ","
               )
