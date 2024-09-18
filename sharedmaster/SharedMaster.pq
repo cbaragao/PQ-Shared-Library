@@ -2,6 +2,45 @@ let
   return = Table.FromRecords(
     {
       [
+        Name = "RoundDateTime", 
+        Category = "DateTime", 
+        Function = 
+          let
+  RoundDateTime= Function.From(
+    type function (dt as datetime, interval as number) as datetime, 
+    (params) =>
+      let
+        // Convert datetime to number
+        Source = Number.From(params{0}), 
+        
+        // Calculate the number of intervals in a day
+        Minutes = 24 * 60 / params{1}, 
+        
+        // Round the datetime to the nearest interval
+        Rounded = Number.RoundAwayFromZero((Source * Minutes), 0) / Minutes, 
+        
+        // Convert the rounded number back to datetime
+        Result = DateTime.From(Rounded)
+      in
+        Result
+  ), 
+  fnType = type function (dt as datetime, interval as number) as datetime
+    meta [
+      Documentation.Name = "RoundDateTime", 
+      Documentation.LongDescription = "This function rounds a datetime to a specified minute interval (e.g., round to the nearest 15 minutes).", 
+      Documentation.Examples = {
+        [
+          Description = "Round a datetime to the nearest 15 minutes.",
+          Code        = "=RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)", 
+          Result      = "#datetime(2022, 10, 1, 10, 15, 0)"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(RoundDateTime, fnType)
+ 
+      ],
+      [
         Name = "Bearing", 
         Category = "Geo", 
         Function = 
@@ -794,6 +833,61 @@ in
 
 in
   Value.ReplaceType(MegaStDevS, fnType) 
+      ],
+      [
+        Name = "Pearson", 
+        Category = "Math", 
+        Function = 
+          let
+  Pearson= Function.From(
+    type function (x as list, y as list) as number, 
+    (params) =>
+      let
+        // Calculate the sum of list x
+        sum_x = List.Sum(params{0}),
+        
+        // Calculate the sum of list y
+        sum_y = List.Sum(params{1}),
+        
+        // Calculate the sum of squares of list x
+        sum_x_sq = List.Accumulate(params{0}, 0, (state, current) => state + Number.Power(current, 2)),
+        
+        // Calculate the sum of squares of list y
+        sum_y_sq = List.Accumulate(params{1}, 0, (state, current) => state + Number.Power(current, 2)),
+        
+        // Calculate the sum of products of corresponding elements in lists x and y
+        sum_xy = 
+          let   
+            l = List.Zip({params{0}, params{1}}),
+            tx = List.Transform(l, each _{0} * _{1}),
+            sum = List.Sum(tx)
+          in 
+            sum,
+        
+        // Calculate the number of elements in list x
+        n = List.Count(params{0}),
+        
+        // Calculate the Pearson correlation coefficient
+        Result = ((n * sum_xy) - (sum_x * sum_y)) / 
+            Number.Sqrt((n * sum_x_sq - Number.Power(sum_x, 2)) * (n * sum_y_sq - Number.Power(sum_y, 2)))
+      in
+        Result
+  ), 
+  fnType = type function (x as list, y as list) as number
+    meta [
+      Documentation.Name = "Pearson", 
+      Documentation.LongDescription = "This function calculates the Pearson correlation coefficient between two lists of numbers.", 
+      Documentation.Examples = {
+        [
+          Description = "Calculate the Pearson correlation coefficient for two lists of numbers.",
+          Code        = "=Pearson({1, 2, 3, 4}, {4, 5, 6, 7})", 
+          Result      = "1"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(Pearson, fnType)
+ 
       ],
       [
         Name = "QuartileStats", 
@@ -2050,7 +2144,7 @@ in
         // Select columns that are of type Number
         Columns = Table.SelectRows(Table.Schema(params{0}), each _[TypeName] = "Number.Type")[Name],
         // Exclude any columns that do not need to be rounded
-        Exclude = try List.RemoveItems(Columns, params{2}) otherwise {},
+        Exclude = try List.RemoveItems(Columns, params{2}) otherwise Columns,
         // Create a list of transformation functions for rounding numbers
         Zip = List.Zip({Exclude, List.Repeat({(num) as number => Number.RoundAwayFromZero(num, params{1})}, List.Count(Exclude))}),
         // Apply the rounding transformation to the columns
@@ -2077,6 +2171,61 @@ in
     ]
 in
   Value.ReplaceType(RoundColumns, fnType) 
+      ],
+      [
+        Name = "CreateBatches", 
+        Category = "Utils", 
+        Function = 
+          let
+  Source = Function.From(
+    type function (batch as number, total as number, base as number) as table, 
+    (params) =>
+      let
+        // Generate batches based on the input parameters
+        batches = List.Generate(
+          () => [
+            from = params{2},
+            to = params{0}
+          ],
+          each [to] <= params{1},
+          each [
+            from = [from] + params{0},
+            to = if params{2} = 1 then [to] + params{0} else ([from] + (params{0}) * 2) - 1
+          ]
+        ),
+        
+        // Convert the list of batches to a table
+        to_table = Table.FromList(batches, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        
+        // Expand the record column to separate columns
+        expanded = Table.ExpandRecordColumn(to_table, "Column1", {"from", "to"}, {"from", "to"}),
+        
+        // Change the column types to Int64
+        changed_type = Table.TransformColumnTypes(expanded, {{"from", Int64.Type}, {"to", Int64.Type}}),
+        
+        // Add an index column to the table
+        index = Table.AddIndexColumn(changed_type, "run", 1, 1, Int64.Type),
+        
+        // Reorder the columns for better readability
+        reorder = Table.ReorderColumns(index, {"run", "from", "to"})
+      in
+        reorder
+  ), 
+  fnType = type function (batch as number, total as number, base as number) as table
+    meta [
+      Documentation.Name = "GenerateBatches", 
+      Documentation.LongDescription = "This function generates batches based on the input parameters: batch size, total size, and base value. It returns a table with the batch ranges and an index column.", 
+      Documentation.Examples = {
+        [
+          Description = "Generate batches with a batch size of 10, total size of 100, and base value of 1.",
+          Code        = "=GenerateBatches(10, 100, 1)", 
+          Result      = "#table({""run"", ""from"", ""to""}, {{1, 1, 10}, {2, 11, 20}, {3, 21, 30}, {4, 31, 40}, {5, 41, 50}, {6, 51, 60}, {7, 61, 70}, {8, 71, 80}, {9, 81, 90}, {10, 91, 100}})"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(Source, fnType)
+ 
       ],
       [
         Name = "GetFunctionMetadata", 
@@ -2129,6 +2278,53 @@ in
 in
   // Replace the type of the function with the defined type
   Value.ReplaceType(GetFunctionMetadata, fnType) 
+      ],
+      [
+        Name = "Switch", 
+        Category = "Utils", 
+        Function = 
+          let
+  Switch = Function.From(
+    type function (value as any, l as list, default as any) as any, 
+    (params) =>
+      let
+        // Function to select nth item of list
+        // If you pass in zero, you get even indices
+        // If you pass in one, you get odd indices
+        fnSelectEvenOdd = (lst as list, remainder as number) as list =>
+            let 
+                result = List.Select(lst, each Number.Mod(List.PositionOf(lst, _), 2) = remainder)
+            in    
+                result,
+        
+        // After getting even and odd in separate lists, zip them together
+        // This sets up a {function, return} item
+        Zipped = List.Zip({fnSelectEvenOdd(params{1}, 0), fnSelectEvenOdd(params{1}, 1)}),
+
+        // Now check each function and return the result that maps along with it
+        Return = try List.Select(List.Transform(Zipped, each if _{0}(params{0}) = true then _{1} else null), each _ <> null){0} otherwise params{2}
+      in
+       Return
+  ), 
+  fnType = type function (value as any, l as list, default as any) as any
+    meta [
+      Documentation.Name = "Switch", 
+      Documentation.LongDescription = "This function evaluates a value against a list of functions and returns the corresponding result. It takes a value, a list of functions and results, and a default value. If the value matches a function, the corresponding result is returned; otherwise, the default value is returned.",
+      Documentation.Examples = {
+        [
+          Description = "Evaluate a value against a list of functions and return the corresponding result.",
+          Code        = "=Switch(5, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
+          Result      = """Less than 10"""
+        ],
+        [
+          Description = "Evaluate a value against a list of functions and return the default value if no match is found.",
+          Code        = "=Switch(15, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
+          Result      = """10 or more"""
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(Switch, fnType) 
       ],
       [
         Name = "CheckColorBlind", 
@@ -2845,6 +3041,71 @@ in
  
       ],
       [
+        Name = "GetColorHue", 
+        Category = "UX", 
+        Function = 
+          let
+  GetColorHue = Function.From(
+    type function (HEX as text) as number, 
+    (params) =>
+      let
+        // Split strings into list by each character, convert to upper, remove hash
+        Source = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000",
+        
+        // Split the Source by each character
+        SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source),
+
+        GetHue = (hexlist) =>
+          let 
+            // Build the RGB list
+            RGB = List.Combine({{"0".."9"},{"A".."F"}}),
+            
+            // Sub function to figure out RGB value
+            GetRGB = (cval1, cval2) =>
+              let 
+                RGBVal = (Number.From(cval1) * 16) + Number.From(cval2)
+              in       
+                RGBVal,
+            
+            // Get positions of each digit
+            r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})),
+            g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})),
+            b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})),
+            
+            // Get the hue from r, g, b values
+            hue = 
+              if r >= g and g >= b then 60 * (g - b) / (r - b)
+              else if g > r and r >= b then 60 * (2 - (r - b) / (g - b))
+              else if g >= b and b > r then 60 * (2 + (b - r) / (g - r))
+              else if b > g and g > r then 60 * (4 - (g - r) / (b - r))
+              else if b > r and r >= g then 60 * (4 + (r - g) / (b - g))
+              else if r >= b and b > g then 60 * (6 - (b - g) / (r - g))
+              else -1
+          in
+            hue,
+        
+        // Process the split list from the input
+        Result = GetHue(SplitHex)
+      in
+        Result
+  ), 
+  fnType = type function (HEX as text) as number
+    meta [
+      Documentation.Name = "GetColorHue", 
+      Documentation.LongDescription = "This function calculates the hue of a color given its HEX code.", 
+      Documentation.Examples = {
+        [
+          Description = "Calculate the hue of a color given its HEX code.",
+          Code        = "=GetColorHue(""#FF5733"")", 
+          Result      = "10.588235294117647"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(GetColorHue, fnType)
+ 
+      ],
+      [
         Name = "GetCompColor", 
         Category = "UX", 
         Function = 
@@ -3047,6 +3308,67 @@ in
  
       ],
       [
+        Name = "GetLuminosity", 
+        Category = "UX", 
+        Function = 
+          let
+  GetLuminosity = Function.From(
+    type function (HEX as text) as number, 
+    (params) =>
+      let
+        // Split strings into list by each character, convert to upper, remove hash
+        Source = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000",
+        
+        // Split the Source by each character
+        SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source),
+
+        GetLuminosity = (hexlist) =>
+          let 
+            // Build the RGB list
+            RGB = List.Combine({{"0".."9"},{"A".."F"}}),
+            
+            // Sub function to figure out complimentary color RGB value
+            GetRGB = (cval1, cval2) =>
+              let 
+                RGBVal = (Number.From(cval1) * 16) + Number.From(cval2)
+              in       
+                RGBVal,
+            
+            // Get positions of each digit
+            r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})),
+            g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})),
+            b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})),
+            
+            // Combine R, G, B hex values to one hex value
+            FinalRGB = {r, g, b},
+            
+            // Get the luminosity
+            Luminosity = 0.5 * (List.Max(FinalRGB) / 255 + List.Min(FinalRGB) / 255)
+          in
+            Luminosity,
+        
+        // Process the split list from the input
+        lum = GetLuminosity(SplitHex)
+      in
+        lum
+  ), 
+  fnType = type function (HEX as text) as number
+    meta [
+      Documentation.Name = "GetLuminosity", 
+      Documentation.LongDescription = "This function calculates the luminosity of a color given its HEX code.", 
+      Documentation.Examples = {
+        [
+          Description = "Calculate the luminosity of a color given its HEX code.",
+          Code        = "=GetLuminosity(""#FF5733"")", 
+          Result      = "0.6"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(GetLuminosity, fnType)
+ 
+      ],
+      [
         Name = "GetRGBValue", 
         Category = "UX", 
         Function = 
@@ -3106,6 +3428,62 @@ Documentation.Examples = {
 
     in  
 Value.ReplaceType(GetRGBValue, fnType) 
+      ],
+      [
+        Name = "MedianAspectRatio", 
+        Category = "UX", 
+        Function = 
+          let
+  MedianAspectRatio = Function.From(
+    type function (x as list, y as list) as record, 
+    (params) =>
+      let
+        // Get the range of the x series/column by subtracting max from min
+        range_x = List.Max(params{0}) - List.Min(params{0}), 
+        
+        // Get the range of the y series/column by subtracting max from min
+        range_y = List.Max(params{1}) - List.Min(params{1}), 
+        
+        // Get max index of one of the columns for List.Generate
+        max = List.Count(params{0}) - 1, 
+        
+        // The equation asks for running differences (think lag in SQL) divided by the range for x and y
+        acc = List.Generate(
+          () => [i = 0, dx = 0, dy = 0], 
+          each [i] < max, 
+          each [i = [i] + 1, dx = (params{0}{[i] + 1} - params{0}{[i]}) / range_x, dy = (params{1}{[i] + 1} - params{1}{[i]}) / range_y]
+        ), 
+        
+        // Then divide each dx and dy. After that, take the absolute value
+        div = List.Transform(
+          List.Skip(acc, 1), 
+          each Number.Abs(Record.Field(_, "dy") / Record.Field(_, "dx"))
+        ), 
+        
+        // Get the median of those values
+        median = List.Median(div), 
+        
+        // Get aspect ratio
+        a = (1 / median)
+      in
+        // Return a record with aspect ratio and median absolute slope
+        [aspect_ratio = a, median_slope = median]
+  ), 
+  fnType = type function (x as list, y as list) as record
+    meta [
+      Documentation.Name = "MedianAspectRatio", 
+      Documentation.LongDescription = "This function calculates the median aspect ratio for charts based on two lists of numbers.", 
+      Documentation.Examples = {
+        [
+          Description = "Calculate the median aspect ratio for two lists of numbers.",
+          Code        = "=MedianAspectRatio({1, 2, 3, 4}, {4, 5, 6, 7})", 
+          Result      = "[aspect_ratio = 1, median_slope = 1]"
+        ]
+      }
+    ]
+in
+  Value.ReplaceType(MedianAspectRatio, fnType)
+ 
       ]
     },
     type table [Name = Text.Type, Category = Text.Type, Function = Function.Type]
