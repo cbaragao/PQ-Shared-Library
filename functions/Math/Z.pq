@@ -822,10 +822,10 @@ let
       get_values),
   fnType = type function (test_type as text, value as number) as record
     meta [
-      Documentation.Name = "pqstat.Z",
+      Documentation.Name = "Z",
       Documentation.LongDescription = "This provides lookup capabilities on the Standard Table for Z Scores. " & "The second value is either the confidence level you are looking for or the z-score you are looking up.",
       Documentation.Examples = {
-        [Description = "The test types can be the following: " & "t = two-tailed test; " & "l = left-tailed test; " & "r = right-tailed test; " & "z = lookup based on z score", Code = "fnZTable(""r"", 0.95)", Result = "[z=1.64, area_left = 0.9495, area_right=0.0505, position= above mean]"]
+        [Description = "The test types can be the following: " & "t = two-tailed test; " & "l = left-tailed test; " & "r = right-tailed test; " & "z = lookup based on z score", Code = "Z(""r"", 0.95)", Result = "[z=1.64, area_left = 0.9495, area_right=0.0505, position= above mean]"]
       }
     ]
 in

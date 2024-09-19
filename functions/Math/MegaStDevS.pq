@@ -149,7 +149,7 @@ let
       Documentation.LongDescription = "This function operates on a list and calculates different means and uses those means as part of a sample standard deviation calculation.",
       Documentation.Examples = {
     [Description = "This provides the different values for an example list.",
-    Code = "= pqmath.MegaStDevSample({1, 5, 10, 20, 22})",
+    Code = "= MegaStDevSample({1, 5, 10, 20, 22})",
     Result="[arithmetic = 9.18, trimmed = 9.18, geometric = 10.32, winsor = 9.18, harmonic= 12.83]"]
 }]
       

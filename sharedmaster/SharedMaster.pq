@@ -88,13 +88,13 @@ in
   ), 
   fnType = type function (lat1_rad as number, lat2_rad as number, lon1_rad as number, lon2_rad as number) as record
     meta [
-      Documentation.Name = "CalculateDirection", 
+      Documentation.Name = "Bearing", 
       Documentation.LongDescription
         = "This function calculates the compass direction from one geographic coordinate to another. It takes the latitude and longitude of two points in radians and returns the compass direction as a record with the direction and sort order.", 
       Documentation.Examples = {
         [
           Description = "Calculate the direction from point A to point B.",
-          Code        = "=CalculateDirection(0.785398, 0.523599, -1.5708, -1.0472)", 
+          Code        = "=Bearing(0.785398, 0.523599, -1.5708, -1.0472)", 
           Result      = "[Direction = 'ESE', Sort = 6]"
         ]
       }
@@ -306,7 +306,7 @@ in
       Documentation.Examples = {
         [
           Description = "This provides a correlation matrix based on table t.", 
-          Code        = "=pqmath.Corr(Source)", 
+          Code        = "=Corr(Source)", 
           Result      = "Correlation matrix table based on number columns in table passed in."
         ]
       }
@@ -826,7 +826,7 @@ in
       Documentation.LongDescription = "This function operates on a list and calculates different means and uses those means as part of a sample standard deviation calculation.",
       Documentation.Examples = {
     [Description = "This provides the different values for an example list.",
-    Code = "= pqmath.MegaStDevSample({1, 5, 10, 20, 22})",
+    Code = "= MegaStDevSample({1, 5, 10, 20, 22})",
     Result="[arithmetic = 9.18, trimmed = 9.18, geometric = 10.32, winsor = 9.18, harmonic= 12.83]"]
 }]
       
@@ -1760,10 +1760,10 @@ in
       get_values),
   fnType = type function (test_type as text, value as number) as record
     meta [
-      Documentation.Name = "pqstat.Z",
+      Documentation.Name = "Z",
       Documentation.LongDescription = "This provides lookup capabilities on the Standard Table for Z Scores. " & "The second value is either the confidence level you are looking for or the z-score you are looking up.",
       Documentation.Examples = {
-        [Description = "The test types can be the following: " & "t = two-tailed test; " & "l = left-tailed test; " & "r = right-tailed test; " & "z = lookup based on z score", Code = "fnZTable(""r"", 0.95)", Result = "[z=1.64, area_left = 0.9495, area_right=0.0505, position= above mean]"]
+        [Description = "The test types can be the following: " & "t = two-tailed test; " & "l = left-tailed test; " & "r = right-tailed test; " & "z = lookup based on z score", Code = "Z(""r"", 0.95)", Result = "[z=1.64, area_left = 0.9495, area_right=0.0505, position= above mean]"]
       }
     ]
 in

@@ -85,7 +85,7 @@ let
       Documentation.Examples = {
         [
           Description = "This provides a correlation matrix based on table t.", 
-          Code        = "=pqmath.Corr(Source)", 
+          Code        = "=Corr(Source)", 
           Result      = "Correlation matrix table based on number columns in table passed in."
         ]
       }
