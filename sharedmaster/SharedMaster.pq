@@ -2027,7 +2027,7 @@ in
     (params) =>
       let
         // Select columns by data type "datetimezone" and get their names
-        Select = Table.SelectRows(Table.Schema(params{0}), each _[Kind] = "datetimezone")[Name],
+        Select = Table.SelectRows(Table.Schema(params{0}), each _[Kind] = "datetimezone" or  _[Kind] = "datetime")[Name],
         
         // Get a count of the selected columns
         Count = List.Count(Select),
@@ -2043,15 +2043,14 @@ in
       Documentation.LongDescription = "This function converts columns of type 'datetimezone' to type 'date' in a given table. It takes a table as input and returns the table with the specified columns' data types changed.",
       Documentation.Examples = {
         [
-          Description = "Convert 'datetimezone' columns to 'date' in a table.",
+          Description = "Convert 'datetimezone' or 'datetime' columns to 'date' in a table.",
           Code        = "=ConvertDateTimeZoneToDate(#table({""DateTimeZoneColumn""}, {{#datetimezone(2023, 1, 1, 0, 0, 0, 0, 0)}}))", 
           Result      = "#table({""DateTimeZoneColumn""}, {{#date(2023, 1, 1)}})"
         ]
       }
     ]
 in
-  Value.ReplaceType(ConvertDateTimeZoneToDate, fnType)
- 
+  Value.ReplaceType(ConvertDateTimeZoneToDate, fnType) 
       ],
       [
         Name = "RemoveNullColumns", 
