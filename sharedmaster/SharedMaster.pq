@@ -1829,7 +1829,7 @@ in
       Documentation.Examples = {
         [
           Description = "Encode the text 'Hello'.",
-          Code        = "=pqutils.EncodeText(""Hello"")", 
+          Code        = "=EncodeText(""Hello"")", 
           Result      = "072101108108111"
         ]
       }
