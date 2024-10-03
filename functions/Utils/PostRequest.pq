@@ -7,10 +7,10 @@ let
 
 let
 
-    Response= Web.Contents(SvcUrl,
+    Response= Web.Contents(params{0},
 
     [
-        Content=Text.ToBinary(Content),
+        Content=Text.ToBinary(params{1}),
         // This can be edited for different header parameters
         Headers=[#"Content-Type" = "application/json"]
     ]
