@@ -27,6 +27,10 @@ Special thanks to:
 
 3. Right click any function that you want to use to instantiate it and don't forget to name it.
 
+## Wiki
+
+I used Copilot to put together a [wiki](https://github.com/cbaragao/PQ-Shared-Library/wiki) for all functions added thus far.
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
