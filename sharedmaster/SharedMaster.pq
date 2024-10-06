@@ -155,6 +155,12 @@ in
   Value.ReplaceType(CalculateDistance, fnType) 
       ],
       [
+        Name = "ConvertDatum", 
+        Category = "Geo", 
+        Function = 
+           
+      ],
+      [
         Name = "Benford", 
         Category = "Math", 
         Function = 
@@ -2105,16 +2111,18 @@ in
     type function (t as table, string as text, replacement as text) as table, 
     (params) =>
       let
-        // Get the profile of the table to extract column names
-        Source = Table.Buffer(Table.Profile(params{0}))[Column],
-        // Replace underscores with spaces in column names
-        Replacements = List.ReplaceValue(Source, params{1}, params{2}, Replacer.ReplaceText),
-        // Zip the original and replacement column names together
-        Zip = List.Zip({Source, Replacements}),
-        // Rename columns in the table using the zipped list
-        ReplaceInColumnNames = Table.RenameColumns(params{0}, Zip)
+        // Replace in one step -  based on Alex Powers's solution in his Github repo
+        Replace = Table.TransformColumnNames(
+                    params{0}, 
+                    each Text.Proper(
+                      Replacer.ReplaceText(_,
+                        params{1}, 
+                        params{2}
+                    )
+                )
+            )
       in
-        ReplaceInColumnNames
+        Replace
   ), 
   fnType = type function (t as table, string as text, replacement as text) as table
     meta [
