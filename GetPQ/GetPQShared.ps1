@@ -81,8 +81,6 @@ $icon = New-Object System.Drawing.Icon($memoryStream)
 # Set the form icon
 $form.Icon = $icon
 
-
-
 # Create a listbox to display the file names
 $listBox = New-Object System.Windows.Forms.ListBox
 $listBox.Location = New-Object System.Drawing.Point(10, 35)
@@ -275,6 +273,36 @@ $copyFormatButton.Add_Click({
     Set-Clipboard -Value $formattedCode
     [System.Windows.Forms.MessageBox]::Show("Formatted code copied to clipboard.")
 })
+
+# Create the fourth tab page
+$tabPage4 = New-Object System.Windows.Forms.TabPage
+$tabPage4.Text = "VS Code"
+
+# Create a button for the fourth tab page
+$vsCodeButton = New-Object System.Windows.Forms.Button
+$vsCodeButton.Location = New-Object System.Drawing.Point(10, 10)
+$vsCodeButton.Size = New-Object System.Drawing.Size(150, 30)
+$vsCodeButton.Text = "Open VS Code"
+
+$vsCodeButton.BackColor = [System.Drawing.Color]::Green
+$vsCodeButton.ForeColor = [System.Drawing.Color]::White
+
+$tabPage4.Controls.Add($vsCodeButton)
+
+# Event handler for VS Code button click
+$vsCodeButton.Add_Click({
+    try {
+        Start-Process "code"
+    } catch {
+        $result = [System.Windows.Forms.MessageBox]::Show("Visual Studio Code is not installed or not in PATH. Would you like to download it?", "VS Code Not Found", [System.Windows.Forms.MessageBoxButtons]::YesNo)
+        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+            Start-Process "https://code.visualstudio.com/"
+        }
+    }
+})
+
+# Add the fourth tab page to the tab control
+$tabControl.TabPages.Add($tabPage4)
 
 # Show the form
 $form.ShowDialog() | Out-Null
