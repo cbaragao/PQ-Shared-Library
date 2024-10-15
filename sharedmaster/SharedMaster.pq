@@ -155,12 +155,6 @@ in
   Value.ReplaceType(CalculateDistance, fnType) 
       ],
       [
-        Name = "ConvertDatum", 
-        Category = "Geo", 
-        Function = 
-           
-      ],
-      [
         Name = "Benford", 
         Category = "Math", 
         Function = 
@@ -2912,12 +2906,12 @@ Value.ReplaceType(CheckColorBlind, fnType)
         Function = 
           let CheckColorContrast = 
 
-    (HEX1 as text, HEX2 as text) as text=>
+    Function.From(type function(HEX1 as text, HEX2 as text) as text, (params)=>
 
 let 
     // Split strings into list by each character, convert to upper, remove hash
-    H1 = if HEX1 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX1), "#")) else "#000000",
-    H2 = if HEX2 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX2), "#")) else "#000000",
+    H1 = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000",
+    H2 = if params{1} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{1}), "#")) else "#000000",
     
     // Split the Source by each character
     SplitHex1 = Splitter.SplitTextByRepeatedLengths(1)(H1),
@@ -2983,7 +2977,7 @@ let
     contrast = if cratio >= min then "Enough Contrast" else "Not Enough Contrast"
    
 in 
-    contrast,
+    contrast),
 
 
 fnType = type function (HEX1 as text, HEX2 as text) as text meta 
@@ -3158,6 +3152,89 @@ in
 in
   Value.ReplaceType(GetColorHue, fnType)
  
+      ],
+      [
+        Name = "GetColorScheme", 
+        Category = "UX", 
+        Function = 
+          //from the color api: https://www.thecolorapi.com/docs
+let
+  GetColorScheme = Function.From(
+    type function (hex as text, mode as number, count as number) as table, 
+    (params) =>
+      let
+        num = Text.From(params{2}), 
+        hx = if Text.StartsWith(params{0}, "#") then Text.Replace(params{0}, "#", "") else params{0}, 
+        md = 
+          if params{1} = 0 then
+            "monochrome"
+          else if params{1} = 1 then
+            "monochrome-dark"
+          else if params{1} = 2 then
+            "monochrome-light"
+          else if params{1} = 3 then
+            "analogic"
+          else if params{1} = 4 then
+            "complement"
+          else if params{1} = 5 then
+            "analogic-complement"
+          else if params{1} = 6 then
+            "triad"
+          else
+            "quad", 
+        call = Json.Document(
+          Web.Contents(
+            "https://www.thecolorapi.com/scheme?hex="
+              & hx
+              & "&format=json&mode="
+              & md
+              & "&count="
+              & num
+          )
+        )[colors], 
+        to_table = Table.FromList(call, Splitter.SplitByNothing(), null, null, ExtraValues.Error), 
+        expanded = Table.ExpandRecordColumn(
+          to_table, 
+          "Column1", 
+          {"hex", "rgb", "name", "contrast"}, 
+          {"hex", "rgb", "name", "contrast"}
+        ), 
+        expanded_hex = Table.ExpandRecordColumn(expanded, "hex", {"value"}, {"hex"}), 
+        expanded_rgb = Table.ExpandRecordColumn(expanded_hex, "rgb", {"value"}, {"rgb"}), 
+        expanded_contrast = Table.ExpandRecordColumn(
+          expanded_rgb, 
+          "contrast", 
+          {"value"}, 
+          {"contrast"}
+        ), 
+        expanded_name = Table.ExpandRecordColumn(
+          expanded_contrast, 
+          "name", 
+          {"value", "closest_named_hex"}, 
+          {"closest_name", "closest_named_hex"}
+        ), 
+        result = Table.TransformColumnTypes(
+          expanded_name, 
+          {
+            {"hex", type text}, 
+            {"rgb", type text}, 
+            {"closest_name", type text}, 
+            {"closest_named_hex", type text}, 
+            {"contrast", type text}
+          }
+        )
+      in
+        result
+  ), 
+  // Define the function type with metadata
+  fnType = type function (hex as text, mode as number, count as number) as table
+    meta [
+      Documentation.Name            = "GetColorScheme", 
+      Documentation.LongDescription = "Get Color Scheme from the Color API."
+    ]
+in
+  // Replace the type of the function with the defined type
+  Value.ReplaceType(GetColorScheme, fnType) 
       ],
       [
         Name = "GetCompColor", 
