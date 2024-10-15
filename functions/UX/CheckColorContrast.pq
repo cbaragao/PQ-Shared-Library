@@ -1,11 +1,11 @@
 let CheckColorContrast = 
 
-    (HEX1 as text, HEX2 as text) as text=>
+    Function.From(type function(HEX1 as text, HEX2 as text) as text, (params)=>
 
 let 
     // Split strings into list by each character, convert to upper, remove hash
-    H1 = if HEX1 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX1), "#")) else "#000000",
-    H2 = if HEX2 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX2), "#")) else "#000000",
+    H1 = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000",
+    H2 = if params{1} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{1}), "#")) else "#000000",
     
     // Split the Source by each character
     SplitHex1 = Splitter.SplitTextByRepeatedLengths(1)(H1),
@@ -71,7 +71,7 @@ let
     contrast = if cratio >= min then "Enough Contrast" else "Not Enough Contrast"
    
 in 
-    contrast,
+    contrast),
 
 
 fnType = type function (HEX1 as text, HEX2 as text) as text meta 
