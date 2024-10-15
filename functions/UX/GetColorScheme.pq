@@ -21,8 +21,10 @@ let
             "analogic-complement"
           else if params{1} = 6 then
             "triad"
-          else
-            "quad", 
+          else if params{1} = 7 then
+            "quad"
+          else 
+            "monochrome", 
         call = Json.Document(
           Web.Contents(
             "https://www.thecolorapi.com/scheme?hex="
