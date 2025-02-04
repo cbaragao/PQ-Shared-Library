@@ -1,8 +1,8 @@
 let
   // Define the function using Function.From
-  PostRequest = Function.From(
+  PostRequest = Function.From(type function
 
-(SvcUrl as text, Content as text) as text =>
+(SvcUrl as text, Content as text) as text,
 (params) =>
 
 let
