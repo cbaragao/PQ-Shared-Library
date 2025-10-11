@@ -1795,6 +1795,76 @@ in
   Value.ReplaceType(Z, fnType)
       ],
       [
+        Name = "fnRGetLinearModelCoefficients", 
+        Category = "R", 
+        Function = let
+    fnRGetLinearModelCoefficients =
+    Function.From(type function(df as table, independent as text, dependent as text, family as text) as table, (params) =>
+        let
+            Source = 
+                R.Execute(
+                    "df <- dataset" & 
+                    "#(lf)logit <- glm(" & params{2} & " ~ " & params{1} & ", data = df, family = """ & params{3} &""") " & 
+                    "#(lf)summary_model <- summary(logit) " & 
+                    "#(lf)coef_df <- as.data.frame(summary_model$coefficients) " &
+                    "#(lf)coef_df$Variable <- rownames(coef_df) " & 
+                    "#(lf)coef_df <- coef_df[, c(""Variable"", ""Estimate"", ""Std. Error"", ""z value"", ""Pr(>|z|)"")] " &
+                    "#(lf)colnames(coef_df) <- c(""Variable"", ""Estimate"", ""Std_Error"", ""Z_value"", ""P_value"")" & 
+                    "#(lf)coef_df$Significant <- coef_df$P_value <= 0.05",[dataset = params{0}])
+        in
+            Source{[Name="coef_df"]}[Value]
+    ),
+
+fnType = type function (df as table, independent as text, dependent as text, family as text) as table meta
+[
+    Documentation.Name = "fnRGetLinearModelCoefficients",
+    Documentation.LongDescription = "This function uses R to perform regression analysis and returns the model coefficients with statistical significance indicators. It executes a generalized linear model (GLM) and extracts coefficient estimates, standard errors, z-values, p-values, and significance flags.",
+    Documentation.Examples = {
+        [
+            Description = "Perform logistic regression on a dataset with binary dependent variable.",
+            Code = "fnRGetLinearModelCoefficients(MyTable, ""Age"", ""Outcome"", ""binomial"")",
+            Result = "A table with variables, estimates, standard errors, z-values, p-values, and significance indicators."
+        ]
+    }
+]
+in
+Value.ReplaceType(fnRGetLinearModelCoefficients, fnType)
+      ],
+      [
+        Name = "fnRPredictWithLogitModel", 
+        Category = "R", 
+        Function = let
+    fnRPredictWithLogitModel =
+    Function.From(type function(df as table, independent as text, dependent as text) as table, (params) =>
+        let
+            Source = 
+                R.Execute(
+                    "df <- dataset " & 
+                    "#(lf)logit <- glm(" & params{2} & " ~ " & params{1} & ", data = df, family = ""binomial"")" & 
+                    "#(lf)df$Predicted <- predict(logit, newdata = df, type = ""response"")" & 
+                    "#(lf)df$Prediction <- ifelse(df$Predicted > 0.5, 1, 0)" & 
+                    "#(lf)df", [dataset=params{0}]),
+            Return = Source{[Name="df"]}[Value]
+        in
+            Return
+    ),
+
+fnType = type function (df as table, independent as text, dependent as text) as table meta
+[
+    Documentation.Name = "fnRPredictWithLogitModel",
+    Documentation.LongDescription = "This function uses R to create a logistic regression model and returns predictions. It fits a binomial GLM, generates predicted probabilities, and creates binary predictions based on a 0.5 threshold.",
+    Documentation.Examples = {
+        [
+            Description = "Predict outcomes using logistic regression on a dataset.",
+            Code = "fnRPredictWithLogitModel(MyTable, ""Age"", ""Outcome"")",
+            Result = "A table with the original data plus Predicted (probabilities) and Prediction (binary) columns."
+        ]
+    }
+]
+in
+Value.ReplaceType(fnRPredictWithLogitModel, fnType)
+      ],
+      [
         Name = "RunSQLQuery", 
         Category = "SQL", 
         Function = let
