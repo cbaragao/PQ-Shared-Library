@@ -12,14 +12,15 @@ Get-ChildItem -Path $rootDir -Recurse -Filter *.pq | ForEach-Object {
     $subDirName = $_.Directory.Name
     $fileContent = Get-Content -Path $filePath -Raw
 
+    # Use the file content as-is without additional escaping
+    $escapedContent = $fileContent
 
     # Add the record to the array
     $records += @"
       [
         Name = `"$fileName`", 
         Category = `"$subDirName`", 
-        Function = 
-          $fileContent 
+        Function = $escapedContent
       ]
 "@
 }
@@ -41,5 +42,5 @@ in
 "@
 
 # Output the template to a file
-$template | Out-File -FilePath ".\SharedMaster.pq" -Force
+$template | Out-File -FilePath ".\SharedMaster.pq" -Force -Encoding UTF8
 

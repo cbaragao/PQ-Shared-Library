@@ -4,8 +4,7 @@ let
       [
         Name = "RoundDateTime", 
         Category = "DateTime", 
-        Function = 
-          let
+        Function = let
   RoundDateTime= Function.From(
     type function (dt as datetime, interval as number) as datetime, 
     (params) =>
@@ -38,13 +37,12 @@ let
     ]
 in
   Value.ReplaceType(RoundDateTime, fnType)
- 
+
       ],
       [
         Name = "Bearing", 
         Category = "Geo", 
-        Function = 
-          let
+        Function = let
   Bearing = Function.From(
     type function (lat1_rad as number, lat2_rad as number, lon1_rad as number, lon2_rad as number) as record, 
     (params) =>
@@ -100,13 +98,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Bearing, fnType) 
+  Value.ReplaceType(Bearing, fnType)
       ],
       [
         Name = "CalculateDistance", 
         Category = "Geo", 
-        Function = 
-          let
+        Function = let
   CalculateDistance = Function.From(
     type function (lat1 as number, lon1 as number, lat2 as number, lon2 as number, optional measure as number) as number, 
     (params) =>
@@ -152,13 +149,12 @@ in
       }
       ]
 in
-  Value.ReplaceType(CalculateDistance, fnType) 
+  Value.ReplaceType(CalculateDistance, fnType)
       ],
       [
         Name = "Benford", 
         Category = "Math", 
-        Function = 
-          let Benford = 
+        Function = let Benford = 
     Function.From(type function(num as number) as record,(params)=>
         let
             len = Text.Length(Text.From(params{0})),
@@ -177,13 +173,12 @@ in
       Documentation.LongDescription = "This provides a Benford analysis for (up to) the first three digits of a number."
     ]
 in
-  Value.ReplaceType(Benford, fnType) 
+  Value.ReplaceType(Benford, fnType)
       ],
       [
         Name = "Conf", 
         Category = "Math", 
-        Function = 
-          let Conf = 
+        Function = let Conf = 
  Function.From(type function(z as number, stdev as number, population as number, optional mode as text) as record, (params)=>
 
 let
@@ -213,13 +208,12 @@ in
       
 
 in
-  Value.ReplaceType(Conf, fnType) 
+  Value.ReplaceType(Conf, fnType)
       ],
       [
         Name = "Corr", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   Corr = Function.From(
     type function (t as table) as table, 
     (params) =>
@@ -312,13 +306,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Corr, fnType) 
+  Value.ReplaceType(Corr, fnType)
       ],
       [
         Name = "ErlangC", 
         Category = "Math", 
-        Function = 
-          let 
+        Function = let 
   ErlangC = 
 Function.From( type function
   (
@@ -437,13 +430,51 @@ Documentation.Examples = {
     Result="[Agents = 14, Service_Level = 0.888350019]"]
 }]
     in  
-Value.ReplaceType(ErlangC, fnType) 
+Value.ReplaceType(ErlangC, fnType)
+      ],
+      [
+        Name = "fnExponentialWeightedMovingAverage", 
+        Category = "Math", 
+        Function = let
+    fnExponentialWeightedMovingAverage =
+    Function.From(
+        type function(alpha as number, values as list, index as number) as number,
+        (params) =>
+            let
+                alpha = params{0},
+                values = params{1},
+                index = params{2},
+                // Accumulate EWMA values up to the specified index
+                resultList = List.Accumulate(
+                    List.FirstN(values, index + 1), // take values up to and including the current index
+                    {}, // initial state: empty list
+                    (state, current) =>
+                        if List.Count(state) = 0 then
+                            {current} // first EWMA is just the first value
+                        else
+                            state & {
+                                alpha * Number.From(current) + (1 - alpha) * Number.From(List.Last(state))
+                            } // recursive EWMA formula
+                ),
+                result = resultList{index} // return the EWMA value at the specified index
+            in
+                result
+    ),
+
+    fnType = type function (alpha as number, values as list, index as number) as number
+        meta [
+            Documentation.Name = "fnExponentialWeightedMovingAverage",
+            Documentation.LongDescription = "Computes the EWMA for a list of numeric values using a smoothing factor alpha. The function builds an EWMA series up to the supplied index using List.Accumulate and returns the EWMA value at that index. The first EWMA equals the first value in the list."
+            ],
+
+    EWMAFunction = Value.ReplaceType(fnExponentialWeightedMovingAverage, fnType)
+in
+    EWMAFunction
       ],
       [
         Name = "GenerateRandomNumbers", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   GenerateRandomNumbers = Function.From(
     type function (sample as number, seed as number, max as number) as list, 
     (params) =>
@@ -492,13 +523,12 @@ Value.ReplaceType(ErlangC, fnType)
       }
     ]
 in
-  Value.ReplaceType(GenerateRandomNumbers, fnType) 
+  Value.ReplaceType(GenerateRandomNumbers, fnType)
       ],
       [
         Name = "GetFactors", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   GetFactors = Function.From(
     type function (num as number) as list, 
     (params) =>
@@ -542,13 +572,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(GetFactors, fnType) 
+  Value.ReplaceType(GetFactors, fnType)
       ],
       [
         Name = "MegaAverage", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   MegaAverage = 
     Function.From(
         type function(l as list) as record, (params)=>
@@ -669,13 +698,12 @@ in
 }]
 
 in
-  Value.ReplaceType(MegaAverage, fnType) 
+  Value.ReplaceType(MegaAverage, fnType)
       ],
       [
         Name = "MegaStDevS", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   MegaStDevS = 
     Function.From(
         type function(l as list) as record, (params)=>
@@ -832,13 +860,12 @@ in
       
 
 in
-  Value.ReplaceType(MegaStDevS, fnType) 
+  Value.ReplaceType(MegaStDevS, fnType)
       ],
       [
         Name = "Pearson", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   Pearson= Function.From(
     type function (x as list, y as list) as number, 
     (params) =>
@@ -887,13 +914,12 @@ in
     ]
 in
   Value.ReplaceType(Pearson, fnType)
- 
+
       ],
       [
         Name = "QuartileStats", 
         Category = "Math", 
-        Function = 
-          let 
+        Function = let 
 
   QuartileStats = 
 
@@ -930,13 +956,12 @@ in
       Documentation.LongDescription = "This provides quartiles and whether a row value is an outlier based on a column of data/list."
     ]
 in
-  Value.ReplaceType(QuartileStats, fnType) 
+  Value.ReplaceType(QuartileStats, fnType)
       ],
       [
         Name = "Z", 
         Category = "Math", 
-        Function = 
-          let
+        Function = let
   Z = Function.From(type function(test_type as text, value as number) as record, (params)=>
     let
 
@@ -1767,13 +1792,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Z, fnType) 
+  Value.ReplaceType(Z, fnType)
       ],
       [
         Name = "RunSQLQuery", 
         Category = "SQL", 
-        Function = 
-          let
+        Function = let
   RunSQLQuery = Function.From(
     type function (Source as any, Query as text) as table, 
     (params) =>
@@ -1805,13 +1829,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(RunSQLQuery, fnType) 
+  Value.ReplaceType(RunSQLQuery, fnType)
       ],
       [
         Name = "EncodeText", 
         Category = "String", 
-        Function = 
-          let
+        Function = let
   EncodeText = 
     Function.From(
       type function (str as text) as text, 
@@ -1836,13 +1859,12 @@ in
     ]
 in
   Value.ReplaceType(EncodeText, fnType)
- 
+
       ],
       [
         Name = "ReadFileToText", 
         Category = "String", 
-        Function = 
-          let
+        Function = let
   ReadFileToText = Function.From(
     type function (filepath as text) as text, 
     (params) =>
@@ -1869,13 +1891,12 @@ in
     ]
 in
   Value.ReplaceType(ReadFileToText, fnType)
- 
+
       ],
       [
         Name = "RemoveHTMLTags", 
         Category = "String", 
-        Function = 
-          let
+        Function = let
   RemoveHtmlTags = Function.From(
     type function (STRING as text) as text, 
     (params) =>
@@ -1904,13 +1925,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(RemoveHtmlTags, fnType) 
+  Value.ReplaceType(RemoveHtmlTags, fnType)
       ],
       [
         Name = "RemoveUnwantedCharacters", 
         Category = "String", 
-        Function = 
-          let
+        Function = let
   RemoveUnwantedCharacters = Function.From(
     type function (str as text, optional keep_upper as logical, optional keep_lower as logical, optional keep_nums as logical, optional keep_specials as logical, optional keep_chars as text) as text, 
     (params) =>
@@ -1977,13 +1997,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(RemoveUnwantedCharacters, fnType) 
+  Value.ReplaceType(RemoveUnwantedCharacters, fnType)
       ],
       [
         Name = "ColumnToList", 
         Category = "Tbl", 
-        Function = 
-          let
+        Function = let
   Source = Function.From(
     type function (t as table, column_name as text) as list, 
     (params) =>
@@ -2015,13 +2034,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Source, fnType) 
+  Value.ReplaceType(Source, fnType)
       ],
       [
         Name = "ConvertDateTimeZoneToDate", 
         Category = "Tbl", 
-        Function = 
-          let
+        Function = let
   ConvertDateTimeZoneToDate = Function.From(
     type function (tbl as table) as table, 
     (params) =>
@@ -2050,13 +2068,71 @@ in
       }
     ]
 in
-  Value.ReplaceType(ConvertDateTimeZoneToDate, fnType) 
+  Value.ReplaceType(ConvertDateTimeZoneToDate, fnType)
+      ],
+      [
+        Name = "fnRandomNumber", 
+        Category = "Tbl", 
+        Function = let
+    fnRandomNumber =
+    Function.From(type function(t as table, seed as number) as table, (params) =>
+        let
+            // Step 1: Add an index column to the input table to preserve row order and enable alignment
+            Source = Table.AddIndexColumn(params{0}, "__Index", 0, 1, Int64.Type),
+
+            // Step 2: Generate a reproducible list of random numbers using the provided seed
+            // This ensures consistent output across refreshes or deployments
+            Random_List = List.Random(Table.RowCount(params{0}), params{1}),
+
+            // Step 3: Convert the random list into a table and add an index column for joining
+            Add_Index_To_Random_List = Table.AddIndexColumn(
+                Table.FromList(
+                    Random_List,
+                    Splitter.SplitByNothing(),
+                    type table [Random = Number.Type],
+                    null,
+                    ExtraValues.Error
+                ),
+                "__Index",
+                0,
+                1
+            ),
+
+            // Step 4: Join the original table with the random number table using the index
+            // This aligns each original row with its corresponding random value
+            Join_Tables = Table.Join(
+                Source,
+                "__Index",
+                Add_Index_To_Random_List,
+                "__Index",
+                JoinKind.Inner
+            ),
+
+            // Step 5: Remove the temporary index column to clean up the final output
+            Remove_Index = Table.RemoveColumns(Join_Tables, "__Index")
+        in
+            Remove_Index
+    ),
+
+fnType = type function (t as table, seed as number) as table meta
+[
+    Documentation.Name = "fnRandomNumber",
+    Documentation.LongDescription = "This function generates a reproducible list of random numbers for each row in the input table, using the provided seed for consistency. The random numbers are aligned with the original rows.",
+    Documentation.Examples = {
+        [
+            Description = "Generate random numbers for a table with a seed value.",
+            Code = "fnRandomNumber(MyTable, 12345)",
+            Result = "A table with an additional column of random numbers."
+        ]
+    }
+]
+in
+Value.ReplaceType(fnRandomNumber, fnType)
       ],
       [
         Name = "RemoveNullColumns", 
         Category = "Tbl", 
-        Function = 
-          let
+        Function = let
   RemoveNullColumns = Function.From(
     type function (tbl as table) as table, 
     (params) =>
@@ -2094,13 +2170,12 @@ in
     ]
 in
   Value.ReplaceType(RemoveNullColumns, fnType)
- 
+
       ],
       [
         Name = "ReplaceInColumnNames", 
         Category = "Tbl", 
-        Function = 
-          let
+        Function = let
   Source = Function.From(
     type function (t as table, string as text, replacement as text) as table, 
     (params) =>
@@ -2131,13 +2206,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Source, fnType) 
+  Value.ReplaceType(Source, fnType)
       ],
       [
         Name = "RoundColumns", 
         Category = "Tbl", 
-        Function = 
-          let
+        Function = let
   RoundColumns = Function.From(
     type function (t as table, decimal_places as number, optional exclusions as list) as table, 
     (params) =>
@@ -2171,13 +2245,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(RoundColumns, fnType) 
+  Value.ReplaceType(RoundColumns, fnType)
       ],
       [
         Name = "CreateBatches", 
         Category = "Utils", 
-        Function = 
-          let
+        Function = let
   Source = Function.From(
     type function (batch as number, total as number, base as number) as table, 
     (params) =>
@@ -2226,13 +2299,12 @@ in
     ]
 in
   Value.ReplaceType(Source, fnType)
- 
+
       ],
       [
         Name = "GetFunctionMetadata", 
         Category = "Utils", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   GetFunctionMetadata = Function.From(
     type function (function_name as text, return as text) as text,
@@ -2278,60 +2350,51 @@ in
     ]
 in
   // Replace the type of the function with the defined type
-  Value.ReplaceType(GetFunctionMetadata, fnType) 
+  Value.ReplaceType(GetFunctionMetadata, fnType)
       ],
       [
         Name = "PostRequest", 
         Category = "Utils", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   PostRequest = Function.From(
-
-(SvcUrl as text, Content as text) as text =>
-(params) =>
-
-let
-
-    Response= Web.Contents(params{0},
-
-    [
-        Content=Text.ToBinary(params{1}),
-        // This can be edited for different header parameters
-        Headers=[#"Content-Type" = "application/json"]
-    ]
-
-),
-
-    Json = Json.Document(Response)
-
-in
-
-    Json),
+    type function (SvcUrl as text, Content as text) as text,
+    (SvcUrl, Content) =>
+      let
+        Response = Web.Contents(
+          SvcUrl,
+          [
+            Content = Text.ToBinary(Content),
+            // This can be edited for different header parameters
+            Headers = [#"Content-Type" = "application/json"]
+          ]
+        ),
+        Json = Json.Document(Response)
+      in
+        Json
+  ),
 
   // Define the function type with metadata
-  fnType = type function (SvcUrl as text, Content as text) as text 
+  fnType = type function (SvcUrl as text, Content as text) as text
     meta [
       Documentation.Name = "PostRequest",
       Documentation.LongDescription = "This function makes a POST request to a specified URL with the provided content.",
-        Documentation.Examples = {
-            [
-            Description = "Get the name of a function.",
-            Code        = "=PostRequest(""https://jsonplaceholder.typicode.com/posts"", ""{\""title\"": \""foo\"", \""body\"": \""bar\"", \""userId\"": 1}"")",
-            Result      = "{""title"":""foo"",""body"":""bar"",""userId"":1,""id"":101}"
-            ]
-        }
+      Documentation.Examples = {
+        [
+          Description = "Make a POST request to a sample API.",
+          Code = "=PostRequest(""https://jsonplaceholder.typicode.com/posts"", ""{\""title\"": \""foo\"", \""body\"": \""bar\"", \""userId\"": 1}"")",
+          Result = "{""title"":""foo"",""body"":""bar"",""userId"":1,""id"":101}"
+        ]
+      }
     ]
 in
   // Replace the type of the function with the defined type
   Value.ReplaceType(PostRequest, fnType)
- 
       ],
       [
         Name = "Switch", 
         Category = "Utils", 
-        Function = 
-          let
+        Function = let
   Switch = Function.From(
     type function (value as any, l as list, default as any) as any, 
     (params) =>
@@ -2372,13 +2435,12 @@ in
       }
     ]
 in
-  Value.ReplaceType(Switch, fnType) 
+  Value.ReplaceType(Switch, fnType)
       ],
       [
         Name = "CheckColorBlind", 
         Category = "UX", 
-        Function = 
-          let 
+        Function = let 
 // Source for matrices of values: https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
     CheckColorBlind = 
 
@@ -2898,13 +2960,12 @@ Documentation.Examples = {
             "1#(tab)#(tab)#271D01#(tab)#(tab)#5E4703#(tab)#(tab)#FF1401#(lf)"]
 }]
     in  
-Value.ReplaceType(CheckColorBlind, fnType) 
+Value.ReplaceType(CheckColorBlind, fnType)
       ],
       [
         Name = "CheckColorContrast", 
         Category = "UX", 
-        Function = 
-          let CheckColorContrast = 
+        Function = let CheckColorContrast = 
 
     Function.From(type function(HEX1 as text, HEX2 as text) as text, (params)=>
 
@@ -2992,13 +3053,12 @@ Documentation.Examples = {
     Result="Not Enough Contrast"]
 }]
     in  
-Value.ReplaceType(CheckColorContrast, fnType) 
+Value.ReplaceType(CheckColorContrast, fnType)
       ],
       [
         Name = "CheckWebAimContrast", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   CheckWebAimContrast = Function.From(
     type function (background_hex as text, font_hex as text) as text,
@@ -3086,13 +3146,12 @@ Value.ReplaceType(CheckColorContrast, fnType)
 in
   // Replace the type of the function with the defined type
   Value.ReplaceType(CheckWebAimContrast, fnType)
- 
+
       ],
       [
         Name = "GetColorHue", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   GetColorHue = Function.From(
     type function (HEX as text) as number, 
     (params) =>
@@ -3151,13 +3210,12 @@ in
     ]
 in
   Value.ReplaceType(GetColorHue, fnType)
- 
+
       ],
       [
         Name = "GetColorScheme", 
         Category = "UX", 
-        Function = 
-          //from the color api: https://www.thecolorapi.com/docs
+        Function = //from the color api: https://www.thecolorapi.com/docs
 let
   GetColorScheme = Function.From(
     type function (hex as text, mode as number, count as number) as table, 
@@ -3180,8 +3238,10 @@ let
             "analogic-complement"
           else if params{1} = 6 then
             "triad"
-          else
-            "quad", 
+          else if params{1} = 7 then
+            "quad"
+          else 
+            "monochrome", 
         call = Json.Document(
           Web.Contents(
             "https://www.thecolorapi.com/scheme?hex="
@@ -3234,13 +3294,12 @@ let
     ]
 in
   // Replace the type of the function with the defined type
-  Value.ReplaceType(GetColorScheme, fnType) 
+  Value.ReplaceType(GetColorScheme, fnType)
       ],
       [
         Name = "GetCompColor", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   GetCompColor = Function.From(
     type function (HEX as text) as text,
@@ -3318,13 +3377,12 @@ in
     ]
 in
   // Replace the type of the function with the defined type
-  Value.ReplaceType(GetCompColor, fnType) 
+  Value.ReplaceType(GetCompColor, fnType)
       ],
       [
         Name = "GetFontColor", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   GetFontColor = Function.From(
     type function (HEX as text) as text,
@@ -3389,13 +3447,12 @@ in
 in
   // Replace the type of the function with the defined type
   Value.ReplaceType(GetFontColor, fnType)
- 
+
       ],
       [
         Name = "GetHexValue", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   // Define the function using Function.From
   GetHexValue = Function.From(
     type function (red as number, green as number, blue as number) as text,
@@ -3436,13 +3493,12 @@ in
 in
   // Replace the type of the function with the defined type
   Value.ReplaceType(GetHexValue, fnType)
- 
+
       ],
       [
         Name = "GetLuminosity", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   GetLuminosity = Function.From(
     type function (HEX as text) as number, 
     (params) =>
@@ -3497,13 +3553,12 @@ in
     ]
 in
   Value.ReplaceType(GetLuminosity, fnType)
- 
+
       ],
       [
         Name = "GetRGBValue", 
         Category = "UX", 
-        Function = 
-          let 
+        Function = let 
     GetRGBValue = 
 
 // Calculate RGB based on hex value
@@ -3558,13 +3613,12 @@ Documentation.Examples = {
 }] 
 
     in  
-Value.ReplaceType(GetRGBValue, fnType) 
+Value.ReplaceType(GetRGBValue, fnType)
       ],
       [
         Name = "MedianAspectRatio", 
         Category = "UX", 
-        Function = 
-          let
+        Function = let
   MedianAspectRatio = Function.From(
     type function (x as list, y as list) as record, 
     (params) =>
@@ -3614,7 +3668,7 @@ Value.ReplaceType(GetRGBValue, fnType)
     ]
 in
   Value.ReplaceType(MedianAspectRatio, fnType)
- 
+
       ]
     },
     type table [Name = Text.Type, Category = Text.Type, Function = Function.Type]
