@@ -1,8 +1,10 @@
 let
-  ConvertToRoundedDateTime = (dt as datetime, interval as number) as datetime =>
+  ConvertToRoundedDateTime = (dt as datetime, interval as number, optional culture as nullable text) as datetime =>
     let
+      _culture = culture ?? "en-US",
+      
       // Convert datetime to number
-      Source = Number.From(dt, "en-US"), 
+      Source = Number.From(dt, _culture), 
       
       // Calculate the number of intervals in a day
       Minutes = 24 * 60 / interval, 
@@ -11,14 +13,14 @@ let
       Rounded = Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero) / Minutes, 
       
       // Convert the rounded number back to datetime
-      Result = DateTime.From(Rounded, "en-US")
+      Result = DateTime.From(Rounded, _culture)
     in
       Result,
   
-  fnType = type function (dt as datetime, interval as number) as datetime
+  fnType = type function (dt as datetime, interval as number, optional culture as nullable text) as datetime
     meta [
       Documentation.Name = "ConvertTo-RoundedDateTime", 
-      Documentation.LongDescription = "This function rounds a datetime to a specified minute interval (e.g., round to the nearest 15 minutes).", 
+      Documentation.LongDescription = "This function rounds a datetime to a specified minute interval (e.g., round to the nearest 15 minutes). Optional culture parameter defaults to 'en-US' if not specified.", 
       Documentation.Examples = {
         [
           Description = "Round a datetime to the nearest 15 minutes.",

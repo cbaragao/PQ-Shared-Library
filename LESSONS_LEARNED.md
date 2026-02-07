@@ -73,6 +73,15 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Solution**: Explicitly specify `RoundingMode.AwayFromZero` as third parameter: `Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero)`. This provides standard mathematical rounding behavior.
 - **Prevention**: Always specify the rounding mode parameter when using `Number.Round` to avoid ambiguity and ensure predictable behavior.
 
+### Issue: Culture Parameters Should Be Optional, Not Hardcoded
+- **Date**: 2026-02-07
+- **Function(s)**: Test-Benford, ConvertTo-RoundedDateTime
+- **Category**: Best Practice
+- **Severity**: High
+- **Problem**: Initially hardcoded culture parameters as `"en-US"` in function calls like `Text.From(num, "en-US")`. This makes functions inflexible and doesn't allow users to specify different cultures when needed.
+- **Solution**: Add optional culture parameter to function signature: `(num as number, optional culture as nullable text)`. Use null-coalescing operator to set default: `_culture = culture ?? "en-US"`. Then use `_culture` variable throughout function. This provides flexibility while maintaining predictable default behavior.
+- **Prevention**: When PQLint flags missing culture parameters, don't hardcode them. Instead, add an optional culture parameter with "en-US" as the default value using the null-coalescing operator (`??`). Update both function signature and type definition to include `optional culture as nullable text`. See Microsoft Learn docs on optional parameters for pattern.
+
 ---
 
 ## Common PQLint Rules Reference
