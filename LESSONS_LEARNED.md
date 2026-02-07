@@ -104,6 +104,17 @@ This section will be populated with frequently encountered PQLint rules and how 
   ```
 ```
 
+### Issue: Power Query String Literals Use Double Quote Escaping
+- **Date**: 2026-02-07
+- **Function(s)**: MeasureCorrelation
+- **Category**: Syntax
+- **Severity**: Medium
+- **Problem**: In `Documentation.Examples`, attempted to escape double quotes using backslash (`\"`) like in many other languages. Power Query M Language uses a different escaping mechanism - double quotes are escaped by doubling them (`""`).
+- **Solution**: Replace `\"A\"` with `""A""` in string literals. For example:
+  - Incorrect: `"MeasureCorrelation(#table({\"A\", \"B\"}, {{1, 2}}))"` 
+  - Correct: `"MeasureCorrelation(#table({""A"", ""B""}, {{1, 2}}))"`
+- **Prevention**: Remember M Language string escaping rules - to include a double quote character inside a string literal, use two consecutive double quotes (`""`), not backslash escape sequences.
+
 ### Issue: M Language Identifiers Cannot Contain Hyphens
 - **Date**: 2026-02-07
 - **Function(s)**: All migrated functions (GetFactors, ConvertToRoundedDateTime, MeasureBearing, MeasureDistance, TestBenford, GetConfidenceInterval)
