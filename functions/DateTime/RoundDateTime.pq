@@ -7,8 +7,8 @@ let
       // Calculate the number of intervals in a day
       Minutes = 24 * 60 / interval, 
       
-      // Round the datetime to the nearest interval
-      Rounded = Number.RoundAwayFromZero((Source * Minutes), 0) / Minutes, 
+      // Round the datetime to the nearest interval (use AwayFromZero for standard rounding)
+      Rounded = Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero) / Minutes, 
       
       // Convert the rounded number back to datetime
       Result = DateTime.From(Rounded, "en-US")

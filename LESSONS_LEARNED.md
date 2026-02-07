@@ -37,6 +37,33 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Solution**: Add `"en-US"` as second parameter to both `Number.From(dt, "en-US")` and `DateTime.From(Rounded, "en-US")` to ensure predictable output regardless of user locale.
 - **Prevention**: Always include culture parameter when using date/time or numeric conversion functions. Default to `"en-US"` unless specific locale is required.
 
+### Issue: RoundDateTime Logic Error - Wrong Rounding Function Used
+- **Date**: 2026-02-07
+- **Function(s)**: RoundDateTime
+- **Category**: Logic Bug
+- **Severity**: Critical
+- **Problem**: Function used `Number.RoundAwayFromZero` which always rounds away from zero, causing incorrect results. Test case: `RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)` expected `#datetime(2022, 10, 1, 10, 15, 0)` but returned `#datetime(2022, 10, 1, 10, 30, 0)`. The function should round to the NEAREST interval, not always away from zero.
+- **Solution**: Replace `Number.RoundAwayFromZero` with `Number.Round` to properly round to the nearest value.
+- **Prevention**: ALWAYS create test files (.query.pq) and validate function output against Documentation.Examples BEFORE considering migration complete. Test-driven development prevents these bugs.
+
+### Issue: Missing Testing Step in Migration Workflow
+- **Date**: 2026-02-07
+- **Function(s)**: All functions
+- **Category**: Process
+- **Severity**: Critical
+- **Problem**: Original workflow didn't include functional testing step. Functions passed linting but had logic errors that weren't caught until user tested manually.
+- **Solution**: Updated workflow to include creating `.query.pq` test files and validating results match Documentation.Examples before committing. Added testing step to both copilot-instructions.md and PROJECT_PLAN.md.
+- **Prevention**: Never skip testing. Create test files from documentation examples and validate results BEFORE linting and committing.
+
+### Issue: Number.Round Default Banker's Rounding Behavior
+- **Date**: 2026-02-07
+- **Function(s)**: RoundDateTime
+- **Category**: PQLint
+- **Severity**: High
+- **Problem**: PQLint rule `use-specific-parameter-for-number-round` flagged that `Number.Round` uses banker's rounding (RoundingMode.ToEven) by default, which rounds 0.5 to nearest even number. This could cause unexpected results.
+- **Solution**: Explicitly specify `RoundingMode.AwayFromZero` as third parameter: `Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero)`. This provides standard mathematical rounding behavior.
+- **Prevention**: Always specify the rounding mode parameter when using `Number.Round` to avoid ambiguity and ensure predictable behavior.
+
 ---
 
 ## Common PQLint Rules Reference

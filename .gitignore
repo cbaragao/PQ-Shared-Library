@@ -2,6 +2,9 @@
 .vscode/
 *.code-workspace
 
+# GitHub copilot instructions (repository-specific)
+.github/
+
 # Windows
 Thumbs.db
 Desktop.ini
