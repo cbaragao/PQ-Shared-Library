@@ -4,6 +4,13 @@
 
 All functions follow PowerShell-style **Verb-Noun** naming to ensure consistency and IntelliSense-friendly discovery.
 
+**⚠️ IMPORTANT - M Language Identifier Constraints:**
+- **M Language identifiers cannot contain hyphens** (e.g., `Get-Factors` is invalid)
+- Use **PascalCase without hyphens** for actual function names: `GetFactors`, `MeasureDistance`, `TestBenford`
+- The "Verb-Noun" concept guides name selection (use approved verbs + descriptive nouns)
+- In practice, concatenate Verb+Noun with no separator: `GetFactors`, `ConvertToRoundedDateTime`
+- Documentation should show the actual identifier users will call: `GetFactors(28)` not `Get-Factors(28)`
+
 ## Approved Verbs for Data Prep & ETL
 
 Based on PowerShell's approved verb list, these are the most relevant verbs for Power Query data preparation and ETL operations:
@@ -42,74 +49,77 @@ Based on PowerShell's approved verb list, these are the most relevant verbs for 
 
 ## Naming Rules
 
-1. **Use Verb-Noun format**: `Verb-Noun` (e.g., `Get-Distance`, not `CalculateDistance`)
-2. **Use approved verbs only**: See the lists above
-3. **Use singular nouns**: `Get-Color` not `Get-Colors` (even if it returns multiple)
-4. **Use PascalCase**: `Get-ColorScheme` not `getColorScheme` or `get-color-scheme`
-5. **Be specific but concise**: `Get-FontColor` not `Get-Font-Color-For-Background`
-6. **Avoid synonyms**: Use `Remove-` not `Delete-`, `Eliminate-`, or `Clear-`
+1. **Use Verb-Noun concept**: Combine approved verb + descriptive noun (e.g., `GetDistance`, `MeasureCorrelation`)
+2. **NO hyphens in identifiers**: M Language does not support hyphens - use `GetFactors` not `Get-Factors`
+3. **Use PascalCase concatenation**: `GetColorScheme`, `ConvertToRoundedDateTime`, `MeasureDistance`
+4. **Use approved verbs only**: See the lists above for data prep/ETL verbs
+5. **Use singular nouns**: `GetColor` not `GetColors` (even if it returns multiple values)
+6. **Be specific but concise**: `GetFontColor` not `GetFontColorForBackground`
+7. **Avoid synonyms**: Use `Remove-` concept consistently, not mixing with `Delete-` or `Clear-`
 
 ## Function Renaming Guide
 
-### Current Functions → Proposed Names
+**Note**: The arrows show the conceptual Verb-Noun pattern, but actual identifiers use PascalCase concatenation without hyphens.
+
+### Current Functions → New Names (Actual Identifiers)
 
 #### Geo Functions
-- `Bearing` → `Measure-Bearing` (calculates angular measurement)
-- `CalculateDistance` → `Measure-Distance` (calculates distance metric)
+- `Bearing` → `MeasureBearing` (calculates angular measurement)
+- `CalculateDistance` → `MeasureDistance` (calculates distance metric)
 
 #### DateTime Functions  
-- `RoundDateTime` → `ConvertTo-RoundedDateTime` (transforms to rounded format)
+- `RoundDateTime` → `ConvertToRoundedDateTime` (transforms to rounded format)
 
 #### Math Functions
-- `Benford` → `Test-Benford` (validates Benford's law)
-- `Conf` → `Get-ConfidenceInterval` 
-- `Corr` → `Measure-Correlation`
-- `ErlangC` → `Get-ErlangC`
-- `ExponentialWeightedMovingAverage` → `Measure-EWMA` (or `Measure-ExponentialMovingAverage`)
-- `GenerateRandomNumbers` → `New-RandomNumbers`
-- `GetFactors` → `Get-Factors`
-- `MegaAverage` → `Measure-MegaAverage`
-- `MegaStDevS` → `Measure-MegaStandardDeviation`
-- `Pearson` → `Measure-Pearson` (or `Measure-PearsonCorrelation`)
-- `QuartileStats` → `Get-QuartileStats`
-- `Z` → `Measure-ZScore`
+- `Benford` → `TestBenford` (validates Benford's law)
+- `Conf` → `GetConfidenceInterval` 
+- `Corr` → `MeasureCorrelation`
+- `ErlangC` → `GetErlangC`
+- `ExponentialWeightedMovingAverage` → `MeasureEWMA` (or `MeasureExponentialMovingAverage`)
+- `GenerateRandomNumbers` → `NewRandomNumbers`
+- `GetFactors` → `GetFactors` ✓ (already correct)
+- `MegaAverage` → `MeasureMegaAverage`
+- `MegaStDevS` → `MeasureMegaStandardDeviation`
+- `Pearson` → `MeasurePearson` (or `MeasurePearsonCorrelation`)
+- `QuartileStats` → `GetQuartileStats`
+- `Z` → `MeasureZScore`
 
 #### R Functions
-- `RGetLinearModelCoefficients` → `Get-LinearModelCoefficients`
-- `RPredictWithLogitModel` → `Invoke-LogitPrediction`
+- `RGetLinearModelCoefficients` → `GetLinearModelCoefficients`
+- `RPredictWithLogitModel` → `InvokeLogitPrediction`
 
 #### SQL Functions
-- `RunSQLQuery` → `Invoke-SQLQuery`
+- `RunSQLQuery` → `InvokeSQLQuery`
 
 #### String Functions
-- `EncodeText` → `ConvertTo-EncodedText`
-- `ReadFileToText` → `Get-FileText`
-- `RemoveHTMLTags` → `Remove-HTMLTags` ✓ (already correct)
-- `RemoveUnwantedCharacters` → `Remove-UnwantedCharacters` ✓ (already correct)
+- `EncodeText` → `ConvertToEncodedText`
+- `ReadFileToText` → `GetFileText`
+- `RemoveHTMLTags` → `RemoveHTMLTags` ✓ (already correct)
+- `RemoveUnwantedCharacters` → `RemoveUnwantedCharacters` ✓ (already correct)
 
 #### Tbl Functions
-- `ColumnToList` → `ConvertTo-List` (noun could be `ColumnList`)
-- `ConvertDateTimeZoneToDate` → `ConvertTo-Date` (or `Convert-DateTimeZone`)
-- `RandomNumber` → `New-RandomNumber`
-- `RemoveNullColumns` → `Remove-NullColumns` ✓ (already correct)
-- `ReplaceInColumnNames` → `Update-ColumnNames` (or `Set-ColumnNames`)
-- `RoundColumns` → `ConvertTo-RoundedColumns` (or `Format-Columns`)
+- `ColumnToList` → `ConvertToList` (or `ConvertToColumnList`)
+- `ConvertDateTimeZoneToDate` → `ConvertToDate` (or `ConvertDateTimeZone`)
+- `RandomNumber` → `NewRandomNumber`
+- `RemoveNullColumns` → `RemoveNullColumns` ✓ (already correct)
+- `ReplaceInColumnNames` → `UpdateColumnNames` (or `SetColumnNames`)
+- `RoundColumns` → `ConvertToRoundedColumns` (or `FormatColumns`)
 
 #### Utils Functions
-- `CreateBatches` → `New-Batches`
-- `DynamicSelectList` → `Select-DynamicList`
-- `GetFunctionMetadata` → `Get-FunctionMetadata` ✓ (already correct)
-- `PostRequest` → `Invoke-PostRequest`
-- `Switch` → `Use-Switch` (special case - Switch is reserved in PowerShell)
+- `CreateBatches` → `NewBatches`
+- `DynamicSelectList` → `SelectDynamicList`
+- `GetFunctionMetadata` → `GetFunctionMetadata` ✓ (already correct)
+- `PostRequest` → `InvokePostRequest`
+- `Switch` → `UseSwitch` (special case - Switch is reserved in PowerShell)
 
 #### UX Functions
-- `CheckColorBlind` → `Test-ColorBlindness` (or `Test-ColorBlindSafety`)
-- `CheckColorContrast` → `Test-ColorContrast`
-- `CheckWebAimContrast` → `Test-WebAimContrast`
-- `GetColorHue` → `Get-ColorHue` ✓ (already correct)
-- `GetColorScheme` → `Get-ColorScheme` ✓ (already correct)
-- `GetCompColor` → `Get-ComplementaryColor`
-- `GetFontColor` → `Get-FontColor` ✓ (already correct)
+- `CheckColorBlind` → `TestColorBlindness` (or `TestColorBlindSafety`)
+- `CheckColorContrast` → `TestColorContrast`
+- `CheckWebAimContrast` → `TestWebAimContrast`
+- `GetColorHue` → `GetColorHue` ✓ (already correct)
+- `GetColorScheme` → `GetColorScheme` ✓ (already correct)
+- `GetCompColor` → `GetComplementaryColor`
+- `GetFontColor` → `GetFontColor` ✓ (already correct)
 - `GetHexValue` → `Get-HexValue` ✓ (already correct)
 - `GetLuminosity` → `Get-Luminosity` ✓ (already correct)
 - `GetRGBValue` → `Get-RGBValue` ✓ (already correct)
@@ -117,41 +127,41 @@ Based on PowerShell's approved verb list, these are the most relevant verbs for 
 
 ## Benefits of Verb-Noun Naming
 
-1. **IntelliSense grouping**: Functions group by verb (all `Get-*` together)
-2. **Predictable**: Users know `Measure-*` calculates, `Test-*` validates
-3. **Consistent**: Same verb means same action across all functions
-4. **Discoverable**: Easy to find related functions by filtering on verb
-5. **Professional**: Follows established PowerShell/industry standards
+1. **IntelliSense grouping**: Functions group by verb prefix (all `Get*` together)
+2. **Predictable**: Users know `Measure*` calculates, `Test*` validates
+3. **Consistent**: Same verb prefix means same action across all functions
+4. **Discoverable**: Easy to find related functions by filtering on verb prefix
+5. **Professional**: Follows established PowerShell/industry conceptual standards
 
 ## Examples in Context
 
 ```powerquery
 // Geographic calculations
-Measure-Distance(lat1, lon1, lat2, lon2)
-Measure-Bearing(lat1, lon1, lat2, lon2)
+MeasureDistance(lat1, lon1, lat2, lon2)
+MeasureBearing(lat1, lon1, lat2, lon2)
 
 // Data transformation
-ConvertTo-RoundedDateTime(dateTime, precision)
-ConvertTo-EncodedText(text, encoding)
-Convert-DateTimeZone(table, column)
+ConvertToRoundedDateTime(dateTime, precision)
+ConvertToEncodedText(text, encoding)
+ConvertDateTimeZone(table, column)
 
 // Data cleaning
-Remove-NullColumns(table)
-Remove-HTMLTags(text)
-Remove-UnwantedCharacters(text, pattern)
+RemoveNullColumns(table)
+RemoveHTMLTags(text)
+RemoveUnwantedCharacters(text, pattern)
 
 // Testing/Validation
-Test-ColorBlindness(color1, color2)
-Test-ColorContrast(foreground, background)
+TestColorBlindness(color1, color2)
+TestColorContrast(foreground, background)
 
 // Statistical calculations
-Measure-Correlation(list1, list2)
-Measure-ZScore(value, mean, stdDev)
+MeasureCorrelation(list1, list2)
+MeasureZScore(value, mean, stdDev)
 
 // Data retrieval
-Get-Factors(number)
-Get-ColorHue(hexColor)
-Get-FileText(filePath)
+GetFactors(number)
+GetColorHue(hexColor)
+GetFileText(filePath)
 ```
 
 ## Migration Notes
