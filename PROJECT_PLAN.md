@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 7
+- **Completed**: 8
 - **In Progress**: 0
-- **Remaining**: 38
+- **Remaining**: 37
 
 ---
 
@@ -134,9 +134,10 @@ All functions must include:
 - **Status**: Not Started
 
 ### Task 10: Migrate GetFactors
-- **Branch**: `migrate/GetFactors`
+- **Branch**: `migrate/Get-Factors`
 - **File**: `functions/Math/GetFactors.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Added return types for functions and culture/comparer parameters for PQLint compliance
 
 ### Task 11: Migrate MegaAverage
 - **Branch**: `migrate/MegaAverage`
