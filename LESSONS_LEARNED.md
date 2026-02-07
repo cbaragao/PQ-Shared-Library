@@ -199,6 +199,39 @@ This section will be populated with frequently encountered PQLint rules and how 
   - Evaluate whether a linting violation represents a genuine issue or an overly strict interpretation
   - Document false positives to avoid confusion in future migrations
 
+### Issue: Floating Point Precision in Test Assertions Requires Explicit Rounding
+- **Date**: 2026-02-07
+- **Function(s)**: CalculateEWMA
+- **Category**: Testing
+- **Severity**: Medium
+- **Problem**: Test cases for mathematical functions that produce floating point results can fail due to IEEE 754 precision limits. For example, an EWMA calculation produced `52.640000000000008` instead of expected `52.64`. Direct comparison (`actual = expected`) fails even though results are mathematically equivalent.
+- **Solution**: Apply `Number.Round()` with explicit decimal precision and `RoundingMode.AwayFromZero` to all floating point test assertions. Pattern:
+  ```powerquery
+  Number.Round(CalculateEWMA(...), 4, RoundingMode.AwayFromZero) = 52.64
+  ```
+  This ensures consistent precision and predictable rounding behavior (standard mathematical rounding, not banker's rounding).
+- **Prevention**:
+  - Always use `Number.Round()` in test assertions for functions that return floating point numbers
+  - Specify decimal precision appropriate to the calculation (typically 4 decimals)
+  - **Always include `RoundingMode.AwayFromZero`** for standard mathematical rounding behavior
+  - Default `Number.Round()` uses banker's rounding (RoundingMode.ToEven), which can produce unexpected results
+  - Apply rounding to both the Actual column AND the Pass comparison
+  - Reference: https://excelguru.ca/power-query-the-round-function/ for Power Query rounding behavior
+
+### Issue: Redundant Type Conversions Trigger PQLint Warnings
+- **Date**: 2026-02-07
+- **Function(s)**: CalculateEWMA
+- **Category**: PQLint
+- **Severity**: Low
+- **Problem**: PQLint rule `use-culture-for-numeric-functions` flagged `Number.From()` calls even though parameters were already typed as numbers: `alpha * Number.From(current) + (1 - alpha) * Number.From(List.Last(state))`. When values are already the correct type, conversion functions are redundant.
+- **Solution**: Remove unnecessary `Number.From()` calls when parameters have explicit type annotations. Simplified to: `alpha * current + (1 - alpha) * List.Last(state)`. Since `current as number` and `state` contains numbers, conversions are not needed.
+- **Prevention**:
+  - Check parameter type annotations before using conversion functions
+  - If a parameter is already typed (e.g., `current as number`), don't wrap it in `Number.From()`
+  - If a function is typed to return a specific type, trust that type
+  - Only use conversion functions when dealing with `any` type or mixed-type lists
+  - Redundant conversions add noise and can trigger linting rules about culture parameters
+
 ---
 
 ## Migration Pattern Library
