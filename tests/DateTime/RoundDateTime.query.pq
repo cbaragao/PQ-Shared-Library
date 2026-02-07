@@ -1,6 +1,24 @@
 // Test cases for RoundDateTime function
 let
-    Source = #table(
+    // Include the function being tested (without type metadata)
+    RoundDateTime = (dt as datetime, interval as number) as datetime =>
+        let
+            // Convert datetime to number
+            Source = Number.From(dt, "en-US"), 
+            
+            // Calculate the number of intervals in a day
+            Minutes = 24 * 60 / interval, 
+            
+            // Round the datetime to the nearest interval (use AwayFromZero for standard rounding)
+            Rounded = Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero) / Minutes, 
+            
+            // Convert the rounded number back to datetime
+            Result = DateTime.From(Rounded, "en-US")
+        in
+            Result,
+    
+    // Test cases
+    TestResults = #table(
         {"TestCase", "Input_DateTime", "Input_Interval", "Expected_Result", "Actual_Result", "Pass"},
         {
             {
@@ -38,4 +56,4 @@ let
         }
     )
 in
-    Source
+    TestResults

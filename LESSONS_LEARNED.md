@@ -52,8 +52,17 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Category**: Process
 - **Severity**: Critical
 - **Problem**: Original workflow didn't include functional testing step. Functions passed linting but had logic errors that weren't caught until user tested manually.
-- **Solution**: Updated workflow to include creating test files in `tests/Category/` directory and validating results match Documentation.Examples before committing. Added testing step to both copilot-instructions.md and PROJECT_PLAN.md.
-- **Prevention**: Never skip testing. Create test files from documentation examples in centralized tests directory and validate results BEFORE linting and committing.
+- **Solution**: Updated workflow to include creating test files in `tests/Category/` directory and validating results match Documentation.Examples before committing. Test files must be **self-contained** (include the function being tested as a nested function) to ensure we're testing the exact code being committed. Added step to WAIT for manual test confirmation from user before proceeding to linting.
+- **Prevention**: Never skip testing. Create self-contained test files with the function code embedded, test cases from documentation examples, and **WAIT for user to manually validate** all Pass columns are true using Power Query SDK BEFORE proceeding to lint and commit.
+
+### Issue: Test Files Must Be Self-Contained
+- **Date**: 2026-02-07
+- **Function(s)**: All functions
+- **Category**: Testing
+- **Severity**: High
+- **Problem**: Test files that reference external functions can't validate the exact code being tested. Need to ensure test file contains the function implementation.
+- **Solution**: Each `.query.pq` test file must include the function being tested as a nested function (copy the simplified function logic without type metadata). This ensures tests are portable and validate the exact code that will be committed.
+- **Prevention**: Always copy the function implementation into the test file. Test file structure: 1) Function definition, 2) Test cases table with Expected/Actual/Pass columns, 3) Return the test table.
 
 ### Issue: Number.Round Default Banker's Rounding Behavior
 - **Date**: 2026-02-07
