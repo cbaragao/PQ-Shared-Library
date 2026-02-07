@@ -44,7 +44,7 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Severity**: Critical
 - **Problem**: Function used `Number.RoundAwayFromZero` which always rounds away from zero, causing incorrect results. Test case: `RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)` expected `#datetime(2022, 10, 1, 10, 15, 0)` but returned `#datetime(2022, 10, 1, 10, 30, 0)`. The function should round to the NEAREST interval, not always away from zero.
 - **Solution**: Replace `Number.RoundAwayFromZero` with `Number.Round` to properly round to the nearest value.
-- **Prevention**: ALWAYS create test files (.query.pq) and validate function output against Documentation.Examples BEFORE considering migration complete. Test-driven development prevents these bugs.
+- **Prevention**: ALWAYS create test files (in `tests/Category/FunctionName.query.pq`) and validate function output against Documentation.Examples BEFORE considering migration complete. Test-driven development prevents these bugs.
 
 ### Issue: Missing Testing Step in Migration Workflow
 - **Date**: 2026-02-07
@@ -52,8 +52,8 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Category**: Process
 - **Severity**: Critical
 - **Problem**: Original workflow didn't include functional testing step. Functions passed linting but had logic errors that weren't caught until user tested manually.
-- **Solution**: Updated workflow to include creating `.query.pq` test files and validating results match Documentation.Examples before committing. Added testing step to both copilot-instructions.md and PROJECT_PLAN.md.
-- **Prevention**: Never skip testing. Create test files from documentation examples and validate results BEFORE linting and committing.
+- **Solution**: Updated workflow to include creating test files in `tests/Category/` directory and validating results match Documentation.Examples before committing. Added testing step to both copilot-instructions.md and PROJECT_PLAN.md.
+- **Prevention**: Never skip testing. Create test files from documentation examples in centralized tests directory and validate results BEFORE linting and committing.
 
 ### Issue: Number.Round Default Banker's Rounding Behavior
 - **Date**: 2026-02-07

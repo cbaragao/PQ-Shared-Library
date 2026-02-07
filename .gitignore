@@ -54,4 +54,5 @@ NOTES.md
 *.secret
 
 # Power Query specific
-*.query.pq
+# Test files are kept in tests/ directory
+# Add any ad-hoc test files here if needed
