@@ -1,0 +1,55 @@
+# VS Code settings and workspace files
+.vscode/
+*.code-workspace
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Office temporary files
+~$*
+
+# Log files
+*.log
+logs/
+
+# Build outputs
+dist/
+build/
+output/
+
+# Personal notes and testing
+notes.txt
+test.pq
+scratch.pq
+TODO.md
+NOTES.md
+
+# Environment files
+.env
+.env.local
+*.secret
+
+# Power Query specific
+*.query.pq
+*.test.pq
