@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 9
+- **Completed**: 10
 - **In Progress**: 0
-- **Remaining**: 30
+- **Remaining**: 29
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -127,10 +127,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed to GetErlangC per Verb-Noun convention. Fixed N calculation with Number.RoundUp to ensure integer for range operator. Added comprehensive type annotations and 3 test scenarios. Enhanced documentation with complete parameter descriptions.
 
-### Task 8: Migrate fnExponentialWeightedMovingAverage
-- **Branch**: `migrate/fnExponentialWeightedMovingAverage`
-- **File**: `functions/Math/fnExponentialWeightedMovingAverage.pq`
-- **Status**: Not Started
+### Task 8: Migrate fnExponentialWeightedMovingAverage → CalculateEWMA
+- **Branch**: `migrate/CalculateEWMA`
+- **File**: `functions/Math/CalculateEWMA.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to CalculateEWMA per Verb-Noun convention. Removed Function.From wrapper and redundant Number.From() calls for cleaner code. Added type annotations to List.Accumulate iterator. Enhanced documentation with detailed parameter descriptions and 3 examples. Created comprehensive test suite with 4 test cases using Number.Round() with RoundingMode.AwayFromZero for consistent precision handling.
 
 ### Task 9: Migrate GenerateRandomNumbers
 - **Branch**: `migrate/GenerateRandomNumbers`
