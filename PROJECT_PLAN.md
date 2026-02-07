@@ -17,8 +17,8 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 - **Total Functions**: 44
 - **Completed**: 9
 - **In Progress**: 0
-- **Remaining**: 34
-- **Deprecated**: 2 (Corr - better implemented in DAX; Z - obsolete lookup table)
+- **Remaining**: 30
+- **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
 
@@ -146,22 +146,30 @@ All functions must include:
 ### Task 11: Migrate MegaAverage
 - **Branch**: `migrate/MegaAverage`
 - **File**: `functions/Math/MegaAverage.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Reason**: Complex statistical calculations (trimmed, geometric, winsorized averages) better implemented as DAX measures where they can be dynamic and calculated in the data model.
+- **Recommendation**: Use DAX measures for statistical aggregations in Power BI.
 
 ### Task 12: Migrate MegaStDevS
 - **Branch**: `migrate/MegaStDevS`
 - **File**: `functions/Math/MegaStDevS.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Reason**: Complex statistical calculations (trimmed, geometric, winsorized standard deviations) better implemented as DAX measures where they can be dynamic and calculated in the data model.
+- **Recommendation**: Use DAX measures for statistical aggregations in Power BI.
 
 ### Task 13: Migrate Pearson
 - **Branch**: `migrate/Pearson`
 - **File**: `functions/Math/Pearson.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Reason**: Statistical correlation calculations are better implemented in DAX using built-in correlation functions. Power Query is for data transformation, not statistical analysis.
+- **Recommendation**: Use DAX correlation functions (e.g., create calculated columns or measures) in Power BI. See also deprecated Corr function (Task 6).
 
 ### Task 14: Migrate QuartileStats
 - **Branch**: `migrate/QuartileStats`
 - **File**: `functions/Math/QuartileStats.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Reason**: Power Query has built-in `List.Percentile()` function. DAX has `PERCENTILE.INC()` and `PERCENTILE.EXC()`. Outlier detection is better done in DAX or visualization layer.
+- **Recommendation**: Use native percentile functions in Power Query for ETL, or DAX measures for dynamic calculations in reports.
 
 ### Task 15: Migrate Z
 - **Branch**: `migrate/Z`

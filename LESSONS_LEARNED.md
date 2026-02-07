@@ -163,6 +163,29 @@ This section will be populated with frequently encountered PQLint rules and how 
   - Consider maintainability: static lookup tables become obsolete as native capabilities improve
   - Evaluate whether the function provides value beyond what's already available in the platform
 
+### Issue: Complex Statistical Functions Better Implemented in DAX (MegaAverage, MegaStDevS, Pearson, QuartileStats)
+- **Date**: 2026-02-07
+- **Function(s)**: MegaAverage, MegaStDevS, Pearson, QuartileStats
+- **Category**: Architecture Decision
+- **Severity**: High
+- **Problem**: These functions perform complex statistical calculations (trimmed/geometric/winsorized averages and standard deviations, Pearson correlation, quartile analysis with outlier detection). While technically functional in Power Query, they represent statistical analysis that should happen in the data model layer, not the ETL layer.
+- **Solution**: Deprecated all 4 functions. Rationale:
+  - **MegaAverage/MegaStDevS**: Return statistical records with multiple calculation types. These are aggregations that should be dynamic DAX measures, not static transformations.
+  - **Pearson**: Correlation calculations similar to already-deprecated Corr function. DAX correlation functions are more appropriate.
+  - **QuartileStats**: Power Query has `List.Percentile()` built-in. DAX has `PERCENTILE.INC()` and `PERCENTILE.EXC()`. Outlier detection belongs in visualization layer.
+  - Users should implement these in DAX where they can be:
+    - Dynamic and respond to filters/slicers
+    - Calculated across the entire data model
+    - Optimized by the analysis engine
+    - Easier to maintain and update
+- **Prevention**:
+  - Power Query is for data **transformation**, not statistical **analysis**
+  - If a function returns complex statistical metrics, consider if it belongs in DAX
+  - Ask: "Does this calculation need to be static in the data, or dynamic in reports?"
+  - Statistical aggregations that produce multiple metrics → DAX measures
+  - Data cleaning/preparation based on statistics → might be appropriate for Power Query
+  - When in doubt, favor DAX for calculations that end-users might want to filter or customize
+
 ### Issue: PQLint False Positive for List.Generate Each Expressions
 - **Date**: 2026-02-07
 - **Function(s)**: GetErlangC
