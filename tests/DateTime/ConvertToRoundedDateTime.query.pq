@@ -1,10 +1,12 @@
 // Test cases for ConvertTo-RoundedDateTime function
 let
     // Include the function being tested (without type metadata)
-    ConvertToRoundedDateTime = (dt as datetime, interval as number) as datetime =>
+    ConvertToRoundedDateTime = (dt as datetime, interval as number, optional culture as nullable text) as datetime =>
         let
+            _culture = culture ?? "en-US",
+            
             // Convert datetime to number
-            Source = Number.From(dt, "en-US"), 
+            Source = Number.From(dt, _culture), 
             
             // Calculate the number of intervals in a day
             Minutes = 24 * 60 / interval, 
@@ -13,7 +15,7 @@ let
             Rounded = Number.Round((Source * Minutes), 0, RoundingMode.AwayFromZero) / Minutes, 
             
             // Convert the rounded number back to datetime
-            Result = DateTime.From(Rounded, "en-US")
+            Result = DateTime.From(Rounded, _culture)
         in
             Result,
     
