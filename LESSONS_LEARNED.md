@@ -132,6 +132,20 @@ This section will be populated with frequently encountered PQLint rules and how 
   - PowerShell-style Verb-Noun naming is a conceptual guide for choosing descriptive names, not a literal syntax requirement
   - Test files serve as validation that documentation matches actual usage
 
+### Issue: Function Better Implemented in Different Tool (Corr/MeasureCorrelation)
+- **Date**: 2026-02-07
+- **Function(s)**: Corr (attempted migration to MeasureCorrelation)
+- **Category**: Architecture Decision
+- **Severity**: High
+- **Problem**: Attempted to migrate Corr function for generating correlation matrices. After multiple debugging iterations with syntax issues for Table.FromList, Table.TransformColumnTypes, Table.RenameColumns, and Table.ReorderColumns, realized that correlation matrices are computationally expensive and better suited for DAX rather than Power Query M Language.
+- **Solution**: Deprecated the function entirely. Removed from migration plan. Users should use DAX functions like CORREL.X() or create calculated columns/tables in Power BI for statistical correlation analysis.
+- **Prevention**: 
+  - Before migrating complex statistical functions, evaluate whether Power Query is the right tool
+  - Power Query is optimized for data transformation, not complex statistical computation
+  - DAX is better suited for calculations that need to happen in the data model
+  - Consider the use case: if function is primarily used in Power BI, DAX may be more appropriate
+  - Avoid spending extensive time debugging functions that would be better implemented elsewhere
+
 ---
 
 ## Migration Pattern Library
