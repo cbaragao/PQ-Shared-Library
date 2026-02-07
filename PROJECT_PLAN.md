@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 8
+- **Completed**: 9
 - **In Progress**: 0
-- **Remaining**: 37
+- **Remaining**: 36
 
 ---
 
@@ -113,10 +113,19 @@ All functions must include:
 - **File**: `functions/Math/GetConfidenceInterval.pq`
 - **Status**: ✅ Completed
 
-### Task 6: Migrate Corr
-- **Branch**: `migrate/Corr`
-- **File**: `functions/Math/Corr.pq`
-- **Status**: Not Started
+### Task 6: Migrate Corr → MeasureCorrelation
+- **Branch**: `migrate/MeasureCorrelation`
+- **File**: `functions/Math/MeasureCorrelation.pq` (renamed from Corr.pq)
+- **Status**: ✅ Completed
+- **Notes**: 
+  - Added optional culture parameter with "en-US" default
+  - Added type annotations to List.Accumulate parameters
+  - Fixed Table.FromList to explicitly specify column name with Splitter.SplitByNothing()
+  - Added MissingField.Error to Table.SelectColumns and Table.ReorderColumns
+  - Fixed Table.ExpandTableColumn to rename directly to "Var2"
+  - Added comments for Table.AddColumn steps
+  - Fixed documentation quote escaping (use "" not \")
+  - Renamed file from Corr.pq to MeasureCorrelation.pq
 
 ### Task 7: Migrate ErlangC
 - **Branch**: `migrate/ErlangC`
