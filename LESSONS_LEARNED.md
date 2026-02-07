@@ -146,6 +146,19 @@ This section will be populated with frequently encountered PQLint rules and how 
   - Consider the use case: if function is primarily used in Power BI, DAX may be more appropriate
   - Avoid spending extensive time debugging functions that would be better implemented elsewhere
 
+### Issue: PQLint False Positive for List.Generate Each Expressions
+- **Date**: 2026-02-07
+- **Function(s)**: GetErlangC
+- **Category**: PQLint
+- **Severity**: Low
+- **Problem**: PQLint rule `no-return-type-for-function` flagged the `each` expression in `List.Generate` as missing a return type annotation. The tool suggested adding `as record` to the each expression. However, the `each` keyword in `List.Generate` is not a standalone function definition - it's an iteration expression where Power Query infers the type from context.
+- **Solution**: Accepted as false positive. The code `each [Agents = ..., Service_Level = ...]` is correct without explicit type annotation. The linting rule is designed for top-level function definitions, not inline iteration expressions within built-in functions like List.Generate.
+- **Prevention**: 
+  - Recognize that not all PQLint warnings require code changes
+  - Inline expressions within higher-order functions (List.Generate, List.Accumulate, List.Transform, etc.) don't always need explicit return types
+  - Evaluate whether a linting violation represents a genuine issue or an overly strict interpretation
+  - Document false positives to avoid confusion in future migrations
+
 ---
 
 ## Migration Pattern Library

@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 8
+- **Completed**: 9
 - **In Progress**: 0
-- **Remaining**: 36
+- **Remaining**: 35
 - **Deprecated**: 1 (Corr - better implemented in DAX)
 
 ---
@@ -121,10 +121,11 @@ All functions must include:
 - **Reason**: Correlation matrices are better implemented in DAX using functions like CORREL.X() or calculated columns. Power Query is not the optimal tool for this statistical operation.
 - **Recommendation**: Use DAX measures or calculated tables in Power BI for correlation analysis.
 
-### Task 7: Migrate ErlangC
+### Task 7: Migrate ErlangC → GetErlangC
 - **Branch**: `migrate/ErlangC`
-- **File**: `functions/Math/ErlangC.pq`
-- **Status**: Not Started
+- **File**: `functions/Math/GetErlangC.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to GetErlangC per Verb-Noun convention. Fixed N calculation with Number.RoundUp to ensure integer for range operator. Added comprehensive type annotations and 3 test scenarios. Enhanced documentation with complete parameter descriptions.
 
 ### Task 8: Migrate fnExponentialWeightedMovingAverage
 - **Branch**: `migrate/fnExponentialWeightedMovingAverage`
