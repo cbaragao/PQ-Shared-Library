@@ -146,6 +146,23 @@ This section will be populated with frequently encountered PQLint rules and how 
   - Consider the use case: if function is primarily used in Power BI, DAX may be more appropriate
   - Avoid spending extensive time debugging functions that would be better implemented elsewhere
 
+### Issue: Obsolete Hardcoded Lookup Tables (Z.pq)
+- **Date**: 2026-02-07
+- **Function(s)**: Z (Z-score lookup table)
+- **Category**: Architecture Decision
+- **Severity**: High
+- **Problem**: The Z.pq function contains an 832-line hardcoded Z-score lookup table copied from a static reference table. This approach is inefficient, difficult to maintain, and completely unnecessary given modern statistical function capabilities in Excel, Power BI, and other tools.
+- **Solution**: Deprecated the function entirely. Removed from migration plan. Users should use native statistical distribution functions instead:
+  - Excel: NORM.S.DIST() for cumulative probability, NORM.S.INV() for inverse
+  - Power BI DAX: NORM.DIST(), NORM.INV()
+  - These functions calculate values dynamically with precision, no lookup table needed
+- **Prevention**:
+  - Recognize when a function is solving a problem that no longer exists in modern tools
+  - Hardcoded lookup tables with hundreds of rows are red flags for deprecation
+  - Before migrating statistical functions, check if Excel/Power BI have built-in equivalents
+  - Consider maintainability: static lookup tables become obsolete as native capabilities improve
+  - Evaluate whether the function provides value beyond what's already available in the platform
+
 ### Issue: PQLint False Positive for List.Generate Each Expressions
 - **Date**: 2026-02-07
 - **Function(s)**: GetErlangC

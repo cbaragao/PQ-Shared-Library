@@ -17,8 +17,8 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 - **Total Functions**: 44
 - **Completed**: 9
 - **In Progress**: 0
-- **Remaining**: 35
-- **Deprecated**: 1 (Corr - better implemented in DAX)
+- **Remaining**: 34
+- **Deprecated**: 2 (Corr - better implemented in DAX; Z - obsolete lookup table)
 
 ---
 
@@ -166,7 +166,9 @@ All functions must include:
 ### Task 15: Migrate Z
 - **Branch**: `migrate/Z`
 - **File**: `functions/Math/Z.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Reason**: This is an 832-line hardcoded Z-score lookup table. Modern Excel, Power BI, and statistical tools have built-in functions (e.g., NORM.S.DIST, NORM.S.INV) that calculate these values dynamically without needing massive static lookup tables.
+- **Recommendation**: Use native statistical distribution functions in Excel (NORM.S.DIST, NORM.S.INV) or Power BI DAX (NORM.DIST, NORM.INV) instead.
 
 ---
 
