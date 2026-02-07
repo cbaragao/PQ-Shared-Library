@@ -105,16 +105,17 @@ fnType = type function (
     shrinkage as number) 
     as record meta 
 [Documentation.Name = "ErlangC",
-Documentation.LongDescription = "This calculates the probable amount of agents needed to meet the required service level and the probable service level for that number of agents in a record.",
+Documentation.LongDescription = "This calculates the probable number of agents needed to meet the required service level in a call center or contact center environment. Returns a record with Agents (number needed), Service_Level (achieved %), Occupancy (% busy), and Shrinkage (adjusted headcount). Parameters: number_of_calls (total calls), period_of_minutes (time period), average_handling_time (seconds per call), required_service_level (0-1, e.g., 0.80 for 80%), target_answer_time (seconds), maximum_occupancy (0-1, typically 0.85), shrinkage (0-1, typically 0.30 for breaks/training).",
 Documentation.Examples = {
-    [Description = "This provides an answer for the following parameters: " &
-                    "Number of Calls = 100; " &
-                    "Period of Minutes = 30; " &
-                    "Average Handling Time (Seconds) = 180; " &
-                    "Required Service Level (% expressed as decimal) = .80; " &
-                    "Target Answer Time (Seconds) = 20; ",
-    Code = "pqmath.ErlangC(100, 30, 180, 0.8, 20)",
-    Result="[Agents = 14, Service_Level = 0.888350019]"]
+    [Description = "Calculate staffing for 100 calls in 30 minutes, 180 second AHT, 80% service level in 20 seconds, 85% max occupancy, 30% shrinkage.",
+    Code = "ErlangC(100, 30, 180, 0.8, 20, 0.85, 0.30)",
+    Result="[Agents = 14, Service_Level = 0.888350019, Occupancy = ..., Shrinkage = ...]"],
+    [Description = "Small call center: 50 calls per hour (60 min period), 5 min AHT, 90% SL in 15 seconds, 80% occupancy, 25% shrinkage.",
+    Code = "ErlangC(50, 60, 300, 0.90, 15, 0.80, 0.25)",
+    Result="[Agents = ..., Service_Level = ..., Occupancy = ..., Shrinkage = ...]"],
+    [Description = "High volume: 500 calls in 60 minutes, 4 min AHT, 85% SL in 30 seconds, 85% occupancy, 35% shrinkage.",
+    Code = "ErlangC(500, 60, 240, 0.85, 30, 0.85, 0.35)",
+    Result="[Agents = ..., Service_Level = ..., Occupancy = ..., Shrinkage = ...]"]
 }]
     in  
 Value.ReplaceType(ErlangC, fnType)
