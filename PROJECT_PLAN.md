@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 5
+- **Completed**: 6
 - **In Progress**: 0
-- **Remaining**: 40
+- **Remaining**: 39
 
 ---
 
@@ -102,10 +102,11 @@ All functions must include:
 
 ## Math Functions (12 functions)
 
-### Task 4: Migrate Benford
-- **Branch**: `migrate/Benford`
-- **File**: `functions/Math/Benford.pq`
-- **Status**: Not Started
+### Task 4: Migrate Benford → Test-Benford
+- **Branch**: `migrate/Test-Benford`
+- **File**: `functions/Math/TestBenford.pq`
+- **Status**: ✅ Completed
+- **Notes**: Added optional culture parameter with "en-US" default for flexibility
 
 ### Task 5: Migrate Conf
 - **Branch**: `migrate/Conf`
