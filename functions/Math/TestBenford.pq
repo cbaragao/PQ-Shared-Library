@@ -15,17 +15,17 @@ let
   
   fnType = type function (num as number, optional culture as nullable text) as record
     meta [
-      Documentation.Name = "Test-Benford",
+      Documentation.Name = "TestBenford",
       Documentation.LongDescription = "Tests if a number follows Benford's Law by calculating the expected probability for the first three digits. Benford's Law states that in many naturally occurring datasets, leading digits follow a logarithmic distribution where 1 appears as the first digit about 30% of the time, 2 about 18%, and so on. Returns a record with Digit_One, Digit_Two, and Digit_Three fields containing the expected probability for each digit position. Optional culture parameter defaults to 'en-US' if not specified.",
       Documentation.Examples = {
         [
           Description = "Test a 3-digit number",
-          Code = "Test-Benford(123)",
+          Code = "TestBenford(123)",
           Result = "[Digit_One = 0.30103, Digit_Two = 0.03476, Digit_Three = 0.00352]"
         ],
         [
           Description = "Test a single-digit number",
-          Code = "Test-Benford(5)",
+          Code = "TestBenford(5)",
           Result = "[Digit_One = 0.07918, Digit_Two = null, Digit_Three = null]"
         ]
       }

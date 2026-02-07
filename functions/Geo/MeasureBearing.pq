@@ -40,13 +40,13 @@ let
   
   fnType = type function (lat1_rad as number, lat2_rad as number, lon1_rad as number, lon2_rad as number) as record
     meta [
-      Documentation.Name = "Measure-Bearing", 
+      Documentation.Name = "MeasureBearing", 
       Documentation.LongDescription
         = "This function calculates the compass direction from one geographic coordinate to another. It takes the latitude and longitude of two points in radians and returns the compass direction as a record with the direction and sort order.", 
       Documentation.Examples = {
         [
           Description = "Calculate the direction from point A to point B.",
-          Code        = "Measure-Bearing(0.785398, 0.523599, -1.5708, -1.0472)", 
+          Code        = "MeasureBearing(0.785398, 0.523599, -1.5708, -1.0472)", 
           Result      = "[Direction = 'ESE', Sort = 6]"
         ]
       }

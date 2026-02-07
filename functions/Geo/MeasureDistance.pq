@@ -25,18 +25,18 @@ let
   
   fnType = type function (lat1 as number, lon1 as number, lat2 as number, lon2 as number, optional measure as number) as number
     meta [
-      Documentation.Name = "Measure-Distance", 
+      Documentation.Name = "MeasureDistance", 
       Documentation.LongDescription
         = "This function calculates the distance between two geographic coordinates using the Haversine formula. It takes the latitude and longitude of two points and returns the distance in kilometers by default, or in miles if specified.", 
       Documentation.Examples = {
         [
           Description = "Calculate the distance between two points in kilometers.",
-          Code        = "Measure-Distance(34.0522, -118.2437, 40.7128, -74.0060)", 
+          Code        = "MeasureDistance(34.0522, -118.2437, 40.7128, -74.0060)", 
           Result      = "3935.7463"
         ],
         [
           Description = "Calculate the distance between two points in miles.",
-          Code        = "Measure-Distance(34.0522, -118.2437, 40.7128, -74.0060, 1)", 
+          Code        = "MeasureDistance(34.0522, -118.2437, 40.7128, -74.0060, 1)", 
           Result      = "2446.9457"
         ]
       }

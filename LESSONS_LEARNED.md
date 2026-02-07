@@ -104,6 +104,23 @@ This section will be populated with frequently encountered PQLint rules and how 
   ```
 ```
 
+### Issue: M Language Identifiers Cannot Contain Hyphens
+- **Date**: 2026-02-07
+- **Function(s)**: All migrated functions (GetFactors, ConvertToRoundedDateTime, MeasureBearing, MeasureDistance, TestBenford, GetConfidenceInterval)
+- **Category**: Syntax
+- **Severity**: Critical
+- **Problem**: Initially attempted to use PowerShell-style Verb-Noun naming with hyphens (e.g., `Get-Factors`, `Measure-Distance`) as M Language identifiers. However, M Language does not allow hyphens in identifiers - they cause compilation errors. This created inconsistency where `Documentation.Name` showed `"Get-Factors"` but users had to call the function as `GetFactors()`, leading to confusion.
+- **Solution**: 
+  1. Use the identifier name (without hyphens) consistently throughout: `GetFactors`, `MeasureBearing`, `TestBenford`, etc.
+  2. In `Documentation.Name`, use the same identifier name: `"GetFactors"` not `"Get-Factors"`
+  3. In `Documentation.Examples`, code samples must show actual function calls: `GetFactors(28)` not `Get-Factors(28)`
+  4. Updated all previously migrated functions to fix documentation inconsistencies
+- **Prevention**: 
+  - Remember that M Language identifiers follow standard programming naming rules (alphanumeric + underscore only)
+  - Documentation should always reflect the ACTUAL function call syntax users will use
+  - PowerShell-style Verb-Noun naming is a conceptual guide for choosing descriptive names, not a literal syntax requirement
+  - Test files serve as validation that documentation matches actual usage
+
 ---
 
 ## Migration Pattern Library

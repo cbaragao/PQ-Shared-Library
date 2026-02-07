@@ -16,17 +16,17 @@ let
   
   fnType = type function (z as number, stdev as number, population as number, optional mode as nullable text) as record
     meta [
-      Documentation.Name = "Get-ConfidenceInterval",
+      Documentation.Name = "GetConfidenceInterval",
       Documentation.LongDescription = "Calculates the confidence interval range based on z-score, standard deviation, and population size. The optional mode parameter determines whether to calculate for a sample (""s"", default) or population (""p""). Returns a record with positive and negative confidence interval values.",
       Documentation.Examples = {
         [
           Description = "Calculate confidence interval for a sample with z=1.75, stdev=4, population=5000",
-          Code = "Get-ConfidenceInterval(1.75, 4, 5000)",
+          Code = "GetConfidenceInterval(1.75, 4, 5000)",
           Result = "[positive = 0.09900485, negative = -0.09900485]"
         ],
         [
           Description = "Calculate confidence interval for entire population",
-          Code = "Get-ConfidenceInterval(1.96, 2.5, 1000, ""p"")",
+          Code = "GetConfidenceInterval(1.96, 2.5, 1000, ""p"")",
           Result = "[positive = 0.1549516, negative = -0.1549516]"
         ]
       }

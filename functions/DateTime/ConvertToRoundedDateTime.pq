@@ -19,12 +19,12 @@ let
   
   fnType = type function (dt as datetime, interval as number, optional culture as nullable text) as datetime
     meta [
-      Documentation.Name = "ConvertTo-RoundedDateTime", 
+      Documentation.Name = "ConvertToRoundedDateTime", 
       Documentation.LongDescription = "This function rounds a datetime to a specified minute interval (e.g., round to the nearest 15 minutes). Optional culture parameter defaults to 'en-US' if not specified.", 
       Documentation.Examples = {
         [
           Description = "Round a datetime to the nearest 15 minutes.",
-          Code        = "ConvertTo-RoundedDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)", 
+          Code        = "ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)", 
           Result      = "#datetime(2022, 10, 1, 10, 15, 0)"
         ]
       }
