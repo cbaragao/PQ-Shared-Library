@@ -80,7 +80,7 @@ let
         List.Zip({numcols, List.Repeat({type number}, List.Count(numcols))})
       ), 
       replace_ones = Table.ReplaceValue(types, null, 1, Replacer.ReplaceValue, numcols), 
-      result = Table.ReorderColumns(replace_ones, List.Combine({{"Var1"}, replace_ones[Var1]}), MissingField.Error)
+      result = Table.ReorderColumns(replace_ones, List.Combine({{"Var1"}, numcols}), MissingField.Error)
     in
       result,
   
