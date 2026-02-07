@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 3
+- **Completed**: 5
 - **In Progress**: 0
-- **Remaining**: 42
+- **Remaining**: 40
 
 ---
 
@@ -64,9 +64,9 @@ All functions must include:
 
 ## DateTime Functions (1 function)
 
-### Task 1: Migrate RoundDateTime
-- **Branch**: `migrate/RoundDateTime`
-- **File**: `functions/DateTime/RoundDateTime.pq`
+### Task 1: Migrate RoundDateTime → ConvertTo-RoundedDateTime
+- **Branch**: `migrate/ConvertTo-RoundedDateTime`
+- **File**: `functions/DateTime/ConvertToRoundedDateTime.pq`
 - **Status**: ✅ Completed
 - **Steps**:
   1. Create branch `migrate/RoundDateTime`
@@ -87,9 +87,9 @@ All functions must include:
 
 ## Geo Functions (2 functions)
 
-### Task 2: Migrate Bearing
-- **Branch**: `migrate/Bearing`
-- **File**: `functions/Geo/Bearing.pq`
+### Task 2: Migrate Bearing → Measure-Bearing
+- **Branch**: `migrate/Measure-Bearing`
+- **File**: `functions/Geo/MeasureBearing.pq`
 - **Status**: ✅ Completed
 
 ### Task 3: Migrate CalculateDistance → Measure-Distance
