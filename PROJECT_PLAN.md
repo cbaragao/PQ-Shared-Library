@@ -5,9 +5,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 1
+- **Completed**: 2
 - **In Progress**: 0
-- **Remaining**: 44
+- **Remaining**: 43
 
 ---
 
@@ -39,7 +39,7 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 ### Task 2: Migrate Bearing
 - **Branch**: `migrate/Bearing`
 - **File**: `functions/Geo/Bearing.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
 
 ### Task 3: Migrate CalculateDistance
 - **Branch**: `migrate/CalculateDistance`
