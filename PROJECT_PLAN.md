@@ -16,7 +16,7 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 ### Task 1: Migrate RoundDateTime
 - **Branch**: `migrate/RoundDateTime`
 - **File**: `functions/DateTime/RoundDateTime.pq`
-- **Status**: 🔄 In Progress (Bug found - needs retest)
+- **Status**: ✅ Completed
 - **Steps**:
   1. Create branch `migrate/RoundDateTime`
   2. Remove `Function.From` wrapper
