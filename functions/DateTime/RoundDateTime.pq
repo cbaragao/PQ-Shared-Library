@@ -1,22 +1,20 @@
 let
-  RoundDateTime= Function.From(
-    type function (dt as datetime, interval as number) as datetime, 
-    (params) =>
-      let
-        // Convert datetime to number
-        Source = Number.From(params{0}), 
-        
-        // Calculate the number of intervals in a day
-        Minutes = 24 * 60 / params{1}, 
-        
-        // Round the datetime to the nearest interval
-        Rounded = Number.RoundAwayFromZero((Source * Minutes), 0) / Minutes, 
-        
-        // Convert the rounded number back to datetime
-        Result = DateTime.From(Rounded)
-      in
-        Result
-  ), 
+  RoundDateTime = (dt as datetime, interval as number) as datetime =>
+    let
+      // Convert datetime to number
+      Source = Number.From(dt, "en-US"), 
+      
+      // Calculate the number of intervals in a day
+      Minutes = 24 * 60 / interval, 
+      
+      // Round the datetime to the nearest interval
+      Rounded = Number.RoundAwayFromZero((Source * Minutes), 0) / Minutes, 
+      
+      // Convert the rounded number back to datetime
+      Result = DateTime.From(Rounded, "en-US")
+    in
+      Result,
+  
   fnType = type function (dt as datetime, interval as number) as datetime
     meta [
       Documentation.Name = "RoundDateTime", 
