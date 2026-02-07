@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 45
-- **Completed**: 6
+- **Completed**: 7
 - **In Progress**: 0
-- **Remaining**: 39
+- **Remaining**: 38
 
 ---
 
@@ -108,10 +108,10 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Added optional culture parameter with "en-US" default for flexibility
 
-### Task 5: Migrate Conf
-- **Branch**: `migrate/Conf`
-- **File**: `functions/Math/Conf.pq`
-- **Status**: Not Started
+### Task 5: Migrate Conf → Get-ConfidenceInterval
+- **Branch**: `migrate/Get-ConfidenceInterval`
+- **File**: `functions/Math/GetConfidenceInterval.pq`
+- **Status**: ✅ Completed
 
 ### Task 6: Migrate Corr
 - **Branch**: `migrate/Corr`
