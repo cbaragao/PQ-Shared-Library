@@ -1,7 +1,7 @@
-// Test cases for RoundDateTime function
+// Test cases for ConvertTo-RoundedDateTime function
 let
     // Include the function being tested (without type metadata)
-    RoundDateTime = (dt as datetime, interval as number) as datetime =>
+    ConvertToRoundedDateTime = (dt as datetime, interval as number) as datetime =>
         let
             // Convert datetime to number
             Source = Number.From(dt, "en-US"), 
@@ -26,32 +26,32 @@ let
                 #datetime(2022, 10, 1, 10, 17, 55),
                 15,
                 #datetime(2022, 10, 1, 10, 15, 0),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15) = #datetime(2022, 10, 1, 10, 15, 0)
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15),
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15) = #datetime(2022, 10, 1, 10, 15, 0)
             },
             {
                 "Round up to 30 minutes",
                 #datetime(2022, 10, 1, 10, 20, 0),
                 30,
                 #datetime(2022, 10, 1, 10, 30, 0),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 20, 0), 30),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 20, 0), 30) = #datetime(2022, 10, 1, 10, 30, 0)
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 20, 0), 30),
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 20, 0), 30) = #datetime(2022, 10, 1, 10, 30, 0)
             },
             {
                 "Round down to 15 minutes",
                 #datetime(2022, 10, 1, 10, 7, 0),
                 15,
                 #datetime(2022, 10, 1, 10, 0, 0),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 7, 0), 15),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 7, 0), 15) = #datetime(2022, 10, 1, 10, 0, 0)
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 7, 0), 15),
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 7, 0), 15) = #datetime(2022, 10, 1, 10, 0, 0)
             },
             {
                 "Exact interval match",
                 #datetime(2022, 10, 1, 10, 30, 0),
                 15,
                 #datetime(2022, 10, 1, 10, 30, 0),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 30, 0), 15),
-                RoundDateTime(#datetime(2022, 10, 1, 10, 30, 0), 15) = #datetime(2022, 10, 1, 10, 30, 0)
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 30, 0), 15),
+                ConvertToRoundedDateTime(#datetime(2022, 10, 1, 10, 30, 0), 15) = #datetime(2022, 10, 1, 10, 30, 0)
             }
         }
     )

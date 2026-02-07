@@ -1,5 +1,5 @@
 let
-  RoundDateTime = (dt as datetime, interval as number) as datetime =>
+  ConvertToRoundedDateTime = (dt as datetime, interval as number) as datetime =>
     let
       // Convert datetime to number
       Source = Number.From(dt, "en-US"), 
@@ -17,15 +17,15 @@ let
   
   fnType = type function (dt as datetime, interval as number) as datetime
     meta [
-      Documentation.Name = "RoundDateTime", 
+      Documentation.Name = "ConvertTo-RoundedDateTime", 
       Documentation.LongDescription = "This function rounds a datetime to a specified minute interval (e.g., round to the nearest 15 minutes).", 
       Documentation.Examples = {
         [
           Description = "Round a datetime to the nearest 15 minutes.",
-          Code        = "=RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)", 
+          Code        = "ConvertTo-RoundedDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)", 
           Result      = "#datetime(2022, 10, 1, 10, 15, 0)"
         ]
       }
     ]
 in
-  Value.ReplaceType(RoundDateTime, fnType)
+  Value.ReplaceType(ConvertToRoundedDateTime, fnType)
