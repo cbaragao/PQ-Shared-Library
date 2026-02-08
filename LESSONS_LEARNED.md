@@ -199,21 +199,32 @@ This section will be populated with frequently encountered PQLint rules and how 
   - Evaluate whether a linting violation represents a genuine issue or an overly strict interpretation
   - Document false positives to avoid confusion in future migrations
 
-### Issue: Floating Point Precision in Test Assertions Requires Explicit Rounding
+### Issue: Floating Point Precision in Test Assertions
 - **Date**: 2026-02-07
-- **Function(s)**: CalculateEWMA
+- **Function(s)**: CalculateEWMA, TestBenford, GetConfidenceInterval
 - **Category**: Testing
 - **Severity**: Medium
 - **Problem**: Test cases for mathematical functions that produce floating point results can fail due to IEEE 754 precision limits. For example, an EWMA calculation produced `52.640000000000008` instead of expected `52.64`. Direct comparison (`actual = expected`) fails even though results are mathematically equivalent.
-- **Solution**: Apply `Number.Round()` with explicit decimal precision and `RoundingMode.AwayFromZero` to all floating point test assertions. Pattern:
+- **Solution**: Use one of two valid approaches to handle floating point precision:
+  
+  **Approach 1 - Tolerance-based comparison** (using `Number.Abs()`):
+  ```powerquery
+  Number.Abs(TestBenford(123)[Digit_One] - 0.30103) < 0.001
+  ```
+  This checks if values are within an acceptable tolerance (e.g., 0.001). More flexible since it doesn't require knowing exact decimal places.
+  
+  **Approach 2 - Rounding-based comparison** (using `Number.Round()`):
   ```powerquery
   Number.Round(CalculateEWMA(...), 4, RoundingMode.AwayFromZero) = 52.64
   ```
-  This ensures consistent precision and predictable rounding behavior (standard mathematical rounding, not banker's rounding).
+  This rounds to a specific precision before comparing. Ensures predictable rounding behavior (standard mathematical rounding, not banker's rounding).
+  
 - **Prevention**:
-  - Always use `Number.Round()` in test assertions for functions that return floating point numbers
-  - Specify decimal precision appropriate to the calculation (typically 4 decimals)
-  - **Always include `RoundingMode.AwayFromZero`** for standard mathematical rounding behavior
+  - **Never use direct equality** (`actual = expected`) for floating point numbers
+  - **Choose approach based on context**:
+    - Tolerance-based: Better when acceptable variance is known (e.g., "within 0.001 is close enough")
+    - Rounding-based: Better when expected values have fixed decimal places (e.g., always 4 decimals)
+  - **If using Number.Round()**: Always include `RoundingMode.AwayFromZero` for standard mathematical rounding
   - Default `Number.Round()` uses banker's rounding (RoundingMode.ToEven), which can produce unexpected results
   - Apply rounding to both the Actual column AND the Pass comparison
   - Reference: https://excelguru.ca/power-query-the-round-function/ for Power Query rounding behavior
