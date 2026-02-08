@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 13
+- **Completed**: 14
 - **In Progress**: 0
-- **Remaining**: 26
+- **Remaining**: 25
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -200,10 +200,11 @@ All functions must include:
 
 ## SQL Functions (1 function)
 
-### Task 18: Migrate RunSQLQuery
-- **Branch**: `migrate/RunSQLQuery`
-- **File**: `functions/SQL/RunSQLQuery.pq`
-- **Status**: Not Started
+### Task 18: Migrate RunSQLQuery → InvokeSQLQuery
+- **Branch**: `migrate/InvokeSQLQuery`
+- **File**: `functions/SQL/InvokeSQLQuery.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to InvokeSQLQuery per Verb-Noun convention (Invoke- is approved verb for executing operations). Removed Function.From wrapper, replaced params{0-1} with named parameters (Source, Query). Enhanced documentation with explanation of Value.NativeQuery, query folding, and type preservation. Added second example showing complex query with JOIN and WHERE clause. Created comprehensive test suite with 4 validation tests for function structure and type safety. PQLint validation: zero violations.
 
 ---
 
