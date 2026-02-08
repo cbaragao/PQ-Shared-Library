@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 12
+- **Completed**: 13
 - **In Progress**: 0
-- **Remaining**: 27
+- **Remaining**: 26
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -190,10 +190,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed to GetLinearModelCoefficients per Verb-Noun convention (Get- is approved verb). Removed Function.From wrapper, replaced params{0-2} with named parameters (df, independent, dependent, family). Enhanced documentation with detailed parameter descriptions, GLM family explanation, and note about R integration requirement. Created comprehensive test suite with sample logistic regression data and validation checks. Tested successfully in Power BI with R integration.
 
-### Task 17: Migrate fnRPredictWithLogitModel
-- **Branch**: `migrate/fnRPredictWithLogitModel`
-- **File**: `functions/R/fnRPredictWithLogitModel.pq`
-- **Status**: Not Started
+### Task 17: Migrate fnRPredictWithLogitModel → InvokeLogitPrediction
+- **Branch**: `migrate/InvokeLogitPrediction`
+- **File**: `functions/R/InvokeLogitPrediction.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to InvokeLogitPrediction per Verb-Noun convention (Invoke- is approved verb for executing operations). Removed Function.From wrapper, replaced params{0-2} with named parameters (df, independent, dependent). Enhanced documentation with GLM explanation, R integration requirement note, and second example showing multiple predictors with R formula syntax. Created comprehensive test suite with 3 test cases validating single predictor, multiple predictors, and binary threshold logic. Passed all tests with R integration. PQLint validation: zero violations.
 
 ---
 
