@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 11
+- **Completed**: 12
 - **In Progress**: 0
-- **Remaining**: 28
+- **Remaining**: 27
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -184,10 +184,11 @@ All functions must include:
 
 ## R Functions (2 functions)
 
-### Task 16: Migrate fnRGetLinearModelCoefficients
-- **Branch**: `migrate/fnRGetLinearModelCoefficients`
-- **File**: `functions/R/fnRGetLinearModelCoefficients.pq`
-- **Status**: Not Started
+### Task 16: Migrate fnRGetLinearModelCoefficients → GetLinearModelCoefficients
+- **Branch**: `migrate/GetLinearModelCoefficients`
+- **File**: `functions/R/GetLinearModelCoefficients.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to GetLinearModelCoefficients per Verb-Noun convention (Get- is approved verb). Removed Function.From wrapper, replaced params{0-2} with named parameters (df, independent, dependent, family). Enhanced documentation with detailed parameter descriptions, GLM family explanation, and note about R integration requirement. Created comprehensive test suite with sample logistic regression data and validation checks. Tested successfully in Power BI with R integration.
 
 ### Task 17: Migrate fnRPredictWithLogitModel
 - **Branch**: `migrate/fnRPredictWithLogitModel`
