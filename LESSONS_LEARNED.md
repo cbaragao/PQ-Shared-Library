@@ -30,16 +30,16 @@ This document tracks all issues, errors, and solutions encountered during the mi
 
 ### Issue: Missing Culture Parameters for Date/Time and Numeric Functions
 - **Date**: 2026-02-07
-- **Function(s)**: RoundDateTime
+- **Function(s)**: ConvertToRoundedDateTime
 - **Category**: PQLint
 - **Severity**: Medium
 - **Problem**: PQLint rule `use-culture-for-date-functions` and `use-culture-for-numeric-functions` flagged missing culture parameter in `Number.From()` and `DateTime.From()` functions. Without explicit culture, output may vary based on user's machine locale.
 - **Solution**: Add `"en-US"` as second parameter to both `Number.From(dt, "en-US")` and `DateTime.From(Rounded, "en-US")` to ensure predictable output regardless of user locale.
 - **Prevention**: Always include culture parameter when using date/time or numeric conversion functions. Default to `"en-US"` unless specific locale is required.
 
-### Issue: RoundDateTime Logic Error - Wrong Rounding Function Used
+### Issue: ConvertToRoundedDateTime Logic Error - Wrong Rounding Function Used
 - **Date**: 2026-02-07
-- **Function(s)**: RoundDateTime
+- **Function(s)**: ConvertToRoundedDateTime
 - **Category**: Logic Bug
 - **Severity**: Critical
 - **Problem**: Function used `Number.RoundAwayFromZero` which always rounds away from zero, causing incorrect results. Test case: `RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)` expected `#datetime(2022, 10, 1, 10, 15, 0)` but returned `#datetime(2022, 10, 1, 10, 30, 0)`. The function should round to the NEAREST interval, not always away from zero.
@@ -66,7 +66,7 @@ This document tracks all issues, errors, and solutions encountered during the mi
 
 ### Issue: Number.Round Default Banker's Rounding Behavior
 - **Date**: 2026-02-07
-- **Function(s)**: RoundDateTime
+- **Function(s)**: ConvertToRoundedDateTime
 - **Category**: PQLint
 - **Severity**: High
 - **Problem**: PQLint rule `use-specific-parameter-for-number-round` flagged that `Number.Round` uses banker's rounding (RoundingMode.ToEven) by default, which rounds 0.5 to nearest even number. This could cause unexpected results.
