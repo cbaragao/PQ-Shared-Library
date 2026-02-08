@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 10
+- **Completed**: 11
 - **In Progress**: 0
-- **Remaining**: 29
+- **Remaining**: 28
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -133,10 +133,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed to CalculateEWMA per Verb-Noun convention. Removed Function.From wrapper and redundant Number.From() calls for cleaner code. Added type annotations to List.Accumulate iterator. Enhanced documentation with detailed parameter descriptions and 3 examples. Created comprehensive test suite with 4 test cases using Number.Round() with RoundingMode.AwayFromZero for consistent precision handling.
 
-### Task 9: Migrate GenerateRandomNumbers
+### Task 9: Migrate GenerateRandomNumbers → NewRandomNumbers
 - **Branch**: `migrate/GenerateRandomNumbers`
-- **File**: `functions/Math/GenerateRandomNumbers.pq`
-- **Status**: Not Started
+- **File**: `functions/Math/NewRandomNumbers.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to NewRandomNumbers per Verb-Noun convention (New- is the approved verb for creating/generating). Removed Function.From wrapper, replaced params{0-2} with named parameters. Added culture parameters to Text.From() and Number.FromText() for PQLint compliance. Enhanced documentation with detailed parameter descriptions and example. Created test suite with verified random number generation.
 
 ### Task 10: Migrate GetFactors
 - **Branch**: `migrate/Get-Factors`
