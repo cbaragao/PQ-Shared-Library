@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 14
+- **Completed**: 15
 - **In Progress**: 0
-- **Remaining**: 25
+- **Remaining**: 24
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -210,10 +210,11 @@ All functions must include:
 
 ## String Functions (4 functions)
 
-### Task 19: Migrate EncodeText
+### Task 19: Migrate EncodeText → ConvertToEncodedText
 - **Branch**: `migrate/EncodeText`
-- **File**: `functions/String/EncodeText.pq`
-- **Status**: Not Started
+- **File**: `functions/String/ConvertToEncodedText.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to ConvertToEncodedText per Verb-Noun convention (ConvertTo- is approved verb for transforming to specific format, "Encode" is not an approved verb). Removed Function.From wrapper, replaced params{0} with named parameter (str). Added culture parameter "en-US" to Number.ToText for PQLint compliance. Enhanced documentation with clearer explanation and added second example for single character. Created comprehensive test suite with 5 test cases covering various scenarios. Files renamed to match function name (EncodeText.pq → ConvertToEncodedText.pq). All tests passed. PQLint validation: Service unavailable during migration, but function follows validated patterns.
 
 ### Task 20: Migrate ReadFileToText
 - **Branch**: `migrate/ReadFileToText`
