@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 16
+- **Completed**: 17
 - **In Progress**: 0
-- **Remaining**: 23
+- **Remaining**: 22
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -225,7 +225,8 @@ All functions must include:
 ### Task 21: Migrate RemoveHTMLTags
 - **Branch**: `migrate/RemoveHTMLTags`
 - **File**: `functions/String/RemoveHTMLTags.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Function name already used approved "Remove-" verb. Standardized casing to RemoveHTMLTags (all caps "HTML"). Removed Function.From wrapper, replaced params{0} with named parameter (htmlString). Fixed bug: changed removeTags{0} to removeTags{0}[text] to properly extract text column. Added optional culture parameter with default "en-US" using null-coalescing operator (??). Enhanced documentation and added second example. Created comprehensive test suite with 5 test cases. All tests passed. PQLint validation: zero violations.
 
 ### Task 22: Migrate RemoveUnwantedCharacters
 - **Branch**: `migrate/RemoveUnwantedCharacters`
