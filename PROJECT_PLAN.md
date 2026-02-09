@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 15
+- **Completed**: 16
 - **In Progress**: 0
-- **Remaining**: 24
+- **Remaining**: 23
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -216,10 +216,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed to ConvertToEncodedText per Verb-Noun convention (ConvertTo- is approved verb for transforming to specific format, "Encode" is not an approved verb). Removed Function.From wrapper, replaced params{0} with named parameter (str). Added culture parameter "en-US" to Number.ToText for PQLint compliance. Enhanced documentation with clearer explanation and added second example for single character. Created comprehensive test suite with 5 test cases covering various scenarios. Files renamed to match function name (EncodeText.pq → ConvertToEncodedText.pq). All tests passed. PQLint validation: Service unavailable during migration, but function follows validated patterns.
 
-### Task 20: Migrate ReadFileToText
-- **Branch**: `migrate/ReadFileToText`
-- **File**: `functions/String/ReadFileToText.pq`
-- **Status**: Not Started
+### Task 20: Migrate ReadFileToText → GetFileText
+- **Branch**: `migrate/GetFileText`
+- **File**: `functions/String/GetFileText.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to GetFileText per Verb-Noun convention (Get- is approved verb for retrieving data, "Read" is not an approved verb). Removed Function.From wrapper, replaced params{0} with named parameter (filepath). Enhanced documentation with clearer explanation and added second example for configuration files. Created test suite with function structure validation (function signature, return type) since this function requires actual file system access. Files renamed to match function name (ReadFileToText.pq → GetFileText.pq). All tests passed. PQLint validation: zero violations.
 
 ### Task 21: Migrate RemoveHTMLTags
 - **Branch**: `migrate/RemoveHTMLTags`
