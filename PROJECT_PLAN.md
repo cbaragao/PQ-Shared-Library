@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 18
+- **Completed**: 19
 - **In Progress**: 0
-- **Remaining**: 21
+- **Remaining**: 20
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -238,10 +238,11 @@ All functions must include:
 
 ## Tbl Functions (6 functions)
 
-### Task 23: Migrate ColumnToList
+### Task 23: Migrate ColumnToList → ConvertColumnToList
 - **Branch**: `migrate/ColumnToList`
-- **File**: `functions/Tbl/ColumnToList.pq`
-- **Status**: Not Started
+- **File**: `functions/Tbl/ConvertColumnToList.pq` (renamed from ColumnToList.pq)
+- **Status**: ✅ Completed
+- **Notes**: Function renamed from ColumnToList to ConvertColumnToList for clarity (ConvertTo- verb pattern). Removed Function.From wrapper, replaced params{0} and params{1} with named parameters (t, column_name). Added MissingField.Error parameter to Table.SelectColumns as per PQLint best practice to explicitly handle missing columns. Enhanced documentation with clearer explanation. Added second example. Created comprehensive test suite with 5 test cases covering different column types, single row, and empty table. All tests passed. PQLint validation: zero violations after adding MissingField parameter. Files renamed to match new function name.
 
 ### Task 24: Migrate ConvertDateTimeZoneToDate
 - **Branch**: `migrate/ConvertDateTimeZoneToDate`
