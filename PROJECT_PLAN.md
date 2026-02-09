@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 17
+- **Completed**: 18
 - **In Progress**: 0
-- **Remaining**: 22
+- **Remaining**: 21
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -228,10 +228,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Function name already used approved "Remove-" verb. Standardized casing to RemoveHTMLTags (all caps "HTML"). Removed Function.From wrapper, replaced params{0} with named parameter (htmlString). Fixed bug: changed removeTags{0} to removeTags{0}[text] to properly extract text column. Added optional culture parameter with default "en-US" using null-coalescing operator (??). Enhanced documentation and added second example. Created comprehensive test suite with 5 test cases. All tests passed. PQLint validation: zero violations.
 
-### Task 22: Migrate RemoveUnwantedCharacters
+### Task 22: Migrate RemoveUnwantedCharacters → RemoveChars
 - **Branch**: `migrate/RemoveUnwantedCharacters`
-- **File**: `functions/String/RemoveUnwantedCharacters.pq`
-- **Status**: Not Started
+- **File**: `functions/String/RemoveChars.pq` (renamed from RemoveUnwantedCharacters.pq)
+- **Status**: ✅ Completed
+- **Notes**: Function renamed from RemoveUnwantedCharacters to RemoveChars for brevity (Remove- verb already approved). Removed Function.From wrapper, replaced params{0-5} with named parameters (str, keep_upper, keep_lower, keep_nums, keep_specials, keep_chars). Simplified nested fnRemove function by inlining the logic directly. Used null-coalescing operator (??) for cleaner default values. Enhanced documentation with clearer parameter descriptions. Added second example. Created comprehensive test suite with 7 test cases covering all parameter combinations including defaults, edge cases (empty string), and special character preservation. All tests passed. PQLint validation: zero violations. Files renamed to match new function name.
 
 ---
 
