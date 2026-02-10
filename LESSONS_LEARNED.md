@@ -255,6 +255,81 @@ _To be populated during migration._
 
 ## Git/Branch Management Issues
 
+### Issue: Git Rename Detection Fails When Rename and Modification Combined in Single Commit
+- **Date**: 2026-02-09
+- **Function(s)**: NewBatches, SelectDynamicList (initial attempts)
+- **Category**: Git
+- **Severity**: Critical
+- **Problem**: When performing `git mv CreateBatches.pq NewBatches.pq` and then editing the renamed file in the same commit, git's rename detection fails. Git log shows "A" (add) and "D" (delete) instead of "R" (rename), breaking file history tracking. GitHub shows these as unrelated files rather than a rename with modifications. This is critical for documentation and code history.
+- **Root Cause**: Git's rename detection threshold requires >50% similarity. When you rename AND significantly modify the file content in one commit (e.g., removing Function.From wrapper, changing parameter names from params{0} to named params), the content similarity drops below 50%, causing git to interpret it as delete + new file.
+- **Solution**: Use two-commit workflow:
+  1. **First commit**: Pure rename only using `git mv`
+     ```powershell
+     git mv 'functions/Utils/CreateBatches.pq' 'functions/Utils/NewBatches.pq'
+     git commit -m "Rename CreateBatches.pq to NewBatches.pq"
+     git log --name-status -1  # Verify shows "R100" (100% similarity)
+     ```
+  2. **Second commit**: Modify content (migration to simplified syntax)
+     ```powershell
+     # Edit functions/Utils/NewBatches.pq with all changes
+     git add functions/Utils/NewBatches.pq tests/Utils/NewBatches.query.pq
+     git commit -m "Migrate NewBatches to modern syntax with PQLint compliance"
+     git log --name-status -2  # First commit shows R100, second shows M
+     ```
+  3. **(Optional) Third commit**: Documentation and meta-file updates
+     ```powershell
+     git add LESSONS_LEARNED.md .github/copilot-instructions.md
+     git commit -m "Update documentation for NewBatches migration"
+     ```
+- **Prevention**:
+  - **NEVER combine git mv and file edits in the same commit**
+  - First commit must be the bare `git mv` command with NO content changes
+  - Verify rename tracked: `git log --name-status -1` should show "R100", not "A" and "D"
+  - After first commit, edit the renamed file and commit modifications separately
+  - This two-commit pattern is MANDATORY for proper git history
+  - Critical for documentation: rename tracking shows function evolution, not file replacement
+- **Verification Commands**:
+  ```powershell
+  git log --name-status -1  # Should show "R100" for rename commit
+  git log --name-status -2  # Second commit shows "M" for modifications
+  git log --follow functions/Utils/NewBatches.pq  # Shows full history including old filename
+  ```
+
+### Issue: File Naming Convention - PascalCase Required, No Hyphens Allowed
+- **Date**: 2026-02-09
+- **Function(s)**: NewBatches, SelectDynamicList (initial attempts)
+- **Category**: File Naming
+- **Severity**: High
+- **Problem**: Initially created files with hyphenated names: `New-Batches.pq`, `Select-DynamicList.pq`. This is incorrect for two reasons:
+  1. M Language identifiers cannot contain hyphens (compilation error)
+  2. Creates confusion between filename, variable name, and documentation name
+  3. File naming convention should follow standard programming patterns (PascalCase without special characters)
+- **Incorrect Pattern**:
+  - Filename: `New-Batches.pq` ❌
+  - Variable name: `New-Batches` ❌ (compilation error)
+  - Documentation.Name: `"New-Batches"` ✓ (user-facing display name, hyphens allowed)
+- **Correct Pattern**:
+  - Filename: `NewBatches.pq` ✓ (PascalCase, no hyphen)
+  - Variable name: `NewBatches` ✓ (matches filename)
+  - Documentation.Name: `"New-Batches"` ✓ (hyphenated Verb-Noun format for user-facing docs)
+- **Solution**:
+  1. File names use PascalCase without hyphens: **NewBatches.pq**, **SelectDynamicList.pq**
+  2. Variable names match file names exactly: **NewBatches**, **SelectDynamicList**
+  3. Only Documentation.Name uses hyphenated Verb-Noun format: **"New-Batches"**, **"Select-DynamicList"**
+  4. Test files follow same pattern: **NewBatches.query.pq**, **SelectDynamicList.query.pq**
+- **Prevention**:
+  - Remember: Hyphens ONLY in Documentation.Name (user-facing string literal)
+  - Filenames, variable names, function names: PascalCase WITHOUT hyphens
+  - Verify filename after `git mv`: `git status` should show correct PascalCase with no hyphens
+  - PowerShell Verb-Noun naming is a CONCEPTUAL guide (New, Select, Get, etc.), not literal syntax
+- **Examples for Migration Tasks**:
+  | Old Name | New File Name | Variable Name | Documentation.Name |
+  |----------|---------------|---------------|-------------------|
+  | CreateBatches.pq | NewBatches.pq | NewBatches | "New-Batches" |
+  | fnDynamicSelectList.pq | SelectDynamicList.pq | SelectDynamicList | "Select-DynamicList" |
+  | GetFunctionMetadata.pq | GetFunctionMetadata.pq | GetFunctionMetadata | "Get-FunctionMetadata" |
+  | PostRequest.pq | PostRequest.pq | PostRequest | "Post-Request" |
+
 _To be populated with any git-related issues encountered._
 
 ---
