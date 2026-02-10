@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 19
+- **Completed**: 20
 - **In Progress**: 0
-- **Remaining**: 20
+- **Remaining**: 19
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -247,7 +247,8 @@ All functions must include:
 ### Task 24: Migrate ConvertDateTimeZoneToDate
 - **Branch**: `migrate/ConvertDateTimeZoneToDate`
 - **File**: `functions/Tbl/ConvertDateTimeZoneToDate.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Function name kept as-is (already uses ConvertTo- verb pattern). Removed Function.From wrapper, replaced params{0} with named parameter (tbl). Added optional culture parameter with default "en-US" for PQLint compliance. Used Date.From() with culture for proper value conversion (not just type metadata change). Added lambda type annotations: (state as table, current as text) as table. Used List.Accumulate with Table.TransformColumns pattern to iterate over datetime/datetimezone columns. Changed from Table.TransformColumnTypes (which only changes metadata) to Table.TransformColumns with Date.From (which actually converts values). Enhanced documentation with culture parameter explanation. Manually tested with 3 scenarios: single datetimezone column, multiple datetime columns, and mixed table with non-datetime columns. All manual tests passed. PQLint validation: zero violations after adding culture parameter and lambda types. No automated test file created - manual testing documented in function comments.
 
 ### Task 25: Migrate fnRandomNumber
 - **Branch**: `migrate/fnRandomNumber`
