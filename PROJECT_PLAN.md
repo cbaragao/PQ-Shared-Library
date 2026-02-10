@@ -17,8 +17,8 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 - **Total Functions**: 44
 - **Completed**: 21
 - **In Progress**: 0
-- **Remaining**: 18
-- **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
+- **Remaining**: 17
+- **Deprecated**: 7 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns)
 
 ---
 
@@ -259,7 +259,8 @@ All functions must include:
 ### Task 26: Migrate RemoveNullColumns
 - **Branch**: `migrate/RemoveNullColumns`
 - **File**: `functions/Tbl/RemoveNullColumns.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Notes**: Function deprecated due to issues with Table.Profile behavior. Unable to reliably identify completely null columns using Count field. Function logic was unclear and testing proved problematic.
 
 ### Task 27: Migrate ReplaceInColumnNames
 - **Branch**: `migrate/ReplaceInColumnNames`
