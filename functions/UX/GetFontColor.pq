@@ -7,9 +7,6 @@ let
         
         // Split strings into list by each character, convert to upper, remove hash
         Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0)) else "#000000",
-        
-        // Set gamma for sRGB to linear RGB conversion
-        gamma = 2.2,
 
         // Get sRGB subfunction - converts hex digit pair to sRGB value (0-1 range)
         GetSRGB = (cval1 as number, cval2 as number) as number =>
@@ -39,9 +36,9 @@ let
 
         // Calculate perceived luminance using sRGB relative luminance coefficients
         // ITU-R BT.709 standard weights: red=21.26%, green=71.52%, blue=7.22%
-        luminance = (0.2126 * Number.Power(rnum, gamma)) + 
-                    (0.7152 * Number.Power(gnum, gamma)) + 
-                    (0.0722 * Number.Power(bnum, gamma)),
+        luminance = (0.2126 * rnum) + 
+                    (0.7152 * gnum) + 
+                    (0.0722 * bnum),
 
         // Determine font color based on luminance threshold
         // >0.5 luminance = light background -> black text
@@ -54,7 +51,7 @@ let
   fnType = type function (HEX as text, optional culture as nullable text) as text
     meta [
       Documentation.Name = "Get-FontColor",
-      Documentation.LongDescription = "Determines whether black (#000000) or white (#FFFFFF) text should be used on a colored background for optimal readability. The function calculates the perceived luminance using the ITU-R BT.709 standard coefficients (red=21.26%, green=71.52%, blue=7.22%) with gamma correction (2.2). If luminance > 0.5, the background is considered light and black text is recommended; otherwise, white text is recommended for dark backgrounds.",
+      Documentation.LongDescription = "Determines whether black (#000000) or white (#FFFFFF) text should be used on a colored background for optimal readability. The function calculates the perceived luminance using the ITU-R BT.709 standard coefficients (red=21.26%, green=71.52%, blue=7.22%). If luminance > 0.5, the background is considered light and black text is recommended; otherwise, white text is recommended for dark backgrounds.",
       Documentation.Examples = {
         [
           Description = "Get the optimal font color for a medium-dark background (#666A86).",
