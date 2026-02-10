@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 23
+- **Completed**: 24
 - **In Progress**: 0
-- **Remaining**: 14
+- **Remaining**: 13
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 52% complete (23/44 functions)
+- **Progress**: 55% complete (24/44 functions)
 
 ---
 
@@ -285,10 +285,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed to NewBatches per Verb-Noun convention (New- is the approved verb for creating/generating resources). Implemented proper two-commit workflow: (1) git mv rename only, (2) content modifications. Removed Function.From wrapper, replaced params{0-2} with named parameters (batchSize, totalSize, baseValue). Added return type annotations for List.Generate. Added MissingField.Ignore to Table.ReorderColumns. Updated Documentation.Name to 'New-Batches' (hyphenated for user docs). Created comprehensive test suite with 4 test cases. All tests passed, PQLint validation: 0 violations. Git history properly preserved with R100 rename tracking.
 
-### Task 30: Migrate fnDynamicSelectList
-- **Branch**: `migrate/fnDynamicSelectList`
-- **File**: `functions/Utils/fnDynamicSelectList.pq`
-- **Status**: Not Started
+### Task 30: Migrate fnDynamicSelectList → SelectDynamicList
+- **Branch**: `migrate/SelectDynamicList`
+- **File**: `functions/Utils/SelectDynamicList.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to SelectDynamicList per Verb-Noun convention (Select- is approved verb). Removed Function.From wrapper, replaced params{0-1} with named parameters (l, selections). Added return type annotations and lambda types. Added Comparer.Ordinal to Text.Contains and List.PositionOf for PQLint compliance. Refactored for better readability with intermediate let bindings. Updated Documentation.Name to 'Select-DynamicList'. Enhanced documentation with second example. Created comprehensive test suite with 5 test cases. Variable name: SelectDynamicList (PascalCase, no hyphen).
 
 ### Task 31: Migrate GetFunctionMetadata
 - **Branch**: `migrate/GetFunctionMetadata`
