@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 32
+- **Completed**: 33
 - **In Progress**: 0
-- **Remaining**: 5
+- **Remaining**: 11
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 73% complete (32/44 functions)
+- **Progress**: 75% complete (33/44 functions)
 
 ---
 
@@ -346,7 +346,8 @@ All functions must include:
 ### Task 39: Migrate GetCompColor
 - **Branch**: `migrate/GetCompColor`
 - **File**: `functions/UX/GetCompColor.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Removed Function.From, added culture parameter with 'en-US' default, added Comparer.Ordinal to Text.AfterDelimiter and List.PositionOf, added Occurrence.First to List.PositionOf, added RoundingMode.Down to Number.RoundDown, added type annotations to nested functions, enhanced documentation explaining complementary color inversion, created comprehensive test suite with 10 tests
 
 ### Task 40: Migrate GetFontColor
 - **Branch**: `migrate/GetFontColor`
