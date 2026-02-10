@@ -15,10 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 22
+- **Completed**: 23
 - **In Progress**: 0
-- **Remaining**: 15
+- **Remaining**: 14
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
+- **Progress**: 52% complete (23/44 functions)
 
 ---
 
@@ -278,10 +279,11 @@ All functions must include:
 
 ## Utils Functions (5 functions)
 
-### Task 29: Migrate CreateBatches
-- **Branch**: `migrate/CreateBatches`
-- **File**: `functions/Utils/CreateBatches.pq`
-- **Status**: Not Started
+### Task 29: Migrate CreateBatches → New-Batches
+- **Branch**: `migrate/NewBatches`
+- **File**: `functions/Utils/NewBatches.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed to NewBatches per Verb-Noun convention (New- is the approved verb for creating/generating resources). Implemented proper two-commit workflow: (1) git mv rename only, (2) content modifications. Removed Function.From wrapper, replaced params{0-2} with named parameters (batchSize, totalSize, baseValue). Added return type annotations for List.Generate. Added MissingField.Ignore to Table.ReorderColumns. Updated Documentation.Name to 'New-Batches' (hyphenated for user docs). Created comprehensive test suite with 4 test cases. All tests passed, PQLint validation: 0 violations. Git history properly preserved with R100 rename tracking.
 
 ### Task 30: Migrate fnDynamicSelectList
 - **Branch**: `migrate/fnDynamicSelectList`
