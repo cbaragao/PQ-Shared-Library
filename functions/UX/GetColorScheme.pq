@@ -6,7 +6,7 @@ let
         cultureToUse = culture ?? "en-US",
         
         num = Text.From(count, cultureToUse), 
-        hx = if Text.StartsWith(hex, "#", Comparer.Ordinal) then Text.Replace(hex, "#", "", Comparer.Ordinal) else hex, 
+        hx = if Text.StartsWith(hex, "#") then Text.Replace(hex, "#", "") else hex, 
         md = 
           if mode = 0 then
             "monochrome"
