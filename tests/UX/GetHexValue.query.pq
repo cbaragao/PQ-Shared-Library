@@ -1,6 +1,28 @@
 let
-    // Load the function from file
-    GetHexValue = Expression.Evaluate(Text.FromBinary(File.Contents("functions/UX/GetHexValue.pq")), #shared),
+    // Define the function directly in the test file
+    GetHexValue = (red as number, green as number, blue as number, optional culture as nullable text) as text =>
+      let
+        // Use default culture if not provided (for potential future text operations)
+        cultureToUse = culture ?? "en-US",
+        
+        // Build the RGB list (hex digits 0-9, A-F)
+        RGB = List.Combine({{"0" .. "9"}, {"A" .. "F"}}), 
+        
+        // Function to convert RGB values to hex
+        ConvertToHex = (r as number, g as number, b as number) as text =>
+          let
+            // Convert each RGB component to two hex digits
+            r1        = RGB{Number.IntegerDivide(r, 16)}, 
+            r2        = RGB{Number.Mod(r, 16)}, 
+            g1        = RGB{Number.IntegerDivide(g, 16)}, 
+            g2        = RGB{Number.Mod(g, 16)}, 
+            b1        = RGB{Number.IntegerDivide(b, 16)}, 
+            b2        = RGB{Number.Mod(b, 16)}, 
+            HexOutput = "#" & r1 & r2 & g1 & g2 & b1 & b2
+          in
+            HexOutput
+      in 
+        ConvertToHex(red, green, blue),
     
     // Test 1: Original example - pure white
     test1 = GetHexValue(255, 255, 255),

@@ -1,6 +1,69 @@
 let
-    // Load the function from file
-    TestWebAimContrast = Expression.Evaluate(Text.FromBinary(File.Contents("functions/UX/TestWebAimContrast.pq")), #shared),
+    // Define the function directly in the test file
+    TestWebAimContrast = (background_hex as text, font_hex as text, optional culture as nullable text) as text =>
+      let
+        // Use default culture if not provided
+        cultureToUse = culture ?? "en-US",
+        
+        // Nested function to remove leading hash for API call and to check length and prevent errors
+        remove_hash = (hex as text) as text =>
+          let
+            // Trim any spaces
+            trim = Text.Trim(hex), 
+            // Remove leading hash
+            remove = if Text.StartsWith(trim, "#") then Text.RemoveRange(trim, 0, 1) else trim, 
+            // Check length, set to white if not equal to 6
+            check_length = if Text.Length(remove, cultureToUse) <> 6 then "#FFFFFF" else remove
+          in
+            check_length, 
+
+        // Pass background color
+        bg = remove_hash(background_hex), 
+        // Pass font color 
+        font = remove_hash(font_hex), 
+
+        // Call the API
+        Call = Json.Document(
+          Web.Contents(
+            "https://webaim.org/resources/contrastchecker/?fcolor=" & font & "&bcolor=" & bg & "&api"
+          )
+        ), 
+
+        // If any fail, transform the record field to be more descriptive, else null 
+        Transform = Record.TransformFields(
+          Call, 
+          {
+            {"AA", each if _ = "fail" then "WCAG 2.0 Level AA Normal Font Test Failed" else null}, 
+            {"AALarge", each if _ = "fail" then "WCAG 2.0 Level AA Large Font Test Failed" else null}, 
+            {"AAA", each if _ = "fail" then "WCAG 2.0 Level AAA Normal Font Test Failed" else null}, 
+            {"AAALarge", each if _ = "fail" then "WCAG 2.0 Level AAA Large Font Test Failed" else null}
+          }
+        ), 
+
+        // Filter out tests that passed 
+        Select = List.Select(Record.ToList(Transform), each _ <> null), 
+
+        // Concatenate the ratio and any failures
+        Concat = List.Accumulate(
+          Select, 
+          "", 
+          (state as text, current as any) as text =>
+            if List.PositionOf(Select, current) = 0 then
+              Text.Combine({"Ratio: ", Text.From(current, cultureToUse), " to 1#(lf)"})
+            else if List.PositionOf(Select, current) = 1 then
+              Text.Combine({state, "Test Failures:#(lf)", current, "#(lf)"})
+            else
+              Text.Combine({state, current, "#(lf)"})
+        ), 
+
+        // If all pass then let the user know
+        If_All_Pass = 
+          if Text.Contains(Concat, "Test Failures") = false then
+            Text.Combine({Concat, "Test Failures: None"})
+          else
+            Concat
+      in
+        If_All_Pass,
     
     // Test 1: Validate function is callable (type check)
     test1 = Value.Type(TestWebAimContrast),

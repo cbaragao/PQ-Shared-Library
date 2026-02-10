@@ -11,7 +11,7 @@ let
             // Trim any spaces
             trim = Text.Trim(hex), 
             // Remove leading hash
-            remove = if Text.StartsWith(trim, "#", Comparer.Ordinal) then Text.RemoveRange(trim, 0, 1) else trim, 
+            remove = if Text.StartsWith(trim, "#") then Text.RemoveRange(trim, 0, 1) else trim, 
             // Check length, set to white if not equal to 6
             check_length = if Text.Length(remove, cultureToUse) <> 6 then "#FFFFFF" else remove
           in
@@ -58,7 +58,7 @@ let
 
         // If all pass then let the user know
         If_All_Pass = 
-          if Text.Contains(Concat, "Test Failures", Comparer.Ordinal) = false then
+          if Text.Contains(Concat, "Test Failures") = false then
             Text.Combine({Concat, "Test Failures: None"})
           else
             Concat

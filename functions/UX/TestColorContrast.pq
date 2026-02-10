@@ -5,8 +5,8 @@ let
             cultureToUse = culture ?? "en-US",
             
             // Split strings into list by each character, convert to upper, remove hash
-            H1 = if HEX1 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX1, cultureToUse), "#", 0, Comparer.Ordinal)) else "#000000",
-            H2 = if HEX2 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX2, cultureToUse), "#", 0, Comparer.Ordinal)) else "#000000",
+            H1 = if HEX1 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX1, cultureToUse), "#", 0)) else "#000000",
+            H2 = if HEX2 <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX2, cultureToUse), "#", 0)) else "#000000",
             
             // Split the Source by each character
             SplitHex1 = Splitter.SplitTextByRepeatedLengths(1)(H1),
@@ -35,12 +35,12 @@ let
                             in  
                                 colorval,  
 
-                        r1 = List.PositionOf(RGB, hexlist{0}, Occurrence.First, Comparer.Ordinal),
-                        r2 = List.PositionOf(RGB, hexlist{1}, Occurrence.First, Comparer.Ordinal),
-                        g1 = List.PositionOf(RGB, hexlist{2}, Occurrence.First, Comparer.Ordinal),
-                        g2 = List.PositionOf(RGB, hexlist{3}, Occurrence.First, Comparer.Ordinal),
-                        b1 = List.PositionOf(RGB, hexlist{4}, Occurrence.First, Comparer.Ordinal),
-                        b2 = List.PositionOf(RGB, hexlist{5}, Occurrence.First, Comparer.Ordinal),
+                        r1 = List.PositionOf(RGB, hexlist{0}),
+                        r2 = List.PositionOf(RGB, hexlist{1}),
+                        g1 = List.PositionOf(RGB, hexlist{2}),
+                        g2 = List.PositionOf(RGB, hexlist{3}),
+                        b1 = List.PositionOf(RGB, hexlist{4}),
+                        b2 = List.PositionOf(RGB, hexlist{5}),
 
                         // Calculate rsrgb, gsrgb, bsrgb
                         rsrgb = GetSRGB(r1,r2),

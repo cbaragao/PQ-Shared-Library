@@ -1,6 +1,47 @@
 let
-    // Load the function from file
-    GetLuminosity = Expression.Evaluate(Text.FromBinary(File.Contents("functions/UX/GetLuminosity.pq")), #shared),
+    // Define the function directly in the test file
+    GetLuminosity = (HEX as text, optional culture as nullable text) as number =>
+      let
+        // Use default culture if not provided
+        cultureToUse = culture ?? "en-US",
+        
+        // Split strings into list by each character, convert to upper, remove hash
+        Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0)) else "#000000",
+        
+        // Split the Source by each character
+        SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source),
+
+        GetLuminosityInternal = (hexlist as list) as number =>
+          let 
+            // Build the RGB list
+            RGB = List.Combine({{"0".."9"},{"A".."F"}}),
+            
+            // Sub function to convert hex digit pair to RGB value (0-255 range)
+            GetRGB = (cval1 as number, cval2 as number) as number =>
+              let 
+                RGBVal = (Number.From(cval1) * 16) + Number.From(cval2)
+              in       
+                RGBVal,
+            
+            // Get positions of each digit
+            r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})),
+            g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})),
+            b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})),
+            
+            // Combine R, G, B values into a list
+            FinalRGB = {r, g, b},
+            
+            // Calculate luminosity using HSL lightness formula
+            // Luminosity = (max(R,G,B) + min(R,G,B)) / 2 / 255
+            // Returns value in 0-1 range where 0=black, 0.5=pure color, 1=white
+            Luminosity = 0.5 * (List.Max(FinalRGB) / 255 + List.Min(FinalRGB) / 255)
+          in
+            Luminosity,
+        
+        // Process the split list from the input
+        lum = GetLuminosityInternal(SplitHex)
+      in
+        lum,
     
     // Test 1: Original example - bright orange #FF5733
     test1 = GetLuminosity("#FF5733"),
