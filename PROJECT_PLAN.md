@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 26
+- **Completed**: 27
 - **In Progress**: 0
-- **Remaining**: 11
+- **Remaining**: 10
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 59% complete (26/44 functions)
+- **Progress**: 61% complete (27/44 functions)
 
 ---
 
@@ -303,10 +303,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed from PostRequest to InvokePostRequest per Verb-Noun convention (Invoke- is approved verb, "Post" is not). Removed Function.From wrapper. Added optional ContentType parameter with default 'application/json' for flexibility. Added TextEncoding.Utf8 to Text.ToBinary for proper encoding. Changed return type from 'text' to 'any' for flexibility. Updated Documentation.Name to 'Invoke-PostRequest'. Enhanced documentation with ContentType explanation and second example showing custom content type. Created test suite with 4 structural validation tests (function type, parameter count, parameter names, return type). Variable name: InvokePostRequest (PascalCase, no hyphen).
 
-### Task 33: Migrate Switch
-- **Branch**: `migrate/Switch`
-- **File**: `functions/Utils/Switch.pq`
-- **Status**: Not Started
+### Task 33: Migrate Switch → SelectCase
+- **Branch**: `migrate/SelectCase`
+- **File**: `functions/Utils/SelectCase.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed from Switch to SelectCase per Verb-Noun convention (Select- is approved verb, "Switch" is not). Removed Function.From wrapper, replaced params{0-2} with named parameters (value, l, default). Added RoundingMode.Down to Number.Mod for PQLint compliance. Added Occurrence.First to List.PositionOf for clarity. Improved code readability with better formatting. Updated Documentation.Name to 'Select-Case'. Enhanced documentation with pattern-matching explanation and third example showing default case. Created comprehensive test suite with 6 test cases covering first/second match, default, multiple matches, text comparison, and boolean values. Variable name: SelectCase (PascalCase, no hyphen).
 
 ---
 
