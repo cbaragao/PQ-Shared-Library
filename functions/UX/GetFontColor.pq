@@ -14,6 +14,14 @@ let
             SRGB = ((cval1 * 16) + cval2) / 255
           in       
             SRGB,
+        
+        // Convert sRGB to linear RGB using sRGB transfer function
+        SRGBToLinear = (srgb as number) as number =>
+          let 
+            linear = if srgb <= 0.03928 then srgb / 12.92 
+                     else Number.Power((srgb + 0.055) / 1.055, 2.4, RoundingMode.AwayFromZero)
+          in 
+            linear,
 
         // Build the RGB list
         RGB = List.Combine({{"0".."9"},{"A".."F"}}),
@@ -33,12 +41,17 @@ let
         rnum = GetSRGB(r1, r2),
         gnum = GetSRGB(g1, g2),
         bnum = GetSRGB(b1, b2),
+        
+        // Convert to linear RGB
+        rlin = SRGBToLinear(rnum),
+        glin = SRGBToLinear(gnum),
+        blin = SRGBToLinear(bnum),
 
-        // Calculate perceived luminance using sRGB relative luminance coefficients
+        // Calculate relative luminance using linear RGB values
         // ITU-R BT.709 standard weights: red=21.26%, green=71.52%, blue=7.22%
-        luminance = (0.2126 * rnum) + 
-                    (0.7152 * gnum) + 
-                    (0.0722 * bnum),
+        luminance = (0.2126 * rlin) + 
+                    (0.7152 * glin) + 
+                    (0.0722 * blin),
 
         // Determine font color based on luminance threshold
         // >0.5 luminance = light background -> black text
@@ -51,7 +64,7 @@ let
   fnType = type function (HEX as text, optional culture as nullable text) as text
     meta [
       Documentation.Name = "Get-FontColor",
-      Documentation.LongDescription = "Determines whether black (#000000) or white (#FFFFFF) text should be used on a colored background for optimal readability. The function calculates the perceived luminance using the ITU-R BT.709 standard coefficients (red=21.26%, green=71.52%, blue=7.22%). If luminance > 0.5, the background is considered light and black text is recommended; otherwise, white text is recommended for dark backgrounds.",
+      Documentation.LongDescription = "Determines whether black (#000000) or white (#FFFFFF) text should be used on a colored background for optimal readability. The function calculates the relative luminance using the W3C/WCAG standard formula with proper sRGB to linear RGB conversion (using the sRGB transfer function) and ITU-R BT.709 coefficients (red=21.26%, green=71.52%, blue=7.22%). If luminance > 0.5, the background is considered light and black text is recommended; otherwise, white text is recommended for dark backgrounds.",
       Documentation.Examples = {
         [
           Description = "Get the optimal font color for a medium-dark background (#666A86).",
