@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 21
+- **Completed**: 22
 - **In Progress**: 0
-- **Remaining**: 17
+- **Remaining**: 16
 - **Deprecated**: 7 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns)
 
 ---
@@ -262,10 +262,11 @@ All functions must include:
 - **Status**: ❌ Deprecated
 - **Notes**: Function deprecated due to issues with Table.Profile behavior. Unable to reliably identify completely null columns using Count field. Function logic was unclear and testing proved problematic.
 
-### Task 27: Migrate ReplaceInColumnNames
-- **Branch**: `migrate/ReplaceInColumnNames`
-- **File**: `functions/Tbl/ReplaceInColumnNames.pq`
-- **Status**: Not Started
+### Task 27: Migrate ReplaceInColumnNames → UpdateColumnNames
+- **Branch**: `migrate/UpdateColumnNames`
+- **File**: `functions/Tbl/UpdateColumnNames.pq` (renamed from ReplaceInColumnNames.pq)
+- **Status**: ✅ Completed
+- **Notes**: Function renamed from ReplaceInColumnNames to UpdateColumnNames (Update- verb for modifying/updating data). Removed Function.From wrapper, replaced params{0-2} with named parameters (t, search, replacement). Added optional culture parameter with default "en-US" for Text.Proper per PQLint best practice. Function replaces specified text in column names using Replacer.ReplaceText and applies Text.Proper to convert to proper case (first letter of each word capitalized). Enhanced documentation with clearer explanation and second example. Created comprehensive test suite with 5 test cases covering: underscore to space replacement, hyphen to underscore, no match with Text.Proper applied, multiple occurrences, and empty replacement. All tests passed. PQLint validation: zero violations after adding culture parameter.
 
 ### Task 28: Migrate RoundColumns
 - **Branch**: `migrate/RoundColumns`
