@@ -1,12 +1,12 @@
 let 
-// Source for matrices of values: https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
-    CheckColorBlind = 
-
-// Calculate RGB based on hex value
-Function.From( type function(HEX as text) as table, (params) =>
-  let
-    // Split strings into list by each character, convert to upper, remove hash
-    Source = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000", 
+    // Source for matrices of values: https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
+    TestColorBlindness = (HEX as text, optional culture as nullable text) as table =>
+      let
+        // Use default culture if not provided
+        cultureToUse = culture ?? "en-US",
+        
+        // Split strings into list by each character, convert to upper, remove hash
+        Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0, Comparer.Ordinal)) else "#000000", 
     // Split the Source by each character
     SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source), 
     GetColor = (hexlist) =>
@@ -16,13 +16,13 @@ Function.From( type function(HEX as text) as table, (params) =>
         // Sub function to figure out RGB value
         GetRGB = (cval1, cval2) =>
           let
-            RGBVal = (Number.From(cval1) * 16) + Number.From(cval2)
+            RGBVal = (Number.From(cval1, "en-US") * 16) + Number.From(cval2, "en-US")
           in
             RGBVal, 
         // Get positions of each digit
-        r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})), 
-        g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})), 
-        b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})), 
+        r = GetRGB(List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){0}), List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){1})), 
+        g = GetRGB(List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){2}), List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){3})), 
+        b = GetRGB(List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){4}), List.PositionOf(RGB, hexlist, Occurrence.First, Comparer.Ordinal){5})), 
         // Combine R,G,B hex values to one hex value
         FinalRGB = Text.Combine({Text.From(r), Text.From(g), Text.From(b)}, ",")
       in
@@ -332,9 +332,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
                 }, 
                 ","
               )
@@ -374,9 +374,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
                 }, 
                 ","
               )
@@ -416,9 +416,9 @@ Function.From( type function(HEX as text) as table, (params) =>
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0)), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0))
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
                 }, 
                 ","
               )
@@ -433,11 +433,11 @@ Function.From( type function(HEX as text) as table, (params) =>
         ConvertToHex = (r, g, b) =>
           let
             r1        = RGB{Number.IntegerDivide(r, 16)}, 
-            r2        = RGB{Number.Mod(r, 16)}, 
+            r2        = RGB{Number.Mod(r, 16, RoundingMode.Down)}, 
             g1        = RGB{Number.IntegerDivide(g, 16)}, 
-            g2        = RGB{Number.Mod(g, 16)}, 
+            g2        = RGB{Number.Mod(g, 16, RoundingMode.Down)}, 
             b1        = RGB{Number.IntegerDivide(b, 16)}, 
-            b2        = RGB{Number.Mod(b, 16)}, 
+            b2        = RGB{Number.Mod(b, 16, RoundingMode.Down)}, 
             HexOutput = "#" & r1 & r2 & g1 & g2 & b1 & b2
           in
             HexOutput
@@ -497,12 +497,12 @@ Function.From( type function(HEX as text) as table, (params) =>
     Output),
 
 
-fnType = type function (HEX as text) as table meta 
-[Documentation.Name = "CheckColorBlind",
-Documentation.LongDescription = "This function returns a table of results applying different levels of severity for protanomaly, deuteranomaly, and tritanomaly color blindness.",
+fnType = type function (HEX as text, optional culture as nullable text) as table meta 
+[Documentation.Name = "Test-ColorBlindness",
+Documentation.LongDescription = "Tests how a given hex color appears under different types and severities of color blindness. Returns a table showing the simulated hex colors for protanomaly (red-weak), deuteranomaly (green-weak), and tritanomaly (blue-weak) at severity levels from 0.0 (normal vision) to 1.0 (complete color blindness). Based on simulation matrices from https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html",
 Documentation.Examples = {
-    [Description = "This provides a table of results for the color red.",
-    Code = "CheckColorBlind(""#FF0000"")",
+    [Description = "Simulate color blindness for the color red across different severities.",
+    Code = "TestColorBlindness(""#FF0000"")",
     Result="Severity#(tab)Protanomaly#(tab)Deuteranomaly#(tab)Tritanomaly#(lf)" &
             "------------------------------------------------------------#(lf)" &
             "0#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(lf)" &
@@ -515,7 +515,11 @@ Documentation.Examples = {
             "0.7#(tab)#(tab)#521B02#(tab)#(tab)#753A03#(tab)#(tab)#FF0F01#(lf)" &
             "0.8#(tab)#(tab)#421C02#(tab)#(tab)#6C3F03#(tab)#(tab)#FF1401#(lf)" &
             "0.9#(tab)#(tab)#341D01#(tab)#(tab)#644303#(tab)#(tab)#FF1600#(lf)" &
-            "1#(tab)#(tab)#271D01#(tab)#(tab)#5E4703#(tab)#(tab)#FF1401#(lf)"]
+            "1#(tab)#(tab)#271D01#(tab)#(tab)#5E4703#(tab)#(tab)#FF1401#(lf)"],
+    [Description = "Simulate color blindness for blue with custom culture.",
+    Code = "TestColorBlindness(""#0000FF"", ""en-GB"")",
+    Result="Table with 11 rows showing different severity levels and color transformations"]
 }]
     in  
-Value.ReplaceType(CheckColorBlind, fnType)
+Value.ReplaceType(TestColorBlindness, fnType)
+
