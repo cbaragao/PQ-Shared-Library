@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 29
+- **Completed**: 30
 - **In Progress**: 0
-- **Remaining**: 8
+- **Remaining**: 7
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 66% complete (29/44 functions)
+- **Progress**: 68% complete (30/44 functions)
 
 ---
 
@@ -325,10 +325,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed from CheckColorContrast to TestColorContrast per Verb-Noun convention (Test- is approved verb). Removed Function.From wrapper, replaced params{0-1} with named parameters (HEX1, HEX2). Added optional culture parameter with default 'en-US'. Added Comparer.Ordinal to List.PositionOf and Text.AfterDelimiter for PQLint compliance. Added RoundingMode.AwayFromZero to Number.Power. Added type annotations to nested functions (GetLuminance, GetSRGB, GetFinalColorVal). Updated Documentation.Name to 'Test-ColorContrast'. Enhanced documentation with WCAG accessibility standards explanation (4.5:1 ratio). Created test suite with 6 test cases covering maximum contrast, insufficient contrast, borderline cases, and custom culture. Variable name: TestColorContrast (PascalCase, no hyphen).
 
-### Task 36: Migrate CheckWebAimContrast
-- **Branch**: `migrate/CheckWebAimContrast`
-- **File**: `functions/UX/CheckWebAimContrast.pq`
-- **Status**: Not Started
+### Task 36: Migrate CheckWebAimContrast → TestWebAimContrast
+- **Branch**: `migrate/TestWebAimContrast`
+- **File**: `functions/UX/TestWebAimContrast.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed from CheckWebAimContrast to TestWebAimContrast per Verb-Noun convention (Test- is approved verb). Removed Function.From wrapper, replaced params{0-1} with named parameters (background_hex, font_hex). Added optional culture parameter with default 'en-US'. Added Comparer.Ordinal to Text.StartsWith and Text.Contains. Added Occurrence.First to List.PositionOf calls. Added culture parameter to Text.Length and Text.From. Added type annotations to nested remove_hash function and List.Accumulate lambda. Updated Documentation.Name to 'Test-WebAimContrast'. Enhanced documentation with WCAG levels explanation. Created test suite with 3 structural validation tests. Function calls external WebAIM API for WCAG 2.0 contrast checking (AA/AAA levels for normal and large fonts). Variable name: TestWebAimContrast (PascalCase, no hyphen).
 
 ### Task 37: Migrate GetColorHue
 - **Branch**: `migrate/GetColorHue`
