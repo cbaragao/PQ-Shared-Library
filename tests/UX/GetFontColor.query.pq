@@ -44,9 +44,9 @@ let
                     (0.0722 * Number.Power(bnum, gamma)),
 
         // Determine font color based on luminance threshold
-        // >0.5 luminance = dark background -> white text
-        // <=0.5 luminance = light background -> black text
-        fontcolor = if luminance > 0.5 then "#FFFFFF" else "#000000"
+        // >0.5 luminance = light background -> black text
+        // <=0.5 luminance = dark background -> white text
+        fontcolor = if luminance > 0.5 then "#000000" else "#FFFFFF"
       in 
         fontcolor,
     
