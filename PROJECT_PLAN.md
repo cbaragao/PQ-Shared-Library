@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 25
+- **Completed**: 26
 - **In Progress**: 0
-- **Remaining**: 12
+- **Remaining**: 11
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 57% complete (25/44 functions)
+- **Progress**: 59% complete (26/44 functions)
 
 ---
 
@@ -297,10 +297,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Function name already used approved Get- verb. Removed Function.From wrapper, replaced params{0-1} with named parameters (function_name, return). Added optional culture parameter with default 'en-US'. Added culture parameter to Text.Lower for PQLint compliance. Changed return type from 'text' to 'any' for flexibility. Refactored for better readability with intermediate variables. Updated Documentation.Name to 'Get-FunctionMetadata'. Enhanced documentation with third example. Created comprehensive test suite with 6 test cases covering name, description, example retrieval, and case insensitivity.
 
-### Task 32: Migrate PostRequest
-- **Branch**: `migrate/PostRequest`
-- **File**: `functions/Utils/PostRequest.pq`
-- **Status**: Not Started
+### Task 32: Migrate PostRequest → InvokePostRequest
+- **Branch**: `migrate/InvokePostRequest`
+- **File**: `functions/Utils/InvokePostRequest.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed from PostRequest to InvokePostRequest per Verb-Noun convention (Invoke- is approved verb, "Post" is not). Removed Function.From wrapper. Added optional ContentType parameter with default 'application/json' for flexibility. Added TextEncoding.Utf8 to Text.ToBinary for proper encoding. Changed return type from 'text' to 'any' for flexibility. Updated Documentation.Name to 'Invoke-PostRequest'. Enhanced documentation with ContentType explanation and second example showing custom content type. Created test suite with 4 structural validation tests (function type, parameter count, parameter names, return type). Variable name: InvokePostRequest (PascalCase, no hyphen).
 
 ### Task 33: Migrate Switch
 - **Branch**: `migrate/Switch`
