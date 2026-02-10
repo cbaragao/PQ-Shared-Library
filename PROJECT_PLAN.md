@@ -15,9 +15,9 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 20
+- **Completed**: 21
 - **In Progress**: 0
-- **Remaining**: 19
+- **Remaining**: 18
 - **Deprecated**: 6 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson)
 
 ---
@@ -250,10 +250,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Function name kept as-is (already uses ConvertTo- verb pattern). Removed Function.From wrapper, replaced params{0} with named parameter (tbl). Added optional culture parameter with default "en-US" for PQLint compliance. Used Date.From() with culture for proper value conversion (not just type metadata change). Added lambda type annotations: (state as table, current as text) as table. Used List.Accumulate with Table.TransformColumns pattern to iterate over datetime/datetimezone columns. Changed from Table.TransformColumnTypes (which only changes metadata) to Table.TransformColumns with Date.From (which actually converts values). Enhanced documentation with culture parameter explanation. Manually tested with 3 scenarios: single datetimezone column, multiple datetime columns, and mixed table with non-datetime columns. All manual tests passed. PQLint validation: zero violations after adding culture parameter and lambda types. No automated test file created - manual testing documented in function comments.
 
-### Task 25: Migrate fnRandomNumber
-- **Branch**: `migrate/fnRandomNumber`
-- **File**: `functions/Tbl/fnRandomNumber.pq`
-- **Status**: Not Started
+### Task 25: Migrate fnRandomNumber → AddRandomNumber
+- **Branch**: `migrate/AddRandomNumber`
+- **File**: `functions/Tbl/AddRandomNumber.pq` (renamed from fnRandomNumber.pq)
+- **Status**: ✅ Completed
+- **Notes**: Function renamed from fnRandomNumber to AddRandomNumber (Add- verb for adding a Random column to a table). Removed Function.From wrapper, replaced params{0} and params{1} with named parameters (t, seed). Added MissingField.Ignore parameter to Table.RemoveColumns per PQLint best practice to handle cases where the __Index column might not exist. Enhanced documentation with two detailed examples showing different seed values and expected behavior. Created comprehensive test suite with 9 test cases covering: 3-row table, 2-row table, reproducibility (same seed produces identical results), single row table, and empty table. All tests passed. PQLint validation: zero violations after adding MissingField.Ignore parameter. Function successfully adds a Random column with deterministic values based on seed.
 
 ### Task 26: Migrate RemoveNullColumns
 - **Branch**: `migrate/RemoveNullColumns`
