@@ -17,8 +17,8 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 - **Total Functions**: 44
 - **Completed**: 22
 - **In Progress**: 0
-- **Remaining**: 16
-- **Deprecated**: 7 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns)
+- **Remaining**: 15
+- **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
 
 ---
 
@@ -271,7 +271,8 @@ All functions must include:
 ### Task 28: Migrate RoundColumns
 - **Branch**: `migrate/RoundColumns`
 - **File**: `functions/Tbl/RoundColumns.pq`
-- **Status**: Not Started
+- **Status**: ❌ Deprecated
+- **Notes**: Function deprecated per user request. Functionality deemed unnecessary or too specific for the library.
 
 ---
 
