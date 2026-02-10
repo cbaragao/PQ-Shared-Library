@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 24
+- **Completed**: 25
 - **In Progress**: 0
-- **Remaining**: 13
+- **Remaining**: 12
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 55% complete (24/44 functions)
+- **Progress**: 57% complete (25/44 functions)
 
 ---
 
@@ -294,7 +294,8 @@ All functions must include:
 ### Task 31: Migrate GetFunctionMetadata
 - **Branch**: `migrate/GetFunctionMetadata`
 - **File**: `functions/Utils/GetFunctionMetadata.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Function name already used approved Get- verb. Removed Function.From wrapper, replaced params{0-1} with named parameters (function_name, return). Added optional culture parameter with default 'en-US'. Added culture parameter to Text.Lower for PQLint compliance. Changed return type from 'text' to 'any' for flexibility. Refactored for better readability with intermediate variables. Updated Documentation.Name to 'Get-FunctionMetadata'. Enhanced documentation with third example. Created comprehensive test suite with 6 test cases covering name, description, example retrieval, and case insensitivity.
 
 ### Task 32: Migrate PostRequest
 - **Branch**: `migrate/PostRequest`
