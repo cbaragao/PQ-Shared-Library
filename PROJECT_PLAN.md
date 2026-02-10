@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 34
+- **Completed**: 35
 - **In Progress**: 0
-- **Remaining**: 10
+- **Remaining**: 9
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 77% complete (34/44 functions)
+- **Progress**: 80% complete (35/44 functions)
 
 ---
 
@@ -358,7 +358,8 @@ All functions must include:
 ### Task 41: Migrate GetHexValue
 - **Branch**: `migrate/GetHexValue`
 - **File**: `functions/UX/GetHexValue.pq`
-- **Status**: Not Started
+- **Status**: ✅ Completed
+- **Notes**: Removed Function.From, replaced params{0-2} with red, green, blue parameters, added optional culture parameter with 'en-US' default, added type annotations to ConvertToHex nested function, enhanced documentation explaining RGB to hex conversion, created comprehensive test suite with 11 tests
 
 ### Task 42: Migrate GetLuminosity
 - **Branch**: `migrate/GetLuminosity`
