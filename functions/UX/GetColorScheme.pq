@@ -1,27 +1,28 @@
 //from the color api: https://www.thecolorapi.com/docs
 let
-  GetColorScheme = Function.From(
-    type function (hex as text, mode as number, count as number) as table, 
-    (params) =>
+  GetColorScheme = (hex as text, mode as number, count as number, optional culture as nullable text) as table =>
       let
-        num = Text.From(params{2}), 
-        hx = if Text.StartsWith(params{0}, "#") then Text.Replace(params{0}, "#", "") else params{0}, 
+        // Use default culture if not provided
+        cultureToUse = culture ?? "en-US",
+        
+        num = Text.From(count, cultureToUse), 
+        hx = if Text.StartsWith(hex, "#", Comparer.Ordinal) then Text.Replace(hex, "#", "", Comparer.Ordinal) else hex, 
         md = 
-          if params{1} = 0 then
+          if mode = 0 then
             "monochrome"
-          else if params{1} = 1 then
+          else if mode = 1 then
             "monochrome-dark"
-          else if params{1} = 2 then
+          else if mode = 2 then
             "monochrome-light"
-          else if params{1} = 3 then
+          else if mode = 3 then
             "analogic"
-          else if params{1} = 4 then
+          else if mode = 4 then
             "complement"
-          else if params{1} = 5 then
+          else if mode = 5 then
             "analogic-complement"
-          else if params{1} = 6 then
+          else if mode = 6 then
             "triad"
-          else if params{1} = 7 then
+          else if mode = 7 then
             "quad"
           else 
             "monochrome", 
@@ -67,13 +68,25 @@ let
           }
         )
       in
-        result
-  ), 
+        result,
+        
   // Define the function type with metadata
-  fnType = type function (hex as text, mode as number, count as number) as table
+  fnType = type function (hex as text, mode as number, count as number, optional culture as nullable text) as table
     meta [
-      Documentation.Name            = "GetColorScheme", 
-      Documentation.LongDescription = "Get Color Scheme from the Color API."
+      Documentation.Name            = "Get-ColorScheme", 
+      Documentation.LongDescription = "Retrieves a color scheme from The Color API (thecolorapi.com) based on a hex color code. Returns a table with hex values, RGB values, color names, and contrast values. Mode parameter determines the scheme type: 0=monochrome, 1=monochrome-dark, 2=monochrome-light, 3=analogic, 4=complement, 5=analogic-complement, 6=triad, 7=quad. Count parameter specifies the number of colors to return (typically 1-10).",
+      Documentation.Examples = {
+        [
+          Description = "Get a monochrome color scheme with 5 colors based on red.",
+          Code        = "GetColorScheme(""#FF0000"", 0, 5)", 
+          Result      = "Table with 5 rows containing hex, rgb, closest_name, closest_named_hex, and contrast columns"
+        ],
+        [
+          Description = "Get a complementary color scheme with 2 colors based on blue.",
+          Code        = "GetColorScheme(""#0000FF"", 4, 2)", 
+          Result      = "Table with 2 rows showing complementary colors"
+        ]
+      }
     ]
 in
   // Replace the type of the function with the defined type
