@@ -15,11 +15,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ## Migration Status
 - **Total Functions**: 44
-- **Completed**: 28
+- **Completed**: 29
 - **In Progress**: 0
-- **Remaining**: 9
+- **Remaining**: 8
 - **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
-- **Progress**: 64% complete (28/44 functions)
+- **Progress**: 66% complete (29/44 functions)
 
 ---
 
@@ -319,10 +319,11 @@ All functions must include:
 - **Status**: ✅ Completed
 - **Notes**: Renamed from CheckColorBlind to TestColorBlindness per Verb-Noun convention (Test- is approved verb, "Check" is not). Removed Function.From wrapper, replaced params{0} with named parameter (HEX). Added optional culture parameter with default 'en-US'. Added Comparer.Ordinal to List.PositionOf and Text.AfterDelimiter for PQLint compliance. Added RoundingMode parameters to Number.Mod and Number.RoundAwayFromZero. Added culture parameters to Number.From and Text.From calls throughout the 521-line function. Updated Documentation.Name to 'Test-ColorBlindness'. Enhanced documentation with detailed explanation of protanomaly, deuteranomaly, and tritanomaly, plus second example. Created test suite with 5 structural validation tests. Complex function with color blindness simulation matrices from academic research. Variable name: TestColorBlindness (PascalCase, no hyphen).
 
-### Task 35: Migrate CheckColorContrast
-- **Branch**: `migrate/CheckColorContrast`
-- **File**: `functions/UX/CheckColorContrast.pq`
-- **Status**: Not Started
+### Task 35: Migrate CheckColorContrast → TestColorContrast
+- **Branch**: `migrate/TestColorContrast`
+- **File**: `functions/UX/TestColorContrast.pq`
+- **Status**: ✅ Completed
+- **Notes**: Renamed from CheckColorContrast to TestColorContrast per Verb-Noun convention (Test- is approved verb). Removed Function.From wrapper, replaced params{0-1} with named parameters (HEX1, HEX2). Added optional culture parameter with default 'en-US'. Added Comparer.Ordinal to List.PositionOf and Text.AfterDelimiter for PQLint compliance. Added RoundingMode.AwayFromZero to Number.Power. Added type annotations to nested functions (GetLuminance, GetSRGB, GetFinalColorVal). Updated Documentation.Name to 'Test-ColorContrast'. Enhanced documentation with WCAG accessibility standards explanation (4.5:1 ratio). Created test suite with 6 test cases covering maximum contrast, insufficient contrast, borderline cases, and custom culture. Variable name: TestColorContrast (PascalCase, no hyphen).
 
 ### Task 36: Migrate CheckWebAimContrast
 - **Branch**: `migrate/CheckWebAimContrast`
