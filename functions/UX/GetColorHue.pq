@@ -1,30 +1,31 @@
 let
-  GetColorHue = Function.From(
-    type function (HEX as text) as number, 
-    (params) =>
+  GetColorHue = (HEX as text, optional culture as nullable text) as number =>
       let
+        // Use default culture if not provided
+        cultureToUse = culture ?? "en-US",
+        
         // Split strings into list by each character, convert to upper, remove hash
-        Source = if params{0} <> "" then Text.Upper(Text.AfterDelimiter(Text.From(params{0}), "#")) else "#000000",
+        Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0, Comparer.Ordinal)) else "#000000",
         
         // Split the Source by each character
         SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source),
 
-        GetHue = (hexlist) =>
+        GetHue = (hexlist as list) as number =>
           let 
             // Build the RGB list
             RGB = List.Combine({{"0".."9"},{"A".."F"}}),
             
             // Sub function to figure out RGB value
-            GetRGB = (cval1, cval2) =>
+            GetRGB = (cval1 as number, cval2 as number) as number =>
               let 
-                RGBVal = (Number.From(cval1) * 16) + Number.From(cval2)
+                RGBVal = (Number.From(cval1, cultureToUse) * 16) + Number.From(cval2, cultureToUse)
               in       
                 RGBVal,
             
             // Get positions of each digit
-            r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})),
-            g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})),
-            b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})),
+            r = GetRGB(List.PositionOf(RGB, hexlist{0}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{1}, Occurrence.First, Comparer.Ordinal)),
+            g = GetRGB(List.PositionOf(RGB, hexlist{2}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{3}, Occurrence.First, Comparer.Ordinal)),
+            b = GetRGB(List.PositionOf(RGB, hexlist{4}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{5}, Occurrence.First, Comparer.Ordinal)),
             
             // Get the hue from r, g, b values
             hue = 
@@ -41,17 +42,22 @@ let
         // Process the split list from the input
         Result = GetHue(SplitHex)
       in
-        Result
-  ), 
-  fnType = type function (HEX as text) as number
+        Result,
+        
+  fnType = type function (HEX as text, optional culture as nullable text) as number
     meta [
-      Documentation.Name = "GetColorHue", 
-      Documentation.LongDescription = "This function calculates the hue of a color given its HEX code.", 
+      Documentation.Name = "Get-ColorHue", 
+      Documentation.LongDescription = "Calculates the hue value (0-360 degrees) of a color from its hexadecimal code. The hue represents the position on the color wheel, where red is around 0°, green is around 120°, and blue is around 240°. This is the H component in HSL (Hue, Saturation, Lightness) color space.", 
       Documentation.Examples = {
         [
-          Description = "Calculate the hue of a color given its HEX code.",
-          Code        = "=GetColorHue(""#FF5733"")", 
+          Description = "Calculate the hue of an orange-red color.",
+          Code        = "GetColorHue(""#FF5733"")", 
           Result      = "10.588235294117647"
+        ],
+        [
+          Description = "Calculate the hue of pure red.",
+          Code        = "GetColorHue(""#FF0000"")", 
+          Result      = "0 (or -1 if achromatic)"
         ]
       }
     ]
