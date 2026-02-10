@@ -27,8 +27,8 @@ let
             // Sub function to figure out complementary color hex value
             ConvertToHex = (val as number) as text =>
               let 
-                first_digit = Number.RoundDown(val / 16, RoundingMode.Down),
-                second_digit = ((val / 16) - Number.RoundDown(val / 16, RoundingMode.Down)) * 16,
+                first_digit = Number.IntegerDivide(val, 16),
+                second_digit = Number.Mod(val, 16),
                 both_hex = Text.Combine({RGB{first_digit}, RGB{second_digit}})
               in    
                 both_hex,
