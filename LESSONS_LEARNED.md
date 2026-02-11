@@ -29,42 +29,37 @@ This document tracks all issues, errors, and solutions encountered during the mi
 ## Logged Issues
 
 ### Issue: Missing Culture Parameters for Date/Time and Numeric Functions
-- **Date**: 2026-02-07
-- **Function(s)**: ConvertToRoundedDateTime
-- **Category**: PQLint
-- **Severity**: Medium
-- **Problem**: PQLint rule `use-culture-for-date-functions` and `use-culture-for-numeric-functions` flagged missing culture parameter in `Number.From()` and `DateTime.From()` functions. Without explicit culture, output may vary based on user's machine locale.
-- **Solution**: Add `"en-US"` as second parameter to both `Number.From(dt, "en-US")` and `DateTime.From(Rounded, "en-US")` to ensure predictable output regardless of user locale.
-- **Prevention**: Always include culture parameter when using date/time or numeric conversion functions. Default to `"en-US"` unless specific locale is required.
 
 ### Issue: ConvertToRoundedDateTime Logic Error - Wrong Rounding Function Used
-- **Date**: 2026-02-07
-- **Function(s)**: ConvertToRoundedDateTime
-- **Category**: Logic Bug
-- **Severity**: Critical
-- **Problem**: Function used `Number.RoundAwayFromZero` which always rounds away from zero, causing incorrect results. Test case: `RoundDateTime(#datetime(2022, 10, 1, 10, 17, 55), 15)` expected `#datetime(2022, 10, 1, 10, 15, 0)` but returned `#datetime(2022, 10, 1, 10, 30, 0)`. The function should round to the NEAREST interval, not always away from zero.
-- **Solution**: Replace `Number.RoundAwayFromZero` with `Number.Round` to properly round to the nearest value.
-- **Prevention**: ALWAYS create test files (in `tests/Category/FunctionName.query.pq`) and validate function output against Documentation.Examples BEFORE considering migration complete. Test-driven development prevents these bugs.
 
 ### Issue: Missing Testing Step in Migration Workflow
-- **Date**: 2026-02-07
-- **Function(s)**: All functions
-- **Category**: Process
-- **Severity**: Critical
-- **Problem**: Original workflow didn't include functional testing step. Functions passed linting but had logic errors that weren't caught until user tested manually.
-- **Solution**: Updated workflow to include creating test files in `tests/Category/` directory and validating results match Documentation.Examples before committing. Test files must be **self-contained** (include the function being tested as a nested function) to ensure we're testing the exact code being committed. Added step to WAIT for manual test confirmation from user before proceeding to linting.
-- **Prevention**: Never skip testing. Create self-contained test files with the function code embedded, test cases from documentation examples, and **WAIT for user to manually validate** all Pass columns are true using Power Query SDK BEFORE proceeding to lint and commit.
 
 ### Issue: Test Files Must Be Self-Contained
-- **Date**: 2026-02-07
-- **Function(s)**: All functions
-- **Category**: Testing
-- **Severity**: High
-- **Problem**: Test files that reference external functions can't validate the exact code being tested. Need to ensure test file contains the function implementation.
-- **Solution**: Each `.query.pq` test file must include the function being tested as a nested function (copy the simplified function logic without type metadata). This ensures tests are portable and validate the exact code that will be committed.
-- **Prevention**: Always copy the function implementation into the test file. Test file structure: 1) Function definition, 2) Test cases table with Expected/Actual/Pass columns, 3) Return the test table.
 
-### Issue: Number.Round Default Banker's Rounding Behavior
+### Power Query Number.RoundAwayFromZero: Incorrect Third Parameter (RoundingMode)
+
+**Issue:** Repeatedly added a third parameter (e.g., `RoundingMode.AwayFromZero`) to `Number.RoundAwayFromZero` in Power Query M code. This is incorrect; the function only accepts up to two parameters: the value and the number of decimal places. Adding a third parameter causes runtime errors.
+
+**Correct Usage:**
+```powerquery
+Number.RoundAwayFromZero(value, decimals)
+```
+Optionally, you can use `Text.From(..., culture)` to format the result for a specific culture, but do not add a rounding mode.
+
+**Example (Correct):**
+```powerquery
+Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0), cultureToUse)
+```
+
+**Example (Incorrect):**
+```powerquery
+Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse)
+```
+
+**Lesson:** Never add a third parameter to `Number.RoundAwayFromZero`. Always check Power Query M documentation for function signatures. Document this in migration instructions and review all migrated code for this error.
+
+**Action:** Migration workflow updated to include explicit check for this error in all future Power Query function migrations and test conversions.
+
 - **Date**: 2026-02-07
 - **Function(s)**: ConvertToRoundedDateTime
 - **Category**: PQLint
@@ -375,7 +370,7 @@ _To be populated with any git-related issues encountered._
   - GetHexValue.query.pq
   - GetLuminosity.query.pq
   - GetRGBValue.query.pq
-  - MedianAspectRatio.query.pq
+  - GetMedianAspectRatio.query.pq
   - TestColorBlindness.query.pq
   - TestColorContrast.query.pq
   - TestWebAimContrast.query.pq
@@ -549,4 +544,17 @@ _To be populated with any git-related issues encountered._
 ---
 
 ## Last Updated
-This document was created on 2026-02-07 and updated on 2026-02-09 throughout the migration process.
+### Issue: Removed generic HTTP POST helper (InvokePostRequest)
+- **Date**: 2026-02-09
+- **Function(s)**: InvokePostRequest
+- **Category**: Architecture Decision / Security
+- **Severity**: High
+- **Problem**: A generic `InvokePostRequest` helper function was present in the shared library. It performed HTTP POST operations using `Web.Contents` and attempted to be broadly useful across projects. In practice, generic HTTP helpers introduce security surface area, environment-specific configuration needs (auth, headers, timeouts, error handling), and encourage copying sensitive behavior into many consumers rather than implementing project-specific wrappers.
+- **Solution**: Marked the function as deprecated (Documentation.Deprecated = true) and added a recommendation to implement project-specific HTTP wrappers. After team review the function and its test were removed from the repository to avoid accidental reuse.
+- **Prevention**: Avoid adding network/IO helpers to a shared library unless they are hardened, fully documented for security, and reviewed for cross-project applicability. Prefer small, well-tested transport adapters implemented within consuming projects that encapsulate authentication, secrets, and retries.
+- **Action**: Removed `functions/Utils/InvokePostRequest.pq` and `tests/Utils/InvokePostRequest.query.pq`; updated `PROJECT_PLAN.md` to mark the task as REMOVED/Deprecated and recorded the recommended alternative pattern.
+
+---
+
+## Last Updated
+This document was created on 2026-02-07 and updated on 2026-02-11 throughout the migration process.

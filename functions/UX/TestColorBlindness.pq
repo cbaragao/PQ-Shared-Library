@@ -302,39 +302,15 @@ let
           "P", 
           each 
             let
-              r = List.Min(
-                {
-                  red
-                    * [Protanomaly][r]{0} + green
-                    * [Protanomaly][g]{0} + blue
-                    * [Protanomaly][b]{0}, 
-                  255
-                }
-              ), 
-              g = List.Min(
-                {
-                  red
-                    * [Protanomaly][r]{1} + green
-                    * [Protanomaly][g]{1} + blue
-                    * [Protanomaly][b]{1}, 
-                  255
-                }
-              ), 
-              b = List.Min(
-                {
-                  red
-                    * [Protanomaly][r]{2} + green
-                    * [Protanomaly][g]{2} + blue
-                    * [Protanomaly][b]{2}, 
-                  255
-                }
-              )
+                  r = List.Min({red * [Protanomaly][r]{0} + green * [Protanomaly][g]{0} + blue * [Protanomaly][b]{0}, 255}),
+                  g = List.Min({red * [Protanomaly][r]{1} + green * [Protanomaly][g]{1} + blue * [Protanomaly][b]{1}, 255}),
+                  b = List.Min({red * [Protanomaly][r]{2} + green * [Protanomaly][g]{2} + blue * [Protanomaly][b]{2}, 255})
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0), cultureToUse), 
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0), cultureToUse), 
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0), cultureToUse)
                 }, 
                 ","
               )
@@ -344,39 +320,15 @@ let
           "D", 
           each 
             let
-              r = List.Min(
-                {
-                  red
-                    * [Deuteranomaly][r]{0} + green
-                    * [Deuteranomaly][g]{0} + blue
-                    * [Deuteranomaly][b]{0}, 
-                  255
-                }
-              ), 
-              g = List.Min(
-                {
-                  red
-                    * [Deuteranomaly][r]{1} + green
-                    * [Deuteranomaly][g]{1} + blue
-                    * [Deuteranomaly][b]{1}, 
-                  255
-                }
-              ), 
-              b = List.Min(
-                {
-                  red
-                    * [Deuteranomaly][r]{2} + green
-                    * [Deuteranomaly][g]{2} + blue
-                    * [Deuteranomaly][b]{2}, 
-                  255
-                }
-              )
+                  r = List.Min({red * [Deuteranomaly][r]{0} + green * [Deuteranomaly][g]{0} + blue * [Deuteranomaly][b]{0}, 255}),
+                  g = List.Min({red * [Deuteranomaly][r]{1} + green * [Deuteranomaly][g]{1} + blue * [Deuteranomaly][b]{1}, 255}),
+                  b = List.Min({red * [Deuteranomaly][r]{2} + green * [Deuteranomaly][g]{2} + blue * [Deuteranomaly][b]{2}, 255})
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0), cultureToUse), 
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0), cultureToUse), 
+                    Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0), cultureToUse)
                 }, 
                 ","
               )
@@ -386,39 +338,15 @@ let
           "T", 
           each 
             let
-              r = List.Min(
-                {
-                  red
-                    * [Tritanomaly][r]{0} + green
-                    * [Tritanomaly][g]{0} + blue
-                    * [Tritanomaly][b]{0}, 
-                  255
-                }
-              ), 
-              g = List.Min(
-                {
-                  red
-                    * [Tritanomaly][r]{1} + green
-                    * [Tritanomaly][g]{1} + blue
-                    * [Tritanomaly][b]{1}, 
-                  255
-                }
-              ), 
-              b = List.Min(
-                {
-                  red
-                    * [Tritanomaly][r]{2} + green
-                    * [Tritanomaly][g]{2} + blue
-                    * [Tritanomaly][b]{2}, 
-                  255
-                }
-              )
+                  r = List.Min({red * [Tritanomaly][r]{0} + green * [Tritanomaly][g]{0} + blue * [Tritanomaly][b]{0}, 255}),
+                  g = List.Min({red * [Tritanomaly][r]{1} + green * [Tritanomaly][g]{1} + blue * [Tritanomaly][b]{1}, 255}),
+                  b = List.Min({red * [Tritanomaly][r]{2} + green * [Tritanomaly][g]{2} + blue * [Tritanomaly][b]{2}, 255})
             in
               Text.Combine(
                 {
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0, RoundingMode.AwayFromZero), cultureToUse), 
-                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0, RoundingMode.AwayFromZero), cultureToUse)
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(r), 0), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(g), 0), cultureToUse), 
+                  Text.From(Number.RoundAwayFromZero(Number.Abs(b), 0), cultureToUse)
                 }, 
                 ","
               )
@@ -433,11 +361,11 @@ let
         ConvertToHex = (r, g, b) =>
           let
             r1        = RGB{Number.IntegerDivide(r, 16)}, 
-            r2        = RGB{Number.Mod(r, 16, RoundingMode.Down)}, 
+            r2        = RGB{Number.Mod(r, 16)}, 
             g1        = RGB{Number.IntegerDivide(g, 16)}, 
-            g2        = RGB{Number.Mod(g, 16, RoundingMode.Down)}, 
+            g2        = RGB{Number.Mod(g, 16)}, 
             b1        = RGB{Number.IntegerDivide(b, 16)}, 
-            b2        = RGB{Number.Mod(b, 16, RoundingMode.Down)}, 
+            b2        = RGB{Number.Mod(b, 16)}, 
             HexOutput = "#" & r1 & r2 & g1 & g2 & b1 & b2
           in
             HexOutput
@@ -494,32 +422,28 @@ let
       }
     )
   in
-    Output),
+  Output,
 
 
 fnType = type function (HEX as text, optional culture as nullable text) as table meta 
 [Documentation.Name = "Test-ColorBlindness",
 Documentation.LongDescription = "Tests how a given hex color appears under different types and severities of color blindness. Returns a table showing the simulated hex colors for protanomaly (red-weak), deuteranomaly (green-weak), and tritanomaly (blue-weak) at severity levels from 0.0 (normal vision) to 1.0 (complete color blindness). Based on simulation matrices from https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html",
 Documentation.Examples = {
-    [Description = "Simulate color blindness for the color red across different severities.",
-    Code = "TestColorBlindness(""#FF0000"")",
-    Result="Severity#(tab)Protanomaly#(tab)Deuteranomaly#(tab)Tritanomaly#(lf)" &
-            "------------------------------------------------------------#(lf)" &
-            "0#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(lf)" &
-            "0.1#(tab)#(tab)#DA0701#(tab)#(tab)#DD0D01#(tab)#(tab)#EC0502#(lf)" &
-            "0.2#(tab)#(tab)#BB0D01#(tab)#(tab)#C21702#(tab)#(tab)#E40803#(lf)" &
-            "0.3#(tab)#(tab)#A11202#(tab)#(tab)#AC2002#(tab)#(tab)#E70703#(lf)" &
-            "0.4#(tab)#(tab)#891502#(tab)#(tab)#9A2802#(tab)#(tab)#F20403#(lf)" &
-            "0.5#(tab)#(tab)#751802#(tab)#(tab)#8C2E03#(tab)#(tab)#FF0202#(lf)" &
-            "0.6#(tab)#(tab)#621A02#(tab)#(tab)#7F3403#(tab)#(tab)#FF0800#(lf)" &
-            "0.7#(tab)#(tab)#521B02#(tab)#(tab)#753A03#(tab)#(tab)#FF0F01#(lf)" &
-            "0.8#(tab)#(tab)#421C02#(tab)#(tab)#6C3F03#(tab)#(tab)#FF1401#(lf)" &
-            "0.9#(tab)#(tab)#341D01#(tab)#(tab)#644303#(tab)#(tab)#FF1600#(lf)" &
-            "1#(tab)#(tab)#271D01#(tab)#(tab)#5E4703#(tab)#(tab)#FF1401#(lf)"],
-    [Description = "Simulate color blindness for blue with custom culture.",
-    Code = "TestColorBlindness(""#0000FF"", ""en-GB"")",
-    Result="Table with 11 rows showing different severity levels and color transformations"]
+  [Description = "Simulate color blindness for the color red across different severities.",
+  Code = "TestColorBlindness(""#FF0000"")",
+  Result="Severity#(tab)Protanomaly#(tab)Deuteranomaly#(tab)Tritanomaly#(lf)" &
+      "------------------------------------------------------------#(lf)" &
+      "0#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(tab)#(tab)#FF0000#(lf)" &
+      "0.1#(tab)#(tab)#DB0801#(tab)#(tab)#DD0D01#(tab)#(tab)#ED0603#(lf)" &
+      "0.2#(tab)#(tab)#BC0E02#(tab)#(tab)#C21802#(tab)#(tab)#E50804#(lf)" &
+      "0.3#(tab)#(tab)#A11202#(tab)#(tab)#AD2003#(tab)#(tab)#E70704#(lf)" &
+      "0.4#(tab)#(tab)#8A1602#(tab)#(tab)#9B2803#(tab)#(tab)#F20403#(lf)" &
+      "0.5#(tab)#(tab)#751802#(tab)#(tab)#8C2F03#(tab)#(tab)#FF0202#(lf)" &
+      "0.6#(tab)#(tab)#631A02#(tab)#(tab)#803503#(tab)#(tab)#FF0901#(lf)" &
+      "0.7#(tab)#(tab)#521C02#(tab)#(tab)#753A03#(tab)#(tab)#FF0F01#(lf)" &
+      "0.8#(tab)#(tab)#431D02#(tab)#(tab)#6C3F04#(tab)#(tab)#FF1401#(lf)" &
+      "0.9#(tab)#(tab)#341D02#(tab)#(tab)#654404#(tab)#(tab)#FF1601#(lf)" &
+      "1#(tab)#(tab)#271E01#(tab)#(tab)#5E4804#(tab)#(tab)#FF1402#(lf)"]
 }]
     in  
 Value.ReplaceType(TestColorBlindness, fnType)
-

@@ -203,6 +203,12 @@ See [LESSONS_LEARNED.md#common-pqlint-rules-reference](../LESSONS_LEARNED.md#com
 - Return type annotations
 - MissingField.Ignore for Table operations
 
+**Critical Migration Warning:**
+- `Number.RoundAwayFromZero` only accepts two parameters: value and decimals. Do NOT add a third parameter (e.g., `RoundingMode.AwayFromZero`). This causes runtime errors. Always check for this mistake in migrated code and tests.
+
+**Migration Checklist Addition:**
+- Review all migrated Power Query code and tests for incorrect third parameter usage in `Number.RoundAwayFromZero`. Fix immediately if found.
+
 ---
 
 ## Last Updated

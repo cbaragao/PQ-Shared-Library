@@ -3681,10 +3681,10 @@ Documentation.Examples = {
 Value.ReplaceType(GetRGBValue, fnType)
       ],
       [
-        Name = "MedianAspectRatio", 
+        Name = "GetMedianAspectRatio", 
         Category = "UX", 
         Function = let
-  MedianAspectRatio = Function.From(
+  GetMedianAspectRatio = Function.From(
     type function (x as list, y as list) as record, 
     (params) =>
       let
@@ -3721,18 +3721,18 @@ Value.ReplaceType(GetRGBValue, fnType)
   ), 
   fnType = type function (x as list, y as list) as record
     meta [
-      Documentation.Name = "MedianAspectRatio", 
+      Documentation.Name = "Get-MedianAspectRatio", 
       Documentation.LongDescription = "This function calculates the median aspect ratio for charts based on two lists of numbers.", 
       Documentation.Examples = {
         [
           Description = "Calculate the median aspect ratio for two lists of numbers.",
-          Code        = "=MedianAspectRatio({1, 2, 3, 4}, {4, 5, 6, 7})", 
+          Code        = "=GetMedianAspectRatio({1, 2, 3, 4}, {4, 5, 6, 7})", 
           Result      = "[aspect_ratio = 1, median_slope = 1]"
         ]
       }
     ]
 in
-  Value.ReplaceType(MedianAspectRatio, fnType)
+  Value.ReplaceType(GetMedianAspectRatio, fnType)
 
       ]
     },

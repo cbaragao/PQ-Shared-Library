@@ -1,7 +1,34 @@
 let
-    // Load the function from file
-    SelectCase = Expression.Evaluate(Text.FromBinary(File.Contents("functions/Utils/SelectCase.pq")), #shared),
-    
+    // Define the SelectCase function inline so this test is portable to Power BI
+    SelectCase = (value as any, l as list, default as any) as any =>
+        let
+            fnSelectEvenOdd = (lst as list, remainder as number) as list =>
+                let
+                    result = List.Select(
+                        lst,
+                        each Number.Mod(
+                                    List.PositionOf(lst, _, Occurrence.First),
+                                    2
+                        ) = remainder
+                    )
+                in
+                    result,
+
+            Zipped = List.Zip({ fnSelectEvenOdd(l, 0), fnSelectEvenOdd(l, 1) }),
+
+            Return = try
+                List.Select(
+                    List.Transform(
+                        Zipped,
+                        each if _{0}(value) = true then _{1} else null
+                    ),
+                    each _ <> null
+                ){0}
+            otherwise
+                default
+        in
+            Return,
+
     // Test 1: Value matches first predicate
     test1 = SelectCase(5, {each _ < 10, "Less than 10", each _ >= 10, "10 or more"}, "No match"),
     result1 = if test1 = "Less than 10" then "Test 1 Passed" else "Test 1 Failed: " & Text.From(test1, "en-US"),

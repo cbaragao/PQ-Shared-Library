@@ -27,13 +27,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ### Naming Conventions (PowerShell Verb-Noun Format)
 All functions must follow **PowerShell-style Verb-Noun** naming for consistency and IntelliSense discovery:
-- **Verb-Noun format**: `Measure-Distance` not `CalculateDistance`
-- **Approved verbs only**: Use PowerShell approved verbs (Get-, Measure-, Test-, Convert-, Remove-, New-, Invoke-, etc.)
-- **No "fn" prefixes**: Remove all "fn" prefixes during migration
-- **PascalCase**: All function names use PascalCase (e.g., `Measure-Distance`, `Get-ColorHue`)
-- **Singular nouns**: Use `Get-Color` not `Get-Colors`
 
-**See [documentation/NamingConventions.md](documentation/NamingConventions.md) for**:
+### Migration Checklist: Power Query Number.RoundAwayFromZero Parameter Error
+
+- [ ] Review all migrated functions and tests for incorrect third parameter usage in `Number.RoundAwayFromZero`. Fix immediately if found.
+
 - Complete list of approved verbs for data prep/ETL
 - Function renaming guide for all 44 functions
 - Examples and usage patterns
@@ -299,9 +297,9 @@ All functions must include:
 
 ### Task 32: Migrate PostRequest → InvokePostRequest
 - **Branch**: `migrate/InvokePostRequest`
-- **File**: `functions/Utils/InvokePostRequest.pq`
-- **Status**: ✅ Completed
-- **Notes**: Renamed from PostRequest to InvokePostRequest per Verb-Noun convention (Invoke- is approved verb, "Post" is not). Removed Function.From wrapper. Added optional ContentType parameter with default 'application/json' for flexibility. Added TextEncoding.Utf8 to Text.ToBinary for proper encoding. Changed return type from 'text' to 'any' for flexibility. Updated Documentation.Name to 'Invoke-PostRequest'. Enhanced documentation with ContentType explanation and second example showing custom content type. Created test suite with 4 structural validation tests (function type, parameter count, parameter names, return type). Variable name: InvokePostRequest (PascalCase, no hyphen).
+- **File**: `functions/Utils/InvokePostRequest.pq` (REMOVED)
+- **Status**: ❌ Deprecated / Removed
+- **Notes**: This function has been deprecated and removed from the codebase because generic HTTP POST helpers require per-use customization (authentication, headers, retry, timeouts, logging) and are not suitable as a one-size-fits-all library function. The implementation and its test were removed on 2026-02-11. Recommendation: implement small, project-specific wrappers that call `Web.Contents` with the exact headers, authentication, and error handling required by the target API. Update `PROJECT_PLAN.md` and `LESSONS_LEARNED.md` when replacing with project-specific examples.
 
 ### Task 33: Migrate Switch → SelectCase
 - **Branch**: `migrate/SelectCase`
@@ -374,8 +372,8 @@ All functions must include:
 - **Notes**: Modernized arrow syntax, added optional culture parameter with 'en-US' default, added Comparer.Ordinal to Text.AfterDelimiter and List.PositionOf, added Occurrence.First to List.PositionOf, added type annotations to nested functions, enhanced documentation explaining hex to RGB conversion, fixed inconsistent spacing and formatting, created comprehensive test suite with 13 tests
 
 ### Task 44: Migrate MedianAspectRatio
-- **Branch**: `migrate/MedianAspectRatio`
-- **File**: `functions/UX/MedianAspectRatio.pq`
+- **Branch**: `migrate/GetMedianAspectRatio`
+- **File**: `functions/UX/GetMedianAspectRatio.pq`
 - **Status**: ✅ Completed
 - **Notes**: Removed Function.From, replaced params{0-1} with x, y parameters, added optional culture parameter with 'en-US' default, added type annotation to List.Transform lambda, enhanced documentation explaining William Cleveland's banking to 45 degrees principle, created comprehensive test suite with 10 tests. **ALL UX FUNCTIONS COMPLETE!**
 

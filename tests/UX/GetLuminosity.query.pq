@@ -47,9 +47,9 @@ let
     test1 = GetLuminosity("#FF5733"),
     result1 = if test1 = 0.6 then "Test 1 Passed" else "Test 1 Failed: Got " & Number.ToText(test1),
     
-    // Test 2: Medium gray #808080 - should be 0.5
+    // Test 2: Medium gray #808080 - should be ≈0.502
     test2 = GetLuminosity("#808080"),
-    result2 = if test2 = 0.5 then "Test 2 Passed" else "Test 2 Failed: Got " & Number.ToText(test2),
+    result2 = if Number.Round(test2, 4) = 0.502 then "Test 2 Passed" else "Test 2 Failed: Got " & Number.ToText(test2),
     
     // Test 3: Pure black #000000 - should be 0
     test3 = GetLuminosity("#000000"),

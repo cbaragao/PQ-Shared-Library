@@ -31,7 +31,7 @@ let
                         // Get final c values subfunction
                         GetFinalColorVal = (srgb as number) as number =>
                             let   
-                                colorval = if srgb <=0.03928 then srgb/12.92 else Number.Power(((srgb + 0.055)/1.055), exp, RoundingMode.AwayFromZero)
+                                colorval = if srgb <=0.03928 then srgb/12.92 else Number.Power(((srgb + 0.055)/1.055), exp)
                             in  
                                 colorval,  
 

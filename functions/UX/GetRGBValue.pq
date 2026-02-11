@@ -5,7 +5,7 @@ let
       cultureToUse = culture ?? "en-US",
       
       // Split strings into list by each character, convert to upper, remove hash
-      Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0, Comparer.Ordinal)) else "#000000",
+      Source = if HEX <> "" then Text.Upper(Text.AfterDelimiter(Text.From(HEX, cultureToUse), "#", 0)) else "#000000",
       
       // Split the Source by each character
       SplitHex = Splitter.SplitTextByRepeatedLengths(1)(Source),
@@ -23,9 +23,9 @@ let
               RGBVal,
           
           // Get positions of each digit
-          r = GetRGB(List.PositionOf(RGB, hexlist{0}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{1}, Occurrence.First, Comparer.Ordinal)),
-          g = GetRGB(List.PositionOf(RGB, hexlist{2}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{3}, Occurrence.First, Comparer.Ordinal)),
-          b = GetRGB(List.PositionOf(RGB, hexlist{4}, Occurrence.First, Comparer.Ordinal), List.PositionOf(RGB, hexlist{5}, Occurrence.First, Comparer.Ordinal)),
+          r = GetRGB(List.PositionOf(RGB, hexlist{0}), List.PositionOf(RGB, hexlist{1})),
+          g = GetRGB(List.PositionOf(RGB, hexlist{2}), List.PositionOf(RGB, hexlist{3})),
+          b = GetRGB(List.PositionOf(RGB, hexlist{4}), List.PositionOf(RGB, hexlist{5})),
 
           // Combine R, G, B values to comma-separated text (e.g., "255,0,128")
           FinalRGB = Text.Combine({Text.From(r, cultureToUse), Text.From(g, cultureToUse), Text.From(b, cultureToUse)}, ",")

@@ -172,3 +172,18 @@ When renaming functions during migration:
 3. Update test file names to match
 4. Update branch names to use new name (e.g., `migrate/Measure-Distance`)
 5. Update all documentation references
+
+## Power Query Function Migration: Number.RoundAwayFromZero Parameter Warning
+
+**Do NOT add a third parameter to `Number.RoundAwayFromZero`.**
+
+Correct usage:
+```
+Number.RoundAwayFromZero(value, decimals)
+```
+Incorrect usage (causes runtime error):
+```
+Number.RoundAwayFromZero(value, decimals, RoundingMode.AwayFromZero)
+```
+
+Always check migrated code and tests for this error.

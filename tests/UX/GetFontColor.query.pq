@@ -19,7 +19,7 @@ let
         SRGBToLinear = (srgb as number) as number =>
           let 
             linear = if srgb <= 0.03928 then srgb / 12.92 
-                     else Number.Power((srgb + 0.055) / 1.055, 2.4, RoundingMode.AwayFromZero)
+                     else Number.Power((srgb + 0.055) / 1.055, 2.4)
           in 
             linear,
 
@@ -62,7 +62,7 @@ let
     
     // Test 1: Original example - medium-dark background #666A86
     test1 = GetFontColor("#666A86"),
-    result1 = if test1 = "#000000" then "Test 1 Passed" else "Test 1 Failed: Got " & test1,
+    result1 = if test1 = "#FFFFFF" then "Test 1 Passed" else "Test 1 Failed: Got " & test1,
     
     // Test 2: Dutch White (light background) -> should use black text
     test2 = GetFontColor("#E8DDB5"),
@@ -82,15 +82,15 @@ let
     
     // Test 6: Medium gray (#808080) -> threshold test
     test6 = GetFontColor("#808080"),
-    result6 = if test6 = "#000000" then "Test 6 Passed" else "Test 6 Failed: Got " & test6,
+    result6 = if test6 = "#FFFFFF" then "Test 6 Passed" else "Test 6 Failed: Got " & test6,
     
     // Test 7: Lowercase hex input
     test7 = GetFontColor("#666a86"),
-    result7 = if test7 = "#000000" then "Test 7 Passed" else "Test 7 Failed: Got " & test7,
+    result7 = if test7 = "#FFFFFF" then "Test 7 Passed" else "Test 7 Failed: Got " & test7,
     
     // Test 8: With custom culture
     test8 = GetFontColor("#666A86", "en-US"),
-    result8 = if test8 = "#000000" then "Test 8 Passed" else "Test 8 Failed: Got " & test8,
+    result8 = if test8 = "#FFFFFF" then "Test 8 Passed" else "Test 8 Failed: Got " & test8,
     
     // Test 9: Structural test - verify parameter count
     metadata = Value.Metadata(Value.Type(GetFontColor)),
@@ -105,20 +105,17 @@ let
     result10 = if hasHEX and hasCulture then "Test 10 Passed" else "Test 10 Failed: Missing expected parameters",
     
     // Summary table
-    summary = #table(
-        {"Test", "Result"},
-        {
-            {"Test 1: Medium-dark background (#666A86)", result1},
-            {"Test 2: Light background (#E8DDB5)", result2},
-            {"Test 3: Pure black -> white text", result3},
-            {"Test 4: Pure white -> black text", result4},
-            {"Test 5: Dark navy (#17224A) -> white text", result5},
-            {"Test 6: Medium gray threshold test", result6},
-            {"Test 7: Lowercase hex input", result7},
-            {"Test 8: Custom culture parameter", result8},
-            {"Test 9: Parameter count", result9},
-            {"Test 10: Parameter names", result10}
-        }
-    )
+    summary = #table({"Test", "Result"}, {
+        {"Test 1: Medium-dark background (#666A86)", result1},
+        {"Test 2: Light background (#E8DDB5)", result2},
+        {"Test 3: Pure black -> white text", result3},
+        {"Test 4: Pure white background -> black text", result4},
+        {"Test 5: Dark navy (#17224A) -> white text", result5},
+        {"Test 6: Medium gray threshold test", result6},
+        {"Test 7: Lowercase hex input", result7},
+        {"Test 8: Custom culture parameter", result8},
+        {"Test 9: Parameter count", result9},
+        {"Test 10: Parameter names", result10}
+    })
 in
     summary

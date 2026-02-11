@@ -6,14 +6,13 @@ let
         // If you pass in one, you get odd indices (results)
         fnSelectEvenOdd = (lst as list, remainder as number) as list =>
             let 
-                result = List.Select(
-                  lst, 
-                  each Number.Mod(
-                    List.PositionOf(lst, _, Occurrence.First), 
-                    2, 
-                    RoundingMode.Down
-                  ) = remainder
-                )
+                    result = List.Select(
+                      lst,
+                      each Number.Mod(
+                        List.PositionOf(lst, _, Occurrence.First),
+                        2
+                      ) = remainder
+                    )
             in    
                 result,
         
