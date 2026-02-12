@@ -64,7 +64,7 @@ foreach ($md in $mdFiles) {
             $codeMatches = [regex]::Matches($exText, 'Code\s*=\s*"(?<code>(?:[^"]|""")*)"')
             $resultMatches = [regex]::Matches($exText, 'Result\s*=\s*"(?<result>(?:[^"]|""")*)"')
 
-            $count = [Math]::Max($descMatches.Count, $codeMatches.Count, $resultMatches.Count)
+            $count = @($descMatches.Count, $codeMatches.Count, $resultMatches.Count) | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
             for ($i=0; $i -lt $count; $i++) {
                 $d = if ($i -lt $descMatches.Count) { ($descMatches[$i].Groups['desc'].Value -replace '""','"') } else { '' }
                 $c = if ($i -lt $codeMatches.Count) { ($codeMatches[$i].Groups['code'].Value -replace '""','"') } else { '' }
