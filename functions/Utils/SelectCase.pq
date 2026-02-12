@@ -1,3 +1,4 @@
+```powerquery
 let
   SelectCase = (value as any, l as list, default as any) as any =>
       let
@@ -6,13 +7,14 @@ let
         // If you pass in one, you get odd indices (results)
         fnSelectEvenOdd = (lst as list, remainder as number) as list =>
             let 
-                    result = List.Select(
-                      lst,
-                      each Number.Mod(
-                        List.PositionOf(lst, _, Occurrence.First),
-                        2
-                      ) = remainder
-                    )
+                result = List.Select(
+                  lst, 
+                  each Number.Mod(
+                    List.PositionOf(lst, _, Occurrence.First), 
+                    2, 
+                    RoundingMode.Down
+                  ) = remainder
+                )
             in    
                 result,
         
@@ -45,20 +47,21 @@ let
       Documentation.Examples = {
         [
           Description = "Evaluate a value against a list of predicates and return the corresponding result.",
-          Code        = "SelectCase(5, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
-          Result      = """Less than 10"""
+          Code        = "SelectCase(5, {each _ < 10, \"Less than 10\", each _ >= 10, \"10 or more\"}, \"No match\")", 
+          Result      = "\"Less than 10\""
         ],
         [
           Description = "Evaluate a value that matches the second predicate.",
-          Code        = "SelectCase(15, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
-          Result      = """10 or more"""
+          Code        = "SelectCase(15, {each _ < 10, \"Less than 10\", each _ >= 10, \"10 or more\"}, \"No match\")", 
+          Result      = "\"10 or more\""
         ],
         [
           Description = "Evaluate a value with no matching predicate, returning the default.",
-          Code        = "SelectCase(""test"", {each _ = 123, ""Is number"", each _ = true, ""Is boolean""}, ""Unknown type"")", 
-          Result      = """Unknown type"""
+          Code        = "SelectCase(\"test\", {each _ = 123, \"Is number\", each _ = true, \"Is boolean\"}, \"Unknown type\")", 
+          Result      = "\"Unknown type\""
         ]
       }
     ]
 in
   Value.ReplaceType(SelectCase, fnType)
+```
