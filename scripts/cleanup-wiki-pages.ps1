@@ -14,14 +14,12 @@ foreach ($md in $mdFiles) {
 
     $content = Get-Content -Raw -Encoding UTF8 $md.FullName
 
-
     # Remove all backslash-escaped characters (from previous script bug)
     $content = $content -replace '\\([#`n])', '$1'
     $content = $content -replace '\\', ''
 
     # Replace all lone 'n' (not part of a word) with a newline (for legacy bug)
     $content = $content -replace '(?<![a-zA-Z0-9])n(?![a-zA-Z0-9])', "`n"
-
 
     # Remove any duplicate Parameters or Examples sections
     $content = $content -replace '(?ms)^## Parameters.*?(?=^## |\z)', ''
@@ -33,77 +31,12 @@ foreach ($md in $mdFiles) {
     # Remove outer fences ```markdown ... ``` if present
     $content = $content -replace '^```markdown\s*', '' -replace '\s*```\s*$', ''
 
-    # Fix code fence markers: replace ``powerquery with ```powerquery and closing `` with ```
-    $content = $content -replace '``powerquery', '```powerquery'
-    $content = $content -replace "\n``\n", "`n```n"
+    # Fix code block formatting for examples: ensure ```powerquery ... ```
+    $content = $content -replace '(?m)^`powerquery\s*([\s\S]*?)`\s*', '```powerquery`n$1```'
 
-    # Find corresponding .pq file
-    $base = [System.IO.Path]::GetFileNameWithoutExtension($md.Name)
-    $pq = Get-ChildItem -Path $FunctionsDir -Recurse -Filter "$base.pq" | Select-Object -First 1
-    $paramsSection = ''
-    $examplesSection = ''
-
-    if ($pq) {
-        $raw = Get-Content -Raw -LiteralPath $pq.FullName -Encoding UTF8
-
-        # Extract fnType parameters
-        $fnMatch = [regex]::Match($raw, 'fnType\s*=\s*type function\s*\((?<params>.*?)\)\s*as', [System.Text.RegularExpressions.RegexOptions]::Singleline)
-        if ($fnMatch.Success) {
-            $paramText = $fnMatch.Groups['params'].Value.Trim()
-            if ($paramText -ne '') {
-                $paramList = $paramText -split ',' | ForEach-Object { $_.Trim() }
-                $paramsSection = "## Parameters`n`n"
-                foreach ($p in $paramList) {
-                    $paramsSection += "- $p`n"
-                }
-                $paramsSection += "`n"
-            }
-        } else {
-            # try to extract function signature line
-            $sigMatch = [regex]::Match($raw, '^\s*' + [regex]::Escape($base) + '\s*=\s*\((?<params>.*?)\)\s*as', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-            if ($sigMatch.Success) {
-                $paramText = $sigMatch.Groups['params'].Value.Trim()
-                if ($paramText -ne '') {
-                    $paramList = $paramText -split ',' | ForEach-Object { $_.Trim() }
-                    $paramsSection = "## Parameters`n`n"
-                    foreach ($p in $paramList) { $paramsSection += "- $p`n" }
-                    $paramsSection += "`n"
-                }
-            }
-        }
-
-        # Extract simple examples: find Code and Description pairs
-        $exBlockMatch = [regex]::Match($raw, 'Documentation\.Examples\s*=\s*\{(?<examples>.*?)\}\s*\]', [System.Text.RegularExpressions.RegexOptions]::Singleline)
-        $examples = @()
-        if ($exBlockMatch.Success) {
-            $exText = $exBlockMatch.Groups['examples'].Value
-            $descMatches = [regex]::Matches($exText, 'Description\s*=\s*"(?<desc>(?:[^"]|""")*)"')
-            $codeMatches = [regex]::Matches($exText, 'Code\s*=\s*"(?<code>(?:[^"]|""")*)"')
-            $resultMatches = [regex]::Matches($exText, 'Result\s*=\s*"(?<result>(?:[^"]|""")*)"')
-
-            $count = @($descMatches.Count, $codeMatches.Count, $resultMatches.Count) | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
-            for ($i=0; $i -lt $count; $i++) {
-                $d = if ($i -lt $descMatches.Count) { ($descMatches[$i].Groups['desc'].Value -replace '""','"') } else { '' }
-                $c = if ($i -lt $codeMatches.Count) { ($codeMatches[$i].Groups['code'].Value -replace '""','"') } else { '' }
-                $r = if ($i -lt $resultMatches.Count) { ($resultMatches[$i].Groups['result'].Value -replace '""','"') } else { '' }
-                $examples += [PSCustomObject]@{Description=$d; Code=$c; Result=$r}
-            }
-        }
-
-        if ($examples.Count -gt 0) {
-            $examplesSection = "## Examples`n`n"
-            foreach ($e in $examples) {
-                if ($e.Description -ne '') { $examplesSection += "**$($e.Description)**`n`n" }
-                if ($e.Code -ne '') { $examplesSection += "```powerquery`n$($e.Code)`n```n`n" }
-                if ($e.Result -ne '') { $examplesSection += "Result: `$($e.Result)`n`n" }
-            }
-        }
-    }
-
-
-    # Remove any existing Parameters or Examples sections to avoid duplication
-    $content = $content -replace '(?ms)^## Parameters.*?(?=^## |\z)', ''
-    $content = $content -replace '(?ms)^## Examples.*?(?=^## |\z)', ''
+    # Fix function source code block: ensure it starts with ```powerquery and ends with ```
+    $content = $content -replace '(```+)[^\n`]*powerquery', '```powerquery'
+    $content = $content -replace '(```+)[^\n`]*$', '```'
 
     # Insert Parameters and Examples after Description heading
     if ($paramsSection -ne '' -or $examplesSection -ne '') {
