@@ -22,9 +22,13 @@ foreach ($md in $mdFiles) {
     # Replace all lone 'n' (not part of a word) with a newline (for legacy bug)
     $content = $content -replace '(?<![a-zA-Z0-9])n(?![a-zA-Z0-9])', "`n"
 
+
     # Remove any duplicate Parameters or Examples sections
     $content = $content -replace '(?ms)^## Parameters.*?(?=^## |\z)', ''
     $content = $content -replace '(?ms)^## Examples.*?(?=^## |\z)', ''
+
+    # Replace PowerShell object interpolation in Result lines with just the result value
+    $content = $content -replace 'Result: \$\(@\{[^\}]*Result=([^;\}]+)[^\}]*\}\.Result\)', 'Result: $1'
 
     # Remove outer fences ```markdown ... ``` if present
     $content = $content -replace '^```markdown\s*', '' -replace '\s*```\s*$', ''
