@@ -11,10 +11,15 @@ if (-not (Test-Path $WikiDir)) { Write-Error "Wiki directory '$WikiDir' not foun
 $mdFiles = Get-ChildItem -Path $WikiDir -Filter *.md -File
 foreach ($md in $mdFiles) {
     Write-Host "Processing wiki page: $($md.Name)"
+
     $content = Get-Content -Raw -Encoding UTF8 $md.FullName
 
+    # Remove all backslash-escaped characters (from previous script bug)
+    $content = $content -replace '\\([#`n])', '$1'
+    $content = $content -replace '\\', ''
+
     # Remove outer fences ```markdown ... ``` if present
-    $content = $content -replace '^```markdown\s*', '' -replace '\s*```\s*$',''
+    $content = $content -replace '^```markdown\s*', '' -replace '\s*```\s*$', ''
 
     # Fix code fence markers: replace ``powerquery with ```powerquery and closing `` with ```
     $content = $content -replace '``powerquery', '```powerquery'
@@ -83,25 +88,19 @@ foreach ($md in $mdFiles) {
         }
     }
 
+
+    # Remove any existing Parameters or Examples sections to avoid duplication
+    $content = $content -replace '(?ms)^## Parameters.*?(?=^## |\z)', ''
+    $content = $content -replace '(?ms)^## Examples.*?(?=^## |\z)', ''
+
     # Insert Parameters and Examples after Description heading
     if ($paramsSection -ne '' -or $examplesSection -ne '') {
-        # find end of Description section (after the blank line following it)
-        $pattern = '(## Description\s*\r?\n\r?\n)(.*?)((\r?\n){2}|$)'
-        $m = [regex]::Match($content, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+        $pattern = '(## Description\s*\r?\n(?:.|\r|\n)*?)(\r?\n){2,}'
+        $m = [regex]::Match($content, $pattern)
         if ($m.Success) {
-            $desc = $m.Groups[0].Value
-            $insert = $m.Groups[1].Value + $m.Groups[2].Value + "`n" + $paramsSection + $examplesSection
-            $content = $content -replace [regex]::Escape($m.Groups[0].Value), [System.Text.RegularExpressions.Regex]::Escape($insert)
-            # above replacement uses escaping; simpler: rebuild content by replacing once
-            $content = $content -replace [regex]::Escape($m.Groups[0].Value), [System.Text.RegularExpressions.Regex]::Escape($insert)
-            # The above was conservative; instead rebuild by splitting
-            $parts = $content -split '(?s)(## Description\s*\r?\n\r?\n)'
-            if ($parts.Count -ge 2) {
-                $before = $parts[0]
-                $afterRest = $parts[1..($parts.Count-1)] -join '## Description`n`n'
-                # Not reliable; fallback to simple append
-                $content = $content + "`n" + $paramsSection + $examplesSection
-            }
+            $desc = $m.Groups[1].Value.TrimEnd()
+            $rest = $content.Substring($m.Index + $m.Length)
+            $content = $desc + "`n`n" + $paramsSection + $examplesSection + "`n" + $rest
         } else {
             $content = $content + "`n" + $paramsSection + $examplesSection
         }
