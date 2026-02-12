@@ -14,9 +14,17 @@ foreach ($md in $mdFiles) {
 
     $content = Get-Content -Raw -Encoding UTF8 $md.FullName
 
+
     # Remove all backslash-escaped characters (from previous script bug)
     $content = $content -replace '\\([#`n])', '$1'
     $content = $content -replace '\\', ''
+
+    # Replace all lone 'n' (not part of a word) with a newline (for legacy bug)
+    $content = $content -replace '(?<![a-zA-Z0-9])n(?![a-zA-Z0-9])', "`n"
+
+    # Remove any duplicate Parameters or Examples sections
+    $content = $content -replace '(?ms)^## Parameters.*?(?=^## |\z)', ''
+    $content = $content -replace '(?ms)^## Examples.*?(?=^## |\z)', ''
 
     # Remove outer fences ```markdown ... ``` if present
     $content = $content -replace '^```markdown\s*', '' -replace '\s*```\s*$', ''
