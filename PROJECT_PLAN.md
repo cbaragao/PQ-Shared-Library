@@ -27,11 +27,11 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 
 ### Naming Conventions (PowerShell Verb-Noun Format)
 All functions must follow **PowerShell-style Verb-Noun** naming for consistency and IntelliSense discovery:
-- **Verb-Noun format**: `Measure-Distance` not `CalculateDistance`
+- **Verb-Noun format**: `MeasureDistance` not `CalculateDistance`
 - **Approved verbs only**: Use PowerShell approved verbs (Get-, Measure-, Test-, Convert-, Remove-, New-, Invoke-, etc.)
 - **No "fn" prefixes**: Remove all "fn" prefixes during migration
-- **PascalCase**: All function names use PascalCase (e.g., `Measure-Distance`, `Get-ColorHue`)
-- **Singular nouns**: Use `Get-Color` not `Get-Colors`
+- **PascalCase**: All function names use PascalCase (e.g., `MeasureDistance`, `GetColorHue`)
+- **Singular nouns**: Use `GetColor` not `GetColors`
 
 **See [documentation/NamingConventions.md](documentation/NamingConventions.md) for**:
 - Complete list of approved verbs for data prep/ETL

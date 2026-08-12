@@ -4,6 +4,7 @@
 
 # GitHub copilot instructions (repository-specific)
 .github/
+.mcp.json
 
 # Windows
 Thumbs.db

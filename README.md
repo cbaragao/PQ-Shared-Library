@@ -64,6 +64,7 @@ Feel free to modify this as needed! Let me know if there's anything else you'd l
 - SQL:
     - InvokeSQLQuery
 - String:
+    - ConvertListToText
     - ConvertToEncodedText
     - GetFileText
     - RemoveChars

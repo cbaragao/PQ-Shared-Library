@@ -1,4 +1,3 @@
-```powerquery
 let
   SelectCase = (value as any, l as list, default as any) as any =>
       let
@@ -42,26 +41,25 @@ let
        
   fnType = type function (value as any, l as list, default as any) as any
     meta [
-      Documentation.Name = "Select-Case", 
+      Documentation.Name = "SelectCase", 
       Documentation.LongDescription = "Evaluates a value against a list of predicate functions and returns the corresponding result. The list parameter should contain alternating predicate functions and result values: {predicate1, result1, predicate2, result2, ...}. Returns the first matching result, or the default value if no predicates match. This function implements a pattern-matching or switch-case behavior in Power Query.",
       Documentation.Examples = {
         [
           Description = "Evaluate a value against a list of predicates and return the corresponding result.",
-          Code        = "SelectCase(5, {each _ < 10, \"Less than 10\", each _ >= 10, \"10 or more\"}, \"No match\")", 
-          Result      = "\"Less than 10\""
+          Code        = "SelectCase(5, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
+          Result      = """Less than 10"""
         ],
         [
           Description = "Evaluate a value that matches the second predicate.",
-          Code        = "SelectCase(15, {each _ < 10, \"Less than 10\", each _ >= 10, \"10 or more\"}, \"No match\")", 
-          Result      = "\"10 or more\""
+          Code        = "SelectCase(15, {each _ < 10, ""Less than 10"", each _ >= 10, ""10 or more""}, ""No match"")", 
+          Result      = """10 or more"""
         ],
         [
           Description = "Evaluate a value with no matching predicate, returning the default.",
-          Code        = "SelectCase(\"test\", {each _ = 123, \"Is number\", each _ = true, \"Is boolean\"}, \"Unknown type\")", 
-          Result      = "\"Unknown type\""
+          Code        = "SelectCase(""test"", {each _ = 123, ""Is number"", each _ = true, ""Is boolean""}, ""Unknown type"")", 
+          Result      = """Unknown type"""
         ]
       }
     ]
 in
   Value.ReplaceType(SelectCase, fnType)
-```
