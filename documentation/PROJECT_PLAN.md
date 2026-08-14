@@ -33,7 +33,7 @@ All functions must follow **PowerShell-style Verb-Noun** naming for consistency 
 - **PascalCase**: All function names use PascalCase (e.g., `MeasureDistance`, `GetColorHue`)
 - **Singular nouns**: Use `GetColor` not `GetColors`
 
-**See [documentation/NamingConventions.md](documentation/NamingConventions.md) for**:
+**See [NamingConventions.md](NamingConventions.md) for**:
 - Complete list of approved verbs for data prep/ETL
 - Function renaming guide for all 44 functions
 - Examples and usage patterns

@@ -15,7 +15,7 @@
   - Perform `git mv` and create rename commit (ask for approval before pushing)
   - Create or update test files following the embedded-function pattern
   - Run PQLint (via configured MCP) and summarize violations
-  - Update `PROJECT_PLAN.md` or `LESSONS_LEARNED.md` when new lessons arise
+  - Update `documentation/PROJECT_PLAN.md` or `documentation/LESSONS_LEARNED.md` when new lessons arise
 
 - **Files created**:
   - `.github/skills/pq-shared-library/SKILL.md` — actionable skill for VS Code/agents

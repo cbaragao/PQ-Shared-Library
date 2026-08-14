@@ -1,22 +1,14 @@
 # Power Query Function Library
 
-Welcome to the Power Query Function Library! This repository is a collection of Power Query functions that I have gathered and developed over the years. Some of these functions were found online, but the majority were coded personally. 
+A collection of Power Query M functions for Power BI, organized by category. Each `.pq` file is self-contained and can be used independently.
 
 ## Structure
 
-- **functions/**: Contains subdirectories categorized by function type. Each `.pq` file implements a single Power Query function and is grouped by category (DateTime, Geo, Math, R, SQL, String, Tbl, Utils, UX).
-
-Note: the previous `sharedmaster` bundling files have been removed — functions can be used directly from the `functions/` folder or imported individually into Power BI / Power Query.
-
-## Methodology
-
-The bundling method used here mimics Kim Burgess's approach of consolidating functions into a single file. This allows for easier management and reuse of code across different projects.
-
-## Acknowledgements
-
-Special thanks to:
-- **Injae Park**: For his innovative method of refreshing code directly from GitHub. [Watch his video here](https://www.youtube.com/watch?v=GXFxiEVAmfI&lc=Ugzqdez_1gwAqt2egbV4AaABAg.A8KV2MP8OcAA8LJqlcSEiT).
-- **John Kerski**: For his insightful article on code reuse with Power Query. [Read his article here](https://www.kerski.tech/bringing-dataops-to-power-bi-part13/).
+```
+functions/   — one .pq file per function, grouped by category
+tests/       — portable test queries mirroring functions/ structure
+documentation/ — project docs, naming conventions, lessons learned
+```
 
 ## Getting Started
 
@@ -24,17 +16,15 @@ Special thanks to:
     ```sh
     git clone https://github.com/cbaragao/PQ-Shared-Library.git
     ```
-2. Import a specific function into Power BI / Power Query by opening the `.pq` file and copying the function body into a Blank Query (Advanced Editor), or by using your preferred bundling workflow.
-
-3. Right click any function that you want to use to instantiate it and give it an appropriate name.
+2. Open the `.pq` file for the function you want, copy the entire contents into a Blank Query in Power BI Desktop (Home → Advanced Editor), and name the query to match the function identifier.
 
 ## Wiki
 
-I used Copilot to put together a [wiki](https://github.com/cbaragao/PQ-Shared-Library/wiki) for all functions added thus far.
+A [wiki](https://github.com/cbaragao/PQ-Shared-Library/wiki) with additional documentation is available on GitHub.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+Contributions are welcome. Please fork the repository and submit a pull request with your changes.
 
 ## License
 
@@ -42,55 +32,87 @@ This project is licensed under the MIT License.
 
 ---
 
-Feel free to modify this as needed! Let me know if there's anything else you'd like to add or change.
+## Function Reference
 
-## Available functions (by folder)
+### DateTime
 
-- DateTime:
-    - ConvertToRoundedDateTime
-- Geo:
-    - MeasureBearing
-    - MeasureDistance
-- Math:
-    - CalculateEWMA
-    - GetConfidenceInterval
-    - GetErlangC
-    - GetFactors
-    - NewRandomNumbers
-    - TestBenford
-- R:
-    - GetLinearModelCoefficients
-    - InvokeLogitPrediction
-- SQL:
-    - InvokeSQLQuery
-- String:
-    - ConvertListToText
-    - ConvertToEncodedText
-    - GetFileText
-    - RemoveChars
-    - RemoveHTMLTags
-- Tbl:
-    - AddRandomNumber
-    - ConvertColumnToList
-    - ConvertDateTimeZoneToDate
-    - RoundColumns
-    - UpdateColumnNames
-- Utils:
-    - GetFunctionMetadata
-    - NewBatches
-    - SelectCase
-    - SelectDynamicList
-- UX:
-    - GetColorHue
-    - GetColorScheme
-    - GetCompColor
-    - GetFontColor
-    - GetHexValue
-    - GetLuminosity
-    - GetMedianAspectRatio
-    - GetRGBValue
-    - TestColorBlindness
-    - TestColorContrast
-    - TestWebAimContrast
+| Function | Description |
+|---|---|
+| `ConvertToRoundedDateTime` | Rounds a datetime value to a specified minute interval. |
 
-If you want this list exported to a machine-readable file (JSON/CSV) or added to the repository wiki, I can generate that next.
+### Geo
+
+| Function | Description |
+|---|---|
+| `MeasureBearing` | Calculates the compass bearing between two geographic coordinates, returning direction and sort order. |
+| `MeasureDistance` | Calculates the distance between two geographic coordinates using the Haversine formula (km or miles). |
+
+### Math
+
+| Function | Description |
+|---|---|
+| `CalculateEWMA` | Computes an exponential weighted moving average for a list using a smoothing factor. |
+| `GetConfidenceInterval` | Calculates a confidence interval range from a z-score, standard deviation, and population size. |
+| `GetErlangC` | Calculates the number of agents needed to meet a target service level using the Erlang C formula. |
+| `GetFactors` | Returns a sorted list of all integer factors of a given number. |
+| `NewRandomNumbers` | Generates a sorted list of distinct random integers up to a specified maximum using a reproducible seed. |
+| `TestBenford` | Tests a number against Benford's Law by calculating expected probabilities for the first three leading digits. |
+
+### R
+
+| Function | Description |
+|---|---|
+| `GetLinearModelCoefficients` | Runs a generalized linear model in R and returns coefficients with statistical significance indicators. |
+| `InvokeLogitPrediction` | Runs a logistic regression in R and returns predicted probabilities and binary predictions. |
+
+### SQL
+
+| Function | Description |
+|---|---|
+| `InvokeSQLQuery` | Executes a SQL query against a data source with query folding support. |
+
+### String
+
+| Function | Description |
+|---|---|
+| `ConvertListToText` | Joins non-null, non-empty list values into a single text string using a specified separator. |
+| `ConvertToEncodedText` | Encodes text by converting each character to its 3-digit ASCII number. |
+| `GetFileText` | Reads a file and returns all lines as a single text string separated by line feeds. |
+| `RemoveChars` | Removes unwanted characters from text with options for uppercase, lowercase, numbers, and special characters. |
+| `RemoveHTMLTags` | Strips HTML tags from a string and returns the plain text content. |
+| `SplitAndValidate` | Splits text on a delimiter, applies a named pattern rule to each part, and returns a table with per-rule success flags. |
+
+### Tbl
+
+| Function | Description |
+|---|---|
+| `AddRandomNumber` | Adds a reproducible `Random` column to a table using a seed value. |
+| `ConvertColumnToList` | Extracts a specified column from a table and returns it as a list. |
+| `ConvertDateTimeZoneToDate` | Converts datetime or datetimezone columns to date type by removing the time component. |
+| `RoundColumns` | Rounds all numeric columns in a table to a specified number of decimal places, with optional exclusions. |
+| `UpdateColumnNames` | Replaces text patterns in column names and applies proper casing. |
+
+### Utils
+
+| Function | Description |
+|---|---|
+| `GetFunctionMetadata` | Returns metadata (name or description) for a given function. |
+| `NewBatches` | Generates a table of batch ranges from a batch size, total size, and base value. |
+| `SelectCase` | Evaluates a value against a list of predicate/result pairs and returns the first matching result, or a default. |
+| `SelectDynamicList` | Selects items from a list using individual indices or range notation (`start:end`). |
+
+### UX
+
+| Function | Description |
+|---|---|
+| `GetColorHue` | Returns the hue angle (0–360°) for a hex color code. |
+| `GetColorScheme` | Retrieves a color scheme from The Color API for a given hex code and mode. |
+| `GetCompColor` | Calculates the complementary color by inverting RGB channel values. |
+| `GetHexValue` | Converts RGB values (0–255) to a `#RRGGBB` hex color code. |
+| `GetLuminosity` | Calculates the HSL luminosity of a hex color, returning a value between 0 and 1. |
+| `GetMedianAspectRatio` | Computes the median slope and corresponding aspect ratio between two numeric series. |
+| `GetRGBValue` | Converts a hex color code to comma-separated RGB values (0–255). |
+| `TestColorBlindness` | Simulates how a color appears under various types and severities of color blindness. |
+| `TestColorContrast` | Tests the contrast ratio between two hex colors against WCAG accessibility standards. |
+| `TestWebAimContrast` | Tests color contrast using the WebAIM API and returns the ratio and WCAG 2.0 pass/fail results. |
+

@@ -273,7 +273,7 @@ _To be populated during migration._
      ```
   3. **(Optional) Third commit**: Documentation and meta-file updates
      ```powershell
-     git add LESSONS_LEARNED.md .github/copilot-instructions.md
+     git add documentation/LESSONS_LEARNED.md .github/copilot-instructions.md
      git commit -m "Update documentation for NewBatches migration"
      ```
 - **Prevention**:
@@ -552,7 +552,7 @@ _To be populated with any git-related issues encountered._
 - **Problem**: A generic `InvokePostRequest` helper function was present in the shared library. It performed HTTP POST operations using `Web.Contents` and attempted to be broadly useful across projects. In practice, generic HTTP helpers introduce security surface area, environment-specific configuration needs (auth, headers, timeouts, error handling), and encourage copying sensitive behavior into many consumers rather than implementing project-specific wrappers.
 - **Solution**: Marked the function as deprecated (Documentation.Deprecated = true) and added a recommendation to implement project-specific HTTP wrappers. After team review the function and its test were removed from the repository to avoid accidental reuse.
 - **Prevention**: Avoid adding network/IO helpers to a shared library unless they are hardened, fully documented for security, and reviewed for cross-project applicability. Prefer small, well-tested transport adapters implemented within consuming projects that encapsulate authentication, secrets, and retries.
-- **Action**: Removed `functions/Utils/InvokePostRequest.pq` and `tests/Utils/InvokePostRequest.query.pq`; updated `PROJECT_PLAN.md` to mark the task as REMOVED/Deprecated and recorded the recommended alternative pattern.
+- **Action**: Removed `functions/Utils/InvokePostRequest.pq` and `tests/Utils/InvokePostRequest.query.pq`; updated `documentation/PROJECT_PLAN.md` to mark the task as REMOVED/Deprecated and recorded the recommended alternative pattern.
 
 ---
 

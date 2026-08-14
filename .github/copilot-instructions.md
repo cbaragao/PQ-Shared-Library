@@ -7,8 +7,8 @@ This repository contains Power Query M functions for Power BI. Function implemen
 - Use PascalCase without hyphens for M identifiers, function filenames, test filenames, and migration branch suffixes.
 - Preserve the existing category structure when adding functions or tests.
 - Use direct typed function syntax for new or migrated functions. Treat `Function.From` as a legacy pattern to replace during migration.
-- Read `LESSONS_LEARNED.md` before changing a migration or reacting to a PQLint finding; some lint findings are documented false positives.
-- Use `PROJECT_PLAN.md` to identify migration work and update it only when the migration state changes.
+- Read `documentation/LESSONS_LEARNED.md` before changing a migration or reacting to a PQLint finding; some lint findings are documented false positives.
+- Use `documentation/PROJECT_PLAN.md` to identify migration work and update it only when the migration state changes.
 - Keep documentation examples executable: their code must use the actual PascalCase function identifier.
 
 ## Git and Validation
