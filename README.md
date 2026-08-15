@@ -81,6 +81,7 @@ This project is licensed under the MIT License.
 | `RemoveChars` | Removes unwanted characters from text with options for uppercase, lowercase, numbers, and special characters. |
 | `RemoveHTMLTags` | Strips HTML tags from a string and returns the plain text content. |
 | `SplitAndValidate` | Splits text on a delimiter, applies a named pattern rule to each part, and returns a table with per-rule success flags. |
+| `SplitByCharacterType` | Tokenizes text into a list of records for consecutive Alpha, Numeric, and Special character runs. |
 
 ### Tbl
 
