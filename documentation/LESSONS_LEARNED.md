@@ -521,6 +521,15 @@ _To be populated with any git-related issues encountered._
   
 - **Prevention**: Only use comparer parameters when actually needed for user input or external data. For internal string literals created by the function, simple comparison is sufficient.
 
+### Issue: PQLint use-distinct-step-names False Positive on Test1_/Test2_ Naming
+- **Date**: 2026-08-17
+- **Function(s)**: GetSchemaComparison (and, in effect, every existing `.query.pq` test file)
+- **Category**: PQLint / Documented False Positive
+- **Severity**: Low
+- **Problem**: PQLint's `use-distinct-step-names` rule flags every step ending in a number (e.g., `Test1_Result`, `Test2_Pass`) as a "similar step" that should be renamed, since it assumes numbered steps like `Added Custom Column3` come from the Power Query UI auto-naming duplicate steps.
+- **Solution**: This is a deliberate, repo-wide test naming convention (`TestN_...`) used to keep each test case's steps grouped and readable, not accidental UI-generated duplicates. No change needed.
+- **Prevention**: Do not rename `TestN_...` steps in `.query.pq` files to satisfy this rule. Treat `use-distinct-step-names` findings in test files with this naming pattern as an accepted false positive.
+
 ---
 
 ## Summary: PQLint Culture/Comparer Recommendations Require Validation
@@ -553,6 +562,15 @@ _To be populated with any git-related issues encountered._
 - **Solution**: Marked the function as deprecated (Documentation.Deprecated = true) and added a recommendation to implement project-specific HTTP wrappers. After team review the function and its test were removed from the repository to avoid accidental reuse.
 - **Prevention**: Avoid adding network/IO helpers to a shared library unless they are hardened, fully documented for security, and reviewed for cross-project applicability. Prefer small, well-tested transport adapters implemented within consuming projects that encapsulate authentication, secrets, and retries.
 - **Action**: Removed `functions/Utils/InvokePostRequest.pq` and `tests/Utils/InvokePostRequest.query.pq`; updated `documentation/PROJECT_PLAN.md` to mark the task as REMOVED/Deprecated and recorded the recommended alternative pattern.
+
+### Issue: Removed RoundColumns (unused function)
+- **Date**: 2026-08-17
+- **Function(s)**: RoundColumns
+- **Category**: Architecture Decision
+- **Severity**: Low
+- **Problem**: RoundColumns was already marked Deprecated in `documentation/PROJECT_PLAN.md`, but the `functions/Tbl/RoundColumns.pq` file was never deleted. No test file existed for it.
+- **Solution**: Deleted `functions/Tbl/RoundColumns.pq` and removed its entry from `README.md`. Not every deprecated function has an architectural rationale — this one was simply unused.
+- **Prevention**: When a function is marked Deprecated in the project plan, verify its `.pq` file and any test file are actually removed from the repo, not just flagged.
 
 ---
 

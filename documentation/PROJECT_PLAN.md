@@ -18,7 +18,7 @@ Migrate all Power Query functions from verbose `Function.From` format to simplif
 - **Completed**: 38
 - **In Progress**: 0
 - **Remaining**: 6
-- **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns)
+- **Deprecated**: 8 (Corr, Z, QuartileStats, MegaAverage, MegaStDevS, Pearson, RemoveNullColumns, RoundColumns) — all removed from `functions/` and `tests/`
 - **Progress**: 86% complete (38/44 functions)
 
 ---
