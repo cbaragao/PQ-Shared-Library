@@ -28,6 +28,15 @@ This document tracks all issues, errors, and solutions encountered during the mi
 
 ## Logged Issues
 
+### Issue: PQLint False Positive for Conditional-Join Rules on Per-Row Table.Profile Column
+- **Date**: 2026-08-19
+- **Function(s)**: GetKeyCandidates
+- **Category**: PQLint
+- **Severity**: Low
+- **Problem**: PQLint rules `use-table-buffer-for-conditional-join` and `use-value-type-with-conditional-join` fired on the `compositeResults` step. These rules target the classic pattern of `Table.AddColumn` adding a row-wise lookup against a second named table, followed by `Table.SelectRows` filtering on it. In `GetKeyCandidates`, the flagged `Table.AddColumn` (`pairProfiles`, step "Subtable") instead computes a fresh `Table.Profile` per row from the source table itself (already isolated via `Table.Buffer`), not a lookup into another table. There is no second table to buffer, and no stable "other table" type to pass via `Value.Type`.
+- **Solution**: Accepted as false positive. The real per-pair cost (re-scanning the source table for every candidate column pair) is already mitigated by buffering the source table once (`bufferedTable = Table.Buffer(t, [BufferMode = BufferMode.Delayed])`) before the per-pair step.
+- **Prevention**: These two rules are pattern-matching on `Table.AddColumn` + `Table.SelectRows` proximity, not on an actual second-table join. When the flagged `Table.AddColumn` only profiles/derives a value from the already-buffered primary table, treat the finding as a false positive rather than introducing an artificial `Value.Type` reference.
+
 ### Issue: Missing Culture Parameters for Date/Time and Numeric Functions
 
 ### Issue: ConvertToRoundedDateTime Logic Error - Wrong Rounding Function Used
