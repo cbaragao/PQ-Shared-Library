@@ -96,7 +96,7 @@ let
 
       combinedResults = Table.Combine({typedSingleColumnResults, compositeResults}),
       withSecondColumn = Table.ReplaceValue(combinedResults, null, "N/A", Replacer.ReplaceValue, {"Second Column"}),
-      result = Table.ReorderColumns(withSecondColumn, {"Column", "Second Column", "Percent Unique", "Classification"}, MissingField.Error)
+      result = Table.TransformColumnTypes(Table.ReorderColumns(withSecondColumn, {"Column", "Second Column", "Percent Unique", "Classification"}, MissingField.Error),{"Second Column", type text})
     in
       result,
 
