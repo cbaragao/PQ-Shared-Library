@@ -37,6 +37,15 @@ This document tracks all issues, errors, and solutions encountered during the mi
 - **Solution**: Accepted as false positive. The real per-pair cost (re-scanning the source table for every candidate column pair) is already mitigated by buffering the source table once (`bufferedTable = Table.Buffer(t, [BufferMode = BufferMode.Delayed])`) before the per-pair step.
 - **Prevention**: These two rules are pattern-matching on `Table.AddColumn` + `Table.SelectRows` proximity, not on an actual second-table join. When the flagged `Table.AddColumn` only profiles/derives a value from the already-buffered primary table, treat the finding as a false positive rather than introducing an artificial `Value.Type` reference.
 
+### Issue: PQLint False Positive for Table.UnpivotOtherColumns Dropping Nulls
+- **Date**: 2026-08-21
+- **Function(s)**: GetDataQualityMetrics
+- **Category**: PQLint
+- **Severity**: Low
+- **Problem**: PQLint rule `use-replace-null-values-before-table-unpivot-other-columns` fired on the unpivot step inside `getBlanksAndErrors`, warning that null cells are silently dropped rather than becoming attribute/value rows. In this function, that unpivot exists only to detect blank (`""`) and error sentinel values per column; null handling is already sourced separately and correctly from `Table.Profile`'s `NullCount`. Adding a null placeholder before the unpivot (and stripping it back out after) would add complexity without changing any reported metric.
+- **Solution**: Accepted as false positive. Null % is computed from `Table.Profile`, not from the unpivoted/blank-error path, so the rows the unpivot drops are irrelevant to this function's output.
+- **Prevention**: Before applying this rule's suggested fix, check whether the unpivot's purpose already excludes nulls from its own accounting (e.g., a separate profiler step reports nulls). If so, the finding can be treated as a false positive.
+
 ### Issue: Missing Culture Parameters for Date/Time and Numeric Functions
 
 ### Issue: ConvertToRoundedDateTime Logic Error - Wrong Rounding Function Used

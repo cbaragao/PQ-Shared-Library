@@ -90,6 +90,7 @@ This project is licensed under the MIT License.
 | `AddRandomNumber` | Adds a reproducible `Random` column to a table using a seed value. |
 | `ConvertColumnToList` | Extracts a specified column from a table and returns it as a list. |
 | `ConvertDateTimeZoneToDate` | Converts datetime or datetimezone columns to date type by removing the time component. |
+| `GetDataQualityMetrics` | Calculates column-level Null %, Distinct %, Blank %, Error %, and an overall Quality score for a table. |
 | `GetKeyCandidates` | Classifies each column's uniqueness as a Perfect, Nearly, or Not a Key, and detects two-column composite keys. |
 | `GetSchemaComparison` | Compares the column schemas of two tables and classifies each column as Match, Added, Removed, or Type Changed. |
 | `UpdateColumnNames` | Replaces text patterns in column names and applies proper casing. |
