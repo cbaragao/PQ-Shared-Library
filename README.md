@@ -77,6 +77,7 @@ This project is licensed under the MIT License.
 |---|---|
 | `ConvertListToText` | Joins non-null, non-empty list values into a single text string using a specified separator. |
 | `ConvertToEncodedText` | Encodes text by converting each character to its 3-digit ASCII number. |
+| `ConvertToMaskedText` | Masks characters strictly between two boundary positions in a string, preserving the boundaries themselves. |
 | `GetFileText` | Reads a file and returns all lines as a single text string separated by line feeds. |
 | `RemoveChars` | Removes unwanted characters from text with options for uppercase, lowercase, numbers, and special characters. |
 | `RemoveHTMLTags` | Strips HTML tags from a string and returns the plain text content. |
